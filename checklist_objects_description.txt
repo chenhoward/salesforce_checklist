@@ -4,6 +4,8 @@ Checklist
   Master-Detail:CheckListItem (Master)
 ChecklistItem
   Question (String)
+  Required (Boolean)
+  Order (Integer)
   Type(PickList)
   Master-Detail:CheckList (Detail)
   Master-Detail:CheckListItemResponse (Master)
@@ -12,8 +14,6 @@ CheckListItemResponse
   Master-Detail:CheckListItem (Detail)
   Master-Detail:CheckListResponse (Detail)
 CheckListResponse
-  Date
   Master-Detail:CheckListItemResponse (Master)
   Master-Detail: CheckList (Detail)
-
-All Master-Detail
+  (Lookup: Generalized Object Implemented Later)
