@@ -1,0 +1,19 @@
+Checklist
+  Name (String)
+  Description (String)
+  Master-Detail:CheckListItem (Master)
+ChecklistItem
+  Question (String)
+  Type(PickList)
+  Master-Detail:CheckList (Detail)
+  Master-Detail:CheckListItemResponse (Master)
+CheckListItemResponse
+  Answer(String)
+  Master-Detail:CheckListItem (Detail)
+  Master-Detail:CheckListResponse (Detail)
+CheckListResponse
+  Date
+  Master-Detail:CheckListItemResponse (Master)
+  Master-Detail: CheckList (Detail)
+
+All Master-Detail
