@@ -16,4 +16,5 @@ CheckListItemResponse
 CheckListResponse
   Master-Detail:CheckListItemResponse (Master)
   Master-Detail: CheckList (Detail)
+  Lookup: User (So when someone looks up the user they could see all the checklist that they completed)
   (Lookup: Generalized Object Implemented Later)
