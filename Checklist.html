@@ -1,0 +1,50 @@
+<apex:page docType="html-5.0"
+    sidebar="false" 
+    showheader="false"
+    standardStylesheets="false"
+    Controller="CheckListController"
+    applyHtmlTag="false"
+    applyBodyTag="false"   
+    id="todo"
+    >
+<html>        
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="viewport" content="initial-scale = 1.0, user-scalable = no"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.5/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.5/angular-resource.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.5/angular-route.min.js"></script>
+    <script src="https://cdn.firebase.com/v0/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/0.5.0/angularfire.min.js"></script>
+</head>    
+
+<body ng-controller="MainCtrl">
+	<div id="homePage" ng-show="homePageActive" ng-animate="{show: '', hide: ''}">
+		<div id="checklist">
+	    	<ul ng-controller='MainCtrl'>
+			    <li g-controller="MainCtrl" ng-repeat="checklistitem in checklistitems"> {{checklistitem.Question__c}} </li>
+		        <li ng-hide="checklistitems.length">No checklistitems</li>
+		    </ul>
+		</div>
+	</div>
+</body>
+
+<script>
+ /* Angular */
+var myApp = angular.module('myApp', []);
+var checklistitems = {!CheckListItems};
+// console.log(checklistitems.length);
+// console.log(checklistitems[0]);
+
+myApp.controller("MainCtrl", function($scope) {
+	// doesn't get here...WHY?!
+	$scope.checklistitems = checklistitems;
+	var checklistitems = {!CheckListItems};
+	console.log('got here');
+	console.log(checklistitems.length);
+	console.log(checklistitems[0]);
+});
+</script>
+
+</html>
+</apex:page>
