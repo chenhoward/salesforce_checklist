@@ -7,7 +7,7 @@
     applyBodyTag="false"   
     id="todo"
     >
-<html>        
+<html ng-app="myApp">        
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1, user-scalable=no"/>
     <meta name="viewport" content="initial-scale = 1.0, user-scalable = no"/>
@@ -18,12 +18,15 @@
     <script src="https://cdn.firebase.com/libs/angularfire/0.5.0/angularfire.min.js"></script>
 </head>    
 
-<body ng-controller="MainCtrl">
-	<div id="homePage" ng-show="homePageActive" ng-animate="{show: '', hide: ''}">
+<body ng-controller="ChecklistCtrl">
+	<div>
 		<div id="checklist">
-	    	<ul ng-controller='MainCtrl'>
-			    <li g-controller="MainCtrl" ng-repeat="checklistitem in checklistitems"> {{checklistitem.Question__c}} </li>
-		        <li ng-hide="checklistitems.length">No checklistitems</li>
+	    	<ul>
+			    <li ng-repeat="checklistitem in checklistitems"> 
+			    	<p> Question: {{checklistitem.Question__c}} </p> 
+			    	<p> Required: {{checklistitem.Required__c}} </p> 
+			    	<p> Id: {{checklistitem.Id}} </p> 
+			    </li>
 		    </ul>
 		</div>
 	</div>
@@ -33,16 +36,10 @@
  /* Angular */
 var myApp = angular.module('myApp', []);
 var checklistitems = {!CheckListItems};
-// console.log(checklistitems.length);
-// console.log(checklistitems[0]);
 
-myApp.controller("MainCtrl", function($scope) {
-	// doesn't get here...WHY?!
+myApp.controller("ChecklistCtrl", function ($scope) {
 	$scope.checklistitems = checklistitems;
-	var checklistitems = {!CheckListItems};
-	console.log('got here');
-	console.log(checklistitems.length);
-	console.log(checklistitems[0]);
+	console.log($scope.checklistitems);
 });
 </script>
 
