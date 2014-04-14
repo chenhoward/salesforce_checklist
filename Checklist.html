@@ -26,7 +26,9 @@
 			    	<p> Question: {{checklistitem.Question__c}} </p> 
 			    	<p> Required: {{checklistitem.Required__c}} </p> 
 			    	<p> Id: {{checklistitem.Id}} </p> 
+			    	<p> Checklist Id: {{checklistitem.Checklist__c}} </p> 
 			    </li>
+			    <li ng-show="!checklistitems.length">No checklistitems</li>
 		    </ul>
 		</div>
 	</div>

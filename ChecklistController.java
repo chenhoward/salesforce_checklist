@@ -6,8 +6,8 @@ global with sharing class ChecklistController {
 	} 
 
 	private static List<Checklist_Item__c> getAllChecklists(){
-        return [SELECT Order__c, Question__c, Required__c, Type__c 
-        		FROM Checklist_Item__c];
+        return [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
+        		FROM Checklist_Item__c WHERE Checklist__c=:ApexPages.currentPage().getParameters().get('checklist_id')];
     }
 
 }
