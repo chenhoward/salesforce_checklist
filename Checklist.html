@@ -22,20 +22,24 @@
 	<div>
 		<div id="checklist">
 	    	<ul>
-			    <li ng-repeat="checklistitem in checklistitems"> 
-			    	<span ng-switch="checklistitem.Type__c">
-				    	<p> Question: {{checklistitem.Question__c}} </p> 
-				    	<p> Required: {{checklistitem.Required__c}} </p> 
-				    	<p> Id: {{checklistitem.Id}} </p> 
-				    	<p> Checklist Id: {{checklistitem.Checklist__c}} </p> 
-				    	<p> Type: {{checklistitem.Type__c}} </p> 
-					    <input type="checkbox" ng-switch-when="Boolean"> </input>
-					    <input type="number" ng-switch-when="Number"> </input>
-					    <input type="text" ng-switch-when="String"> </input>
-					    <input type="date" ng-switch-when="Date"> </input>
-					 </span>
-			    </li>
 			    <li ng-show="!checklistitems.length">No checklistitems</li>
+			    <form>
+				    <li ng-repeat="checklistitem in checklistitems | orderBy: 'Order__c'"> 
+				    	<span ng-switch="checklistitem.Type__c">
+					    	<p> Question: {{checklistitem.Question__c}} </p> 
+					    	<p> Required: {{checklistitem.Required__c}} </p> 
+					    	<p> Type: {{checklistitem.Type__c}} </p> 
+					    	<p> Id: {{checklistitem.Id}} </p> 
+					    	<p> Checklist Id: {{checklistitem.Checklist__c}} </p> 
+					    	<p> Order: {{checklistitem.Order__c}} </p> 
+						    <input type="checkbox" ng-switch-when="Boolean"> </input>
+						    <input type="number" ng-switch-when="Number"> </input>
+						    <input type="text" ng-switch-when="String"> </input>
+						    <input type="date" ng-switch-when="Date"> </input>
+						 </span>
+				    </li>
+				    <input type="submit" value="Submit"> </input>
+		    	</form>
 		    </ul>
 		</div>
 	</div>
