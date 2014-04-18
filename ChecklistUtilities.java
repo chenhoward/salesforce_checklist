@@ -42,7 +42,7 @@ global class ChecklistUtilities {
     /** Queries the database for a list of Checklist items. */
     global static Checklist_Item__c[] findChecklistItems(Checklist__c checklist) {
         Checklist_Item__c[] checklistItems= [SELECT Checklist__c, Order__c, Question__c, Required__C, Type__c, Values__c
-         FROM Checklist_Item__c WHERE Checklist__c=:checklist.ID];
+         FROM Checklist_Item__c WHERE Checklist__c=:checklist.ID ORDER BY Order__c ASC];
         return checklistItems;
     }
 }
