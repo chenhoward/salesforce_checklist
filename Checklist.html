@@ -21,9 +21,10 @@
 		<div id="messages"></div>
 
 		<div id="checklistListPage" ng-controller="ListCtrl" ng-show="listPageActive">
-		    <li ng-repeat="checklist in checklists | orderBy: 'Name'"> 
-		    	<p> {{checklist.Name}} </p>
-		    	<p> {{checklist.Description__c}} </p>
+		    <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToDetailPage(checklist.Id)"> 
+		    	<p> Name: {{checklist.Name}} </p>
+		    	<p> Description: {{checklist.Description__c}} </p>
+		    	<p> Id: {{checklist.Id}} </p>
 		    </li>
 		</div>
 		<!-- End of checklistListPage -->
@@ -59,6 +60,7 @@
 					    <input type="submit" value="Submit"> </input>
 			    	</form>
 			    </ul>
+			    <div ng-click="goToHomepage()">Back to List View</div>
 			</div>
 		</div>
 		<!-- End of checklistDetailPage -->
