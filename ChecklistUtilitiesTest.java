@@ -13,6 +13,10 @@ public class ChecklistUtilitiesTest {
         System.assertNotEquals(test, null);
         System.assertEquals(test.Name, 'a');
         System.assertEquals(test.Description__c, 'b');
+        test.Name = 'c';
+        ChecklistUtilities.updateChecklist(test);
+        test = ChecklistUtilities.findChecklist(test.ID);
+        System.assertEquals(test.Name, 'c');
         ChecklistUtilities.removeChecklist(test.ID);
         test = ChecklistUtilities.findChecklist(test.ID);
         System.assertEquals(test, null);
