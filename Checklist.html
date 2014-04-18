@@ -18,6 +18,7 @@
     <script src="https://cdn.firebase.com/v0/firebase.js"></script>
     <script src="https://cdn.firebase.com/libs/angularfire/0.5.0/angularfire.min.js"></script>
     -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"> </script>
 </head>    
 
@@ -35,19 +36,19 @@
 					    	<p> Id: {{checklistitem.Id}} </p> 
 					    	<p> Checklist Id: {{checklistitem.Checklist__c}} </p> 
 					    	<p> Order: {{checklistitem.Order__c}} </p> 
-						    <input name="form_checkbox_{{checklistitem.Id}}" type="checkbox" ng-switch-when="Yes/No"> </input>
-						    <input name="form_number_{{checklistitem.Id}}" type="number" ng-switch-when="Number"> </input>
-						    <input name="form_text_{{checklistitem.Id}}" type="text" ng-switch-when="Text"> </input>
-						    <input name="form_date_{{checklistitem.Id}}" type="date" ng-switch-when="Date"> </input>
-						    <textarea name="form_longtext_{{checklistitem.Id}}" ng-switch-when="Long Text">Enter response here...</textarea>
+						    <input id="form_yes/no_{{checklistitem.Id}}" type="checkbox" ng-switch-when="Yes/No"> </input>
+						    <input id="form_number_{{checklistitem.Id}}" type="number" ng-switch-when="Number"> </input>
+						    <input id="form_text_{{checklistitem.Id}}" type="text" ng-switch-when="Text"> </input>
+						    <input id="form_date_{{checklistitem.Id}}" type="date" ng-switch-when="Date"> </input>
+						    <textarea id="form_longtext_{{checklistitem.Id}}" ng-switch-when="Long Text">Enter response here...</textarea>
 							<!-- Multiple Values from Database -->
-						    <input name="form_rating_{{checklistitem.Id}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}"> </input>
-						    <select name="form_date_{{checklistitem.Id}}" ng-switch-when="Picklist"> 
+						    <input id="form_rating_{{checklistitem.Id}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}"> </input>
+						    <select id="form_date_{{checklistitem.Id}}" ng-switch-when="Picklist"> 
 						    	<option value="{{checklistitems.Values__c[0]}}">{{checklistitems.Values__c[0]}}</option>
 								<option value="checklistitems.Values__c[3]">checklistitems.Values__c[3]</option>
 						    </select>
-						    <input name="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input>
-						    <input name="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input>
+						    <input id="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input>
+						    <input id="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input>
 						 </span>
 				    </li>
 				    <input type="submit" value="Submit"> </input>
@@ -69,7 +70,37 @@ myApp.controller("ChecklistCtrl", function ($scope) {
 
 function submitForm() {
 	// Iterate through checklistitems
-	console.log(checklistitems);
+	var requiredCheckPassed;
+    for (var i = 0; i < checklistitems.length; i++) {
+    	var key = checklistitems[i].Type__c.toLowerCase();
+    	var id = checklistitems[i].Id;
+    	var input_id = 'form_' + key + '_' + id;
+    	var inputElement = $('#' + input_id);
+    	if (inputElement!= null && inputElement.length != 0){
+	        var value = inputElement.val().trim();
+	        // html escape
+	        var entityMap = {
+	          "&": "&amp;",
+	          "<": "&lt;",
+	          ">": "&gt;",
+	          '"': '&quot;',
+	          "'": '&#39;',
+	          "/": '&#x2F;'
+	        };
+	        function escapeHtml(string) {
+	          return String(string).replace(/[&<>"'\/]/g, function (s) {
+	            return entityMap[s];
+	          });
+	        }
+	        value = escapeHtml(value);
+	        if (inputElement.attr("isRequired") == "true" &&  value == ''){                  
+	          requiredCheckPassed = false;
+	          // show errors on inputs
+	        } else{
+	            console.log('val: '+inputElement.val());
+	        }
+	    }
+    }
 }
 
 
