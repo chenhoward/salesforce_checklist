@@ -1,0 +1,42 @@
+<apex:page docType="html-5.0"
+    sidebar="false" 
+    showheader="false"
+    standardStylesheets="false"
+    Controller="ChecklistController"
+    applyHtmlTag="false"
+    applyBodyTag="false"   
+    id="todo"
+    >
+<html ng-app="checklistApp">        
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="viewport" content="initial-scale = 1.0, user-scalable = no"/>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"> </script>
+</head>    
+
+<body ng-controller="AdminCtrl">
+<form name="newChecklistForm">
+  <h1>Checklist Name</h1>
+  <input type="text" ng-model="checklist.name"></input>
+  <h1>Checklist Description</h1>
+  <input type="text" ng-model="checklist.description"></input>
+</form>
+</body>
+
+<script>
+ /* Angular */
+var checklistApp = angular.module('checklistApp', []);
+var checklistitems;
+
+checklistApp.controller("AdminCtrl", function ($scope) {
+    $scope.checklist = new Object();
+    $scope.checklist.name = 'Default Name';
+    $scope.checklist.description = 'Default Desc';
+});
+
+
+</script>
+
+</html>
+</apex:page>
