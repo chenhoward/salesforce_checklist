@@ -1,11 +1,20 @@
 global with sharing class ChecklistController {
 
-	public static String getCheckListItems() {
-	   List<Checklist_Item__c> checklists = getAllChecklists(); // pass in ID
+	public static String getCheckLists() {
+	   List<Checklist__c> checklists = getAllChecklists(); 
 	   return JSON.serialize(checklists);
 	} 
 
-	private static List<Checklist_Item__c> getAllChecklists(){
+	private static List<Checklist__c> getAllChecklists(){
+        return [SELECT Name, Description__c, Id	FROM Checklist__c];
+    }
+
+	public static String getCheckListItems() {
+	   List<Checklist_Item__c> checklists = getAllChecklistItems(); 
+	   return JSON.serialize(checklists);
+	} 
+
+	private static List<Checklist_Item__c> getAllChecklistItems(){
         return [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
         		FROM Checklist_Item__c WHERE Checklist__c=:ApexPages.currentPage().getParameters().get('checklist_id')];
     }
