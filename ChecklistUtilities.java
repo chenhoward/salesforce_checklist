@@ -29,4 +29,20 @@ global class ChecklistUtilities {
         }
         return checklist[0];
     }
+
+    /** Inserts CHECKLISTITEMS into CHECKLIST and returns the list of inserted items. */
+    global static Checklist_Item__c[] addChecklistItems(Checklist__c checklist, Checklist_Item__c[] checklistItems) {
+         for(Checklist_Item__c item: checklistItems) {
+             item.Checklist__c = checklist.ID;
+         }
+         insert checklistItems;
+         return checklistItems;
+    }
+
+    /** Queries the database for a list of Checklist items. */
+    global static Checklist_Item__c[] findChecklistItems(Checklist__c checklist) {
+        Checklist_Item__c[] checklistItems= [SELECT Checklist__c, Order__c, Question__c, Required__C, Type__c, Values__c
+         FROM Checklist_Item__c WHERE Checklist__c=:checklist.ID];
+        return checklistItems;
+    }
 }
