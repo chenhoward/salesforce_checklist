@@ -23,7 +23,7 @@
 		<div id="checklist">
 	    	<ul>
 			    <li ng-show="!checklistitems.length">No checklistitems</li>
-			    <form>
+			    <form onsubmit="submitForm()">
 				    <li ng-repeat="checklistitem in checklistitems | orderBy: 'Order__c'"> 
 				    	<span ng-switch="checklistitem.Type__c">
 					    	<p> Question: {{checklistitem.Question__c}} </p> 
@@ -32,10 +32,20 @@
 					    	<p> Id: {{checklistitem.Id}} </p> 
 					    	<p> Checklist Id: {{checklistitem.Checklist__c}} </p> 
 					    	<p> Order: {{checklistitem.Order__c}} </p> 
-						    <input type="checkbox" ng-switch-when="Boolean"> </input>
-						    <input type="number" ng-switch-when="Number"> </input>
-						    <input type="text" ng-switch-when="String"> </input>
-						    <input type="date" ng-switch-when="Date"> </input>
+						    <input name="form_checkbox" type="checkbox" ng-switch-when="Yes/No"> </input>
+						    <input name="form_number" type="number" ng-switch-when="Number"> </input>
+						    <input name="form_text" type="text" ng-switch-when="Text"> </input>
+						    <input name="form_date" type="date" ng-switch-when="Date"> </input>
+						    <textarea ng-switch-when="Long Text">Enter response here...</textarea>
+							<!-- Multiple Values from Database -->
+						    <input name="form_rating" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}"> </input>
+						    <select name="form_date" ng-switch-when="Picklist"> 
+						    	<option value="{{checklistitems.Values__c[0]}}">{{checklistitems.Values__c[0]}}</option>
+								<option value="checklistitems.Values__c[3]">checklistitems.Values__c[3]</option>
+								<option value="checklistitems.Values__c[6]">checklistitems.Values__c[6]</option>
+						    </select>
+						    <input name="form_date" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input>
+						    <input name="form_date" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input>
 						 </span>
 				    </li>
 				    <input type="submit" value="Submit"> </input>
@@ -48,12 +58,19 @@
 <script>
  /* Angular */
 var myApp = angular.module('myApp', []);
-var checklistitems = {!CheckListItems};
+var checklistitems;
 
 myApp.controller("ChecklistCtrl", function ($scope) {
+	checklistitems = {!CheckListItems};
 	$scope.checklistitems = checklistitems;
-	console.log($scope.checklistitems);
 });
+
+function submitForm() {
+	// Iterate through checklistitems
+	console.log(checklistitems);
+}
+
+
 </script>
 
 </html>
