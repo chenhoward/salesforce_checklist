@@ -51,7 +51,7 @@ global class ChecklistUtilities {
         return checklist;
     }
 
-    global static Checklist__c[] updateChecklistItems(Checklist_Item__c[] checklistItems) {
+    global static Checklist_Item__c[] updateChecklistItems(Checklist_Item__c[] checklistItems) {
         update checklistItems;
         return checklistItems;
     }
