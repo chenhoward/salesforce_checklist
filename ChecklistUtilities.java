@@ -45,4 +45,14 @@ global class ChecklistUtilities {
          FROM Checklist_Item__c WHERE Checklist__c=:checklist.ID ORDER BY Order__c ASC];
         return checklistItems;
     }
+
+    global static Checklist__c updateChecklist(Checklist__c checklist) {
+        update checklist;
+        return checklist;
+    }
+
+    global static Checklist__c[] updateChecklistItems(Checklist_Item__c[] checklistItems) {
+        update checklistItems;
+        return checklistItems;
+    }
 }
