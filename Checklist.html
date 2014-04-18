@@ -70,37 +70,43 @@ myApp.controller("ChecklistCtrl", function ($scope) {
 
 function submitForm() {
 	// Iterate through checklistitems
-	var requiredCheckPassed;
+	var safety_check = ["Text", "Long Text"]
+
     for (var i = 0; i < checklistitems.length; i++) {
     	var key = checklistitems[i].Type__c.toLowerCase();
     	var id = checklistitems[i].Id;
     	var input_id = 'form_' + key + '_' + id;
     	var inputElement = $('#' + input_id);
-    	if (inputElement!= null && inputElement.length != 0){
-	        var value = inputElement.val().trim();
-	        // html escape
-	        var entityMap = {
-	          "&": "&amp;",
-	          "<": "&lt;",
-	          ">": "&gt;",
-	          '"': '&quot;',
-	          "'": '&#39;',
-	          "/": '&#x2F;'
-	        };
-	        function escapeHtml(string) {
-	          return String(string).replace(/[&<>"'\/]/g, function (s) {
-	            return entityMap[s];
-	          });
-	        }
-	        value = escapeHtml(value);
-	        if (inputElement.attr("isRequired") == "true" &&  value == ''){                  
-	          requiredCheckPassed = false;
-	          // show errors on inputs
-	        } else{
-	            console.log('val: '+inputElement.val());
-	        }
-	    }
+    	var value = inputElement.val();
+
+    	// protection with HTML escape
+    	if (checklistitems[i].Type__c == "Text" || checklistitems[i].Type__c == "Long Text") {
+	    	if (inputElement!= null && inputElement.length != 0){
+		        value = inputElement.val().trim();
+		        // html escape
+		        var entityMap = {
+		          "&": "&amp;",
+		          "<": "&lt;",
+		          ">": "&gt;",
+		          '"': '&quot;',
+		          "'": '&#39;',
+		          "/": '&#x2F;'
+		        };
+		        function escapeHtml(string) {
+		          return String(string).replace(/[&<>"'\/]/g, function (s) {
+		            return entityMap[s];
+		          });
+		        }
+		        value = escapeHtml(value);
+		    }
+    	}
+    	// value contains the input stuff
+    	console.log(value);
     }
+
+    // create javascript remoting calls to backend
+
+
 }
 
 
