@@ -4,7 +4,7 @@ global class ChecklistUtilities {
     /** Returns a new Checklist with the name LISTNAME, and the description DESC
       * while inserting it into the database. */
     global static Checklist__c createChecklist(String listName, String desc) {
-        Checklist__c checklist = new Checklist__c(Name = listName);
+        Checklist__c checklist = new Checklist__c(Name = listName, Description__c = desc);
         insert checklist;
         return checklist;
     }
@@ -16,6 +16,6 @@ global class ChecklistUtilities {
 
     /** Queries the database for a Checklist with the ID LISTID. */
     global static Checklist__c findChecklist(ID listID) {
-        return [SELECT Name, Id FROM Checklist__c WHERE Id := listID];
+        return [SELECT Name, Id, Description__c FROM Checklist__c WHERE Id := listID];
     }
 }
