@@ -23,6 +23,8 @@
 </head>    
 
 <body ng-controller="ChecklistCtrl">
+	<input class='normal' id='checklist_id' type='hidden' value='{!$CurrentPage.parameters.checklist_id}'/>
+	<div id="messages"></div>
 	<div>
 		<div id="checklist">
 	    	<ul>
@@ -45,7 +47,7 @@
 						    <input id="form_rating_{{checklistitem.Id}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}"> </input>
 						    <select id="form_date_{{checklistitem.Id}}" ng-switch-when="Picklist"> 
 						    	<option value="{{checklistitems.Values__c[0]}}">{{checklistitems.Values__c[0]}}</option>
-								<option value="checklistitems.Values__c[3]">checklistitems.Values__c[3]</option>
+								<option value="{{checklistitems.Values__c[3]}}">checklistitems.Values__c[3]</option>
 						    </select>
 						    <input id="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input>
 						    <input id="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input>
@@ -70,7 +72,9 @@ myApp.controller("ChecklistCtrl", function ($scope) {
 
 function submitForm() {
 	// Iterate through checklistitems
-	var safety_check = ["Text", "Long Text"]
+	var safety_check = ["Text", "Long Text"];
+	checklist_item_id_list = []; // list of all checklist item id's
+    answer_list = []; // list of all answers
 
     for (var i = 0; i < checklistitems.length; i++) {
     	var key = checklistitems[i].Type__c.toLowerCase();
@@ -101,14 +105,42 @@ function submitForm() {
 		    }
     	}
     	// value contains the input stuff
-    	console.log(value);
+    	checklist_id = $('#checklist_id').val();
+    	checklist_item_id_list.push(id);
+    	answer_list.push(value);
     }
 
     // create javascript remoting calls to backend
+    Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistController.save_responses}',
+        checklist_id,
+        checklist_item_id_list,
+        answer_list,
+            function(result, event){
+                if (event.status) {
+                    console.log('SUCCESS!');
+                } else if (event.type === 'exception') {
+                    console.log('Exception!');
+                } else {
+                    console.log('Error!');
+                }
+            },
+        {escape: true}
+    );
 
+    $("#messages").text('Success!');
+
+    // Clearing Input for next checklist
+    for (var i = 0; i < checklistitems.length; i++) {
+    	var key = checklistitems[i].Type__c.toLowerCase();
+    	var id = checklistitems[i].Id;
+    	var input_id = 'form_' + key + '_' + id;
+    	var inputElement = $('#' + input_id);
+    	inputElement.val('');
+    	inputElement.focus();
+    }
 
 }
-
 
 </script>
 
