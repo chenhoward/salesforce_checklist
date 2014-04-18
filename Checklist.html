@@ -25,28 +25,52 @@
 			    <li ng-show="!checklistitems.length">No checklistitems</li>
 			    <form onsubmit="submitForm()">
 				    <li ng-repeat="checklistitem in checklistitems | orderBy: 'Order__c'"> 
-				    	<span ng-switch="checklistitem.Type__c">
-					    	<p> Question: {{checklistitem.Question__c}} </p> 
-					    	<p> Required: {{checklistitem.Required__c}} </p> 
-					    	<p> Type: {{checklistitem.Type__c}} </p> 
-					    	<p> Id: {{checklistitem.Id}} </p> 
-					    	<p> Checklist Id: {{checklistitem.Checklist__c}} </p> 
-					    	<p> Order: {{checklistitem.Order__c}} </p> 
-						    <input name="form_checkbox" type="checkbox" ng-switch-when="Yes/No"> </input>
-						    <input name="form_number" type="number" ng-switch-when="Number"> </input>
-						    <input name="form_text" type="text" ng-switch-when="Text"> </input>
-						    <input name="form_date" type="date" ng-switch-when="Date"> </input>
-						    <textarea ng-switch-when="Long Text">Enter response here...</textarea>
-							<!-- Multiple Values from Database -->
-						    <input name="form_rating" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}"> </input>
-						    <select name="form_date" ng-switch-when="Picklist"> 
-						    	<option value="{{checklistitems.Values__c[0]}}">{{checklistitems.Values__c[0]}}</option>
-								<option value="checklistitems.Values__c[3]">checklistitems.Values__c[3]</option>
-								<option value="checklistitems.Values__c[6]">checklistitems.Values__c[6]</option>
-						    </select>
-						    <input name="form_date" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input>
-						    <input name="form_date" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input>
-						 </span>
+				    	<div ng-class="{checklistitem.Required__c: 'true'}">
+					    	<span ng-switch="checklistitem.Type__c">
+						    	<p> Question: {{checklistitem.Question__c}} </p> 
+						    	<p> Required: {{checklistitem.Required__c}} </p> 
+						    	<p> Type: {{checklistitem.Type__c}} </p> 
+						    	<p> Id: {{checklistitem.Id}} </p> 
+						    	<p> Checklist Id: {{checklistitem.Checklist__c}} </p> 
+						    	<p> Order: {{checklistitem.Order__c}} </p> 
+							    <input name="form_checkbox" type="checkbox" ng-switch-when="Yes/No" required="True"> </input>
+							    <input name="form_number" type="number" ng-switch-when="Number" required="True"> </input>
+							    <input name="form_text" type="text" ng-switch-when="Text" required="True"> </input>
+							    <input name="form_date" type="date" ng-switch-when="Date" required="True"> </input>
+							    <textarea ng-switch-when="Long Text">Enter response here...</textarea>
+								<!-- Multiple Values from Database -->
+							    <input name="form_rating" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}" required="True"> </input>
+							    <select name="form_date" ng-switch-when="Picklist"> 
+							    	<option value="{{checklistitems.Values__c[0]}}">{{checklistitems.Values__c[0]}}</option>
+									<option value="checklistitems.Values__c[3]">checklistitems.Values__c[3]</option>
+							    </select>
+							    <input name="form_date" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input>
+							    <input name="form_date" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input>
+							 </span>
+						</div>
+						<div ng-class="{checklistitem.Required__c: 'false'}">
+					    	<span ng-switch="checklistitem.Type__c">
+						    	<p> Question: {{checklistitem.Question__c}} </p> 
+						    	<p> Required: {{checklistitem.Required__c}} </p> 
+						    	<p> Type: {{checklistitem.Type__c}} </p> 
+						    	<p> Id: {{checklistitem.Id}} </p> 
+						    	<p> Checklist Id: {{checklistitem.Checklist__c}} </p> 
+						    	<p> Order: {{checklistitem.Order__c}} </p> 
+							    <input name="form_checkbox" type="checkbox" ng-switch-when="Yes/No" > </input>
+							    <input name="form_number" type="number" ng-switch-when="Number" > </input>
+							    <input name="form_text" type="text" ng-switch-when="Text" > </input>
+							    <input name="form_date" type="date" ng-switch-when="Date" > </input>
+							    <textarea ng-switch-when="Long Text">Enter response here...</textarea>
+								<!-- Multiple Values from Database -->
+							    <input name="form_rating" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}" > </input>
+							    <select name="form_date" ng-switch-when="Picklist"> 
+							    	<option value="{{checklistitems.Values__c[0]}}">{{checklistitems.Values__c[0]}}</option>
+									<option value="checklistitems.Values__c[3]">checklistitems.Values__c[3]</option>
+							    </select>
+							    <input name="form_date" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input>
+							    <input name="form_date" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input>
+							 </span>
+						</div>	
 				    </li>
 				    <input type="submit" value="Submit"> </input>
 		    	</form>
