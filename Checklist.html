@@ -80,7 +80,6 @@ myApp.controller("ListCtrl", function ($scope) {
 });
 
 myApp.controller("ChecklistCtrl", function ($scope) {
-	checklistitems = {!CheckListItems};
 	$scope.checklistitems = checklistitems;
 });
 
@@ -167,6 +166,25 @@ controllers.PagesController = function ($scope) {
         $scope.listPageActive = false;
         $scope.detailPageActive = true;
         $scope.checklist_id = checklist_id;
+        console.log(checklist_id);
+
+        Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistController.checklist_items}',
+        checklist_id,
+            function(result, event){
+                if (event.status) {
+                    checklistitems = result;
+                    console.log(checklistitems);
+                } else if (event.type === 'exception') {
+                    console.log('Exception!');
+                } else {
+                    console.log('Error!');
+                }
+            },
+        {escape: true}
+	    );
+
+
     };
     $scope.goToHomepage = function() {
         $scope.listPageActive = true;
