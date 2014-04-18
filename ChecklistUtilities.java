@@ -16,6 +16,7 @@ global class ChecklistUtilities {
 
     /** Queries the database for a Checklist with the ID LISTID. */
     global static Checklist__c findChecklist(ID listID) {
-        return [SELECT Name, Id, Description__c FROM Checklist__c WHERE Id := listID];
+        Checklist__c[] checklist = [SELECT Name, Id, Description__c FROM Checklist__c WHERE Id := listID];
+        return checklist[0];
     }
 }
