@@ -17,6 +17,7 @@ global with sharing class ChecklistController {
     private static List<Checklist_Item__c> getAllChecklistItems(Id checklist){
         return [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
                 FROM Checklist_Item__c WHERE Checklist__c=:checklist];
+
     }
 
     // Creates Checklist Response Item Objects
