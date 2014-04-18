@@ -2,7 +2,7 @@
     sidebar="false" 
     showheader="false"
     standardStylesheets="false"
-    Controller="ChecklistController"
+    Controller="ChecklistAdminController"
     applyHtmlTag="false"
     applyBodyTag="false"   
     id="todo"
@@ -21,6 +21,7 @@
   <input type="text" ng-model="checklist.name"></input>
   <h1>Checklist Description</h1>
   <input type="text" ng-model="checklist.description"></input>
+  <input type="submit" value="Submit " ng-click="createChecklist()"> </input>
 </form>
 </body>
 
@@ -33,8 +34,28 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.checklist = new Object();
     $scope.checklist.name = 'Default Name';
     $scope.checklist.description = 'Default Desc';
-});
+    $scope.createChecklist = function() {
+        var nom = $scope.checklist.name;
+    var desc = $scope.checklist.description;
+    Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistAdminController.createChecklist}',
+        nom,
+        desc,
+            function(result, event){
+                if (event.status) {
+                    console.log('SUCCESS!');
+                    console.log(result);
+                } else if (event.type === 'exception') {
+                    console.log('Exception!');
+                } else {
+                    console.log('Error!');
+                }
+            },
+        {escape: true}
+    );
 
+    }
+});
 
 </script>
 
