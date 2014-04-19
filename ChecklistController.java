@@ -9,14 +9,15 @@ global with sharing class ChecklistController {
         return [SELECT Name, Description__c, Id FROM Checklist__c];
     }
 
-    public static String getCheckListItems() {
-       List<Checklist_Item__c> checklists = getAllChecklistItems(); 
-       return JSON.serialize(checklists);
-    } 
+    // public static String getCheckListItems() {
+    //    List<Checklist_Item__c> checklists = getAllChecklistItems(); 
+    //    return JSON.serialize(checklists);
+    // } 
 
-    private static List<Checklist_Item__c> getAllChecklistItems(){
+    private static List<Checklist_Item__c> getAllChecklistItems(Id checklist){
         return [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
-                FROM Checklist_Item__c WHERE Checklist__c=:ApexPages.currentPage().getParameters().get('checklist_id')];
+                FROM Checklist_Item__c WHERE Checklist__c=:checklist];
+
     }
 
     // Creates Checklist Response Item Objects
@@ -34,5 +35,11 @@ global with sharing class ChecklistController {
             insert new_item_response;
         }
         return new String[]{}; // can include succes message?
+    }
+
+    // Creates Checklist Response Item Objects
+    @RemoteAction
+    global static List<Checklist_Item__c> checklist_items(Id checklist) {
+        return getAllChecklistItems(checklist);
     }
 }
