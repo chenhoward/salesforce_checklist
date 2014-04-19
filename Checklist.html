@@ -166,14 +166,7 @@ controllers.PagesController = function ($scope) {
         $scope.listPageActive = false;
         $scope.detailPageActive = true;
         $scope.checklist_id = checklist_id;
-
 		get_checklist_items(checklist_id);        
-		console.log(checklistitems);
-
-        setTimeout(function(){
-        	console.log(checklistitems);
-        },3000);
-
     };
     $scope.goToHomepage = function() {
         $scope.listPageActive = true;
@@ -188,6 +181,7 @@ function get_checklist_items(checklist_id) {
         function(result, event){
             if (event.status) {
                 checklistitems = result;
+                // PUT NOTIFIERS/OBSERVORS HERE
             } else if (event.type === 'exception') {
                 console.log('Exception!');
             } else {
