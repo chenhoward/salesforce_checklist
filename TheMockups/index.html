@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="scroll.js"></script>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200' rel='stylesheet' type='text/css'>
+<title> Checker </title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style type="text/css">
+body {
+    font-family: Source Sans Pro, sans-serif;
+    font-weight: 200;
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    overflow: hidden;
+    background: #CCC;
+}
+    
+*:focus {
+    outline: none;
+}
+    
+p {
+    padding: 0px;
+    margin: 0px;
+}
+
+#container {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    overflow: hidden;
+    background: transparent;
+}
+    
+#container section {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 100%;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
+}
+
+#container section:nth-child(1) {
+    left: 0%;
+}
+
+#logo {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 20%;
+    width: 100%;
+    background: #333;
+}
+    
+.link {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    display: block;
+    color: #999;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-align: left;
+    font-size: 24px;
+    padding: 25px;
+    padding-bottom: 24px;
+    box-shadow: 0px -1px 0px #CCC;
+    background: #FFF;
+    width: 100%;
+}
+    
+.arrow-right {
+    float: right;
+    margin: 9px;
+	width: 10px; 
+	height: 10px;
+    -webkit-transform: rotate(45deg);
+	border-top: 3px solid #CCC;
+	border-right: 3px solid #CCC;
+}
+    
+.title {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    display: block;
+    color: #FFF;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 24px;
+    padding: 25px;
+    padding-bottom: 24px;
+    background: #333;
+    width: 100%;
+}
+    
+.question {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    display: block;
+    color: #999;
+    text-decoration: none;
+    text-align: left;
+    font-size: 24px;
+    padding: 25px;
+    padding-bottom: 24px;
+    box-shadow: 0px -1px 0px #CCC;
+    background: #FFF;
+    width: 100%;
+}
+
+input, textarea, select {
+    font-family: Source Sans Pro, sans-serif;
+    font-weight: 200;
+    font-size: 24px;
+    color: #999;
+    width: 80%;
+    margin-top: 16px;
+    padding: 5px;
+    padding-left: 10px;
+    outline: none;
+    border: 1px solid #CCC;
+    margin-right: 20%;
+    max-width: 800px;
+    background: transparent;
+    border-radius: 5px;
+    -webkit-appearance: none;
+}
+    
+textarea {
+    height: 150px;
+}
+    
+select {
+    background: url(arrow-bottom.png) no-repeat right;
+    background-size: 60px 60px;
+}
+    
+.toggle-spacer {
+    height: 20px;
+    width: 1px;
+}
+  
+.check-spacer {
+    height: 16px;
+    width: 1px;
+}
+    
+.check-label {
+    position: relative;
+    top: -7px;
+    margin-left: 10px;
+}
+
+#yes-button {
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    color: #CCC;
+    text-transform: uppercase;
+    background: #CCC;
+    border: 1px solid #CCC;
+    padding-right: 5px;
+    border-right: none;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+    
+#no-button {
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    color: #CCC;
+    text-transform: uppercase;
+    background: #CCC;
+    border: 1px solid #CCC;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+    
+input[type="radio"].toggle {
+    display: none;
+}
+    
+input[type="radio"]#yes:checked ~ #yes-button {
+    color: #FFF;
+    background: #8bc763;
+}
+    
+input[type="radio"]#no:checked ~ #no-button {
+    color: #FFF;
+    background: #f06060;
+}
+    
+input[type="number"] {
+    width: 80px;
+}
+
+input[type="range"] {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    -webkit-appearance: none;
+    background-color: #FFF;
+    height: 5px;
+    border-radius: 5px;
+    border: 1px solid #CCC;
+}
+    
+input[type="range"]::-webkit-slider-thumb {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-appearance: none;
+    margin-bottom: 0px;
+    border-radius: 10px;
+    background-color: #FFF;
+    border: 1px solid #CCC;
+    height: 20px;
+    width: 20px;
+}
+    
+input[type="checkbox"] {
+    width: 30px;
+    height: 30px;
+    margin: 0px;
+}
+    
+input[type="checkbox"]:checked {
+    background: url(check.svg) no-repeat center;
+    background-size: cover;
+    border: 1px solid #CCC;
+}
+    
+.submit {
+    font-family: Source Sans Pro, sans-serif;
+    font-weight: 200;
+    max-width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    display: block;
+    color: #8bc763;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 24px;
+    padding: 25px;
+    padding-bottom: 24px;
+    border: none;
+    margin: 0px;
+    box-shadow: 0px -1px 0px #CCC;
+    background: #FFF;
+    width: 100%;
+}
+    
+#conclusion {
+    text-align: center;
+}
+
+#return {
+    text-align: center;
+    color: #8bc763;
+}
+    
+.blue {
+    border-left: 15px solid #5596cf;
+}
+
+.magenta {
+    border-left: 15px solid #f0659f;
+}
+
+.green {
+    border-left: 15px solid #8bc763;
+}
+    
+.green_text {
+    color: #8bc763;
+}
+
+.red {
+    border-left: 15px solid #f06060;
+}
+
+.orange {
+    border-left: 15px solid #fabc5f;
+}
+</style>
+</head>
+<body>
+    <div id="container">
+        <section id="one" class="active">
+            <div id="logo"> </div>
+            <a class="link blue" data-section="two" href="#"> 
+                Checklist 1
+                <div class="arrow-right"></div>
+            </a>
+            <a class="link magenta" data-section="two" href="#">
+                Checklist 2
+                <div class="arrow-right"></div>
+            </a>
+            <a class="link green" data-section="two" href="#">
+                Checklist 3
+                <div class="arrow-right"></div>
+            </a>
+            <a class="link red" data-section="two" href="#">
+                Checklist 4
+                <div class="arrow-right"></div>
+            </a>
+            <a class="link orange" data-section="two" href="#">
+                Checklist 4
+                <div class="arrow-right"></div>
+            </a>
+        </section>
+        <section id="two">
+            <form>
+                <div class="title"> CHECKLIST WITH A LONG NAME LIKE THIS </div>
+                <div class="question">
+                    <p> This is a text question? </p>
+                    <input type="text" name="text"></input>
+                </div>
+                <div class="question">
+                    <p> This is a yes or no question? </p>
+                    <p class="toggle-spacer"></p>
+                    <input class="toggle" type="radio" id="yes" name="toggle" checked></input>
+                    <label for="yes" id="yes-button"> Yes </label>
+                    <input class="toggle" type="radio" id="no" name="toggle"></input>
+                    <label for="no" id="no-button"> No </label>
+                </div>
+                <div class="question">
+                    <p> This is a long text question? </p>
+                    <textarea></textarea>
+                </div>
+                <div class="question">
+                    <p> This is a number question? </p>
+                    <input type="number" name="number"></input>
+                </div>
+                <div class="question">
+                    <p> This is a rating question? </p>
+                    <!-- SLIDER STYLING NOT COMPLETE -->
+                    <input type="range" name="rating" min="1" max="10" value="5"></input>
+                </div>
+                <div class="question">
+                    <p> This is a date question? </p>
+                    <input type="date" name="date"></input>
+                </div>
+                <div class="question">
+                    <p> This is a pick list question? </p>
+                    <select>
+                        <option value="vincent"> Vincent </option>
+                        <option value="howard"> Howard </option>
+                        <option value="kevin"> Kevin </option>
+                        <option value="sandeep"> Sandeep </option>
+                    </select>
+                    <div class="arrow-bottom">
+                    </div>
+                </div>
+                <div class="question">
+                    <p> This is a check list question? </p>
+                    <p class="check-spacer"></p>
+                    <input type="checkbox" name="Vincent"></input>
+                    <label class="check-label" for="Vincent"> Vincent </label>
+                    <p class="check-spacer"></p>
+                    <input type="checkbox" name="Howard"></input>
+                    <label class="check-label" for="Howard"> Howard </label>
+                    <p class="check-spacer"></p>
+                    <input type="checkbox" name="Kevin"></input>
+                    <label class="check-label" for="Kevin"> Kevin </label>
+                    <p class="check-spacer"></p>
+                    <input type="checkbox" name="Sandeep"></input>
+                    <label class="check-label" for="Sandeep"> Sandeep </label>
+                </div>
+                <input class="submit" type="button" name="submit" value="Submit" onclick="setSection($('#container section#three'), $('.active'));"></input>
+            </form>
+        </section>
+        <section id="three">
+            <div class="title"> CHECKLIST WITH A LONG NAME LIKE THIS </div>
+            <div class="question">
+                <p id="conclusion"> You've just submitted a review of <span class="green_text"> Location 1</span>. </p>
+            </div>
+            <a class="link" id="return" data-section="one" href="#"> Return </a>
+        </section>
+    </div>
+</body>
+</html>
