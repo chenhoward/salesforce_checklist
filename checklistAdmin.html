@@ -25,6 +25,9 @@
   <input type="submit" value="Submit " ng-click="submitChecklist()"> </input>
 </form>
 </div>
+<div ng-model="Questions">
+     
+</div>
 </body>
 
 <script>
@@ -33,6 +36,7 @@ var checklistApp = angular.module('checklistApp', []);
 var checklistitems;
 
 checklistApp.controller("AdminCtrl", function ($scope) {
+    $scope.numQuestions = 0;
     $scope.checklist = new Object();
     $scope.checklist.name = 'Default Name';
     $scope.checklist.description = 'Default Desc';
@@ -52,7 +56,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
                 }
             },
         {escape: true}
-    );}
+    );};
     $scope.submitChecklist = function() {
         if($scope.newChecklistForm.formName.$valid) {
             console.log('valid');
@@ -60,8 +64,10 @@ checklistApp.controller("AdminCtrl", function ($scope) {
         } else {
             console.log('invalid');
         }
-    }
-
+    };
+    $scope.addQUestion = function() {
+        var el = angular.element('<input></input>');
+    };
 });
 
 </script>
