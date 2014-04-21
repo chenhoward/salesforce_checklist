@@ -11,9 +11,18 @@ global with sharing class ChecklistExtension {
         return [SELECT Name, Description__c, Id FROM Checklist__c];
     }
 
-    public static List<Checklist_Item__c> getAllChecklistItems(Id checklist){
-        return [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
+    public static List<sObject> getAllChecklistItems(Id checklist){
+        List<Checklist_Item__c> to_return = [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
                 FROM Checklist_Item__c WHERE Checklist__c=:checklist];
+        if (to_return.size() == 0) {
+            // handle checklist_response here
+            Checklist_Response__c r = [SELECT Checklist__c, Responder__c 
+                                       FROM Checklist_Response__c WHERE Id=:checklist];
+            List<Checklist_Item_Response__c> answers = [SELECT Answer__c, Checklist_Item__c, Checklist_Response__c 
+                                                       FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:r.id];
+            return answers;
+        }
+        return to_return;
     }
 
     // Creates Checklist Response Item Objects
@@ -38,4 +47,5 @@ global with sharing class ChecklistExtension {
     global static List<Checklist_Item__c> checklist_items(Id checklist) {
         return getAllChecklistItems(checklist);
     }
+
 }
