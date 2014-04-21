@@ -2,13 +2,8 @@
 global with sharing class ChecklistAdminController {
 
     public static String getCheckLists() {
-       List<Checklist__c> checklists = getAllChecklists(); 
-       return JSON.serialize(checklists);
+        return ChecklistExtension.getCheckLists();
     } 
-
-    public static List<Checklist__c> getAllChecklists(){
-        return [SELECT Name, Description__c, Id FROM Checklist__c];
-    }
 
     /** Remote call used by admin pages to create a checklist. */
     @RemoteAction
