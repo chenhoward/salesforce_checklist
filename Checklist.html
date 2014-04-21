@@ -101,7 +101,6 @@ myApp.service('userService', function() {
             function(result, event){
                 if (event.status) {
                     checklistitems = result;
-                    // PUT NOTIFIERS/OBSERVORS HERE
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
@@ -246,11 +245,20 @@ controllers.PagesController = function ($scope, userService) {
     var checklist = getUrlVars()['checklist_id']; 
     var response = getUrlVars()['id']; 
 
+    // Specific checklist
     if (checklist != null ) {
         $scope.listPageActive = false;
         $scope.detailPageActive = true;
         $scope.checklist_id = checklist;
         userService.get_checklist_items(checklist);
+    }
+
+    // Specific response
+    if (response != null ) {
+        $scope.listPageActive = false;
+        $scope.detailPageActive = true;
+        $scope.checklist_id = response;
+        userService.get_checklist_items(response);
     }
 
     if (checklist == undefined && response == undefined) {
