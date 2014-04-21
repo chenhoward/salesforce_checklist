@@ -58,6 +58,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.checklist = new Object();
     $scope.checklist.name = 'Default Name';
     $scope.checklist.description = 'Default Desc';
+    $scope.checklists = {!CheckLists};
     console.log($scope.checklists);
     $scope.createChecklist = function() {
         Visualforce.remoting.Manager.invokeAction(
