@@ -46,8 +46,8 @@ var checklistitems;
 checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.numQuestions = 2;
     $scope.items = new Array();
-    $scope.items[0] = new Array();
-    $scope.items[1] = new Array();
+    $scope.items[0] = new Object();
+    $scope.items[1] = new Object();
     $scope.checklist = new Object();
     $scope.checklist.name = 'Default Name';
     $scope.checklist.description = 'Default Desc';
@@ -77,8 +77,22 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             }
         };
         $scope.addQUestion = function() {
-            var checklistItem = 1; 
-            var el = angular.element('<input></input>');
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.ChecklistAdminController.createChecklistWithQuestions}',
+                $scope.checklist.name,
+                $scope.checklist.description,
+                $scope.items,
+                function(result, event) {
+                    if (event.status) {
+                        console.log('Created everything')
+                    } else if (event.type == 'exception') {
+                        console.log('Exception');
+                    } else {
+                        console.log('Error!');
+                    }
+                },
+                {escape: true}
+                );
         };
     });
 
