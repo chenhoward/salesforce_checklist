@@ -93,7 +93,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
                 $scope.items,
                 function(result, event) {
                     if (event.status) {
-                        console.log('Created everything')
+                        console.log('Created everything');
                     } else if (event.type == 'exception') {
                         console.log('Exception');
                     } else {
@@ -103,6 +103,24 @@ checklistApp.controller("AdminCtrl", function ($scope) {
                 {escape: true}
                 );
         };
+
+        $scope.editChecklist = function() {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.ChecklistAdminController.updateChecklist}',
+                $scope.item,
+                function(result, event) {
+                    if (event.status) {
+                        console.log('Updated everything');
+                    } else if (event.type == 'exeception') {
+                        console.log('Exception');
+                    } else {
+                        console.log('Error!');
+                    }
+                },
+                {escape: true}
+                );
+        };
+
     });
 
 </script>
