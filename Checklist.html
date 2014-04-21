@@ -71,16 +71,67 @@
 <script>
  /* Angular */
 var myApp = angular.module('myApp', []);
-var checklistitems;
-var checklists;
 
-myApp.controller("ListCtrl", function ($scope) {
+myApp.service('userService', function() {
+
+    var checklistitems;
+    var checklists;
+    var checklist_id;
+
+    var observerCallbacks = [];
+
+    // Register an Observer
+    this.registerObserverCallback = function(callback){
+        observerCallbacks.push(callback);
+    };
+
+    //call this when you know 'foo' has been changed
+    this.notifyObservers = function() {
+        angular.forEach(observerCallbacks, function(callback){
+            callback();
+        });
+    };
+
+    this.get_checklist_items = function(checklist_id) {
+        var that = this;
+        Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistController.checklist_items}',
+        checklist_id,
+            function(result, event){
+                if (event.status) {
+                    checklistitems = result;
+                    console.log('result: ' + result);
+                    console.log(checklistitems);
+                    // PUT NOTIFIERS/OBSERVORS HERE
+                    that.notifyObservers();
+                } else if (event.type === 'exception') {
+                    console.log('Exception: ' + event.message);
+                } else {
+                    console.log('Error!');
+                }
+            },
+        {escape: true}
+        );
+    }
+})
+
+myApp.controller("ListCtrl", function ($scope, userService) {
 	checklists = {!CheckLists};
 	$scope.checklists = checklists;
 });
 
-myApp.controller("ChecklistCtrl", function ($scope) {
-	$scope.checklistitems = checklistitems;
+myApp.controller("ChecklistCtrl", function ($scope, userService) {
+    init();
+    function init() {
+        $scope.checklistitems = userService.checklistitems;
+        userService.registerObserverCallback(updateChecklistitems);
+    }
+    function updateChecklistitems() {
+        $scope.checklistitems = userService.checklistitems;
+        console.log('checklistitems: ' + userService.checklistitems);
+        // Make sure the scope refreshes itself
+        $scope.$apply();
+    };
 });
 
 function submitForm() {
@@ -157,7 +208,7 @@ function submitForm() {
 
 var controllers = {};
 
-controllers.PagesController = function ($scope) {
+controllers.PagesController = function ($scope, userService) {
     $scope.listPageActive = true;
     $scope.detailPageActive = false;
     $scope.checklist_id = null;
@@ -166,30 +217,13 @@ controllers.PagesController = function ($scope) {
         $scope.listPageActive = false;
         $scope.detailPageActive = true;
         $scope.checklist_id = checklist_id;
-		get_checklist_items(checklist_id);        
+        $('#checklist_id').val(checklist_id);
+		userService.get_checklist_items(checklist_id);        
     };
     $scope.goToHomepage = function() {
         $scope.listPageActive = true;
         $scope.detailPageActive = false;                    
     }
-}
-
-function get_checklist_items(checklist_id) {
-	Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistController.checklist_items}',
-    checklist_id,
-        function(result, event){
-            if (event.status) {
-                checklistitems = result;
-                // PUT NOTIFIERS/OBSERVORS HERE
-            } else if (event.type === 'exception') {
-                console.log('Exception!');
-            } else {
-                console.log('Error!');
-            }
-        },
-    {escape: true}
-    );
 }
 
 
