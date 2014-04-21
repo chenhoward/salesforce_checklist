@@ -32,6 +32,13 @@ id="todo"
           {{items[1]['Question__c']}}
           <input type="submit" value="Submit " ng-click="addQuestion()"> </input>
       </form>
+      <div id="checklistList" >
+            <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToDetailPage(checklist.Id)"> 
+                <p> Name: {{checklist.Name}} </p>
+                <p> Description: {{checklist.Description__c}} </p>
+                <p> Id: {{checklist.Id}} </p>
+            </li>
+        </div>
   </div>
   <div ng-model="Questions">
 
