@@ -38,4 +38,5 @@ global with sharing class ChecklistExtension {
     global static List<Checklist_Item__c> checklist_items(Id checklist) {
         return getAllChecklistItems(checklist);
     }
+
 }
