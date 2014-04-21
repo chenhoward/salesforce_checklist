@@ -1,5 +1,9 @@
+/** The controller for the Admin Page. */
 global with sharing class ChecklistAdminController {
 
+    public static String getCheckLists() {
+        return ChecklistExtension.getCheckLists();
+    } 
 
     /** Remote call used by admin pages to create a checklist. */
     @RemoteAction

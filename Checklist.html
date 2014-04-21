@@ -100,8 +100,11 @@ myApp.service('userService', function() {
         checklist_id,
             function(result, event){
                 if (event.status) {
+                    console.log(result);
+                    if (result.length > 0) {
+                        console.log(result[0].Answer__c);
+                    }
                     checklistitems = result;
-                    // PUT NOTIFIERS/OBSERVORS HERE
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
@@ -230,9 +233,43 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
 var controllers = {};
 
 controllers.PagesController = function ($scope, userService) {
-    $scope.listPageActive = true;
-    $scope.detailPageActive = false;
-    $scope.checklist_id = null;
+
+    // Get Url Parameters
+    function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+
+    var checklist = getUrlVars()['checklist_id']; 
+    var response = getUrlVars()['id']; 
+
+    // Specific checklist
+    if (checklist != null ) {
+        $scope.listPageActive = false;
+        $scope.detailPageActive = true;
+        $scope.checklist_id = checklist;
+        userService.get_checklist_items(checklist);
+    }
+
+    // Specific response
+    if (response != null ) {
+        $scope.listPageActive = false;
+        $scope.detailPageActive = true;
+        $scope.checklist_id = response;
+        userService.get_checklist_items(response);
+    }
+
+    if (checklist == undefined && response == undefined) {
+        $scope.listPageActive = true;
+        $scope.detailPageActive = false;
+        $scope.checklist_id = null;
+    }
 
     $scope.goToDetailPage = function(checklist_id) {
         $scope.checklist_id = checklist_id;

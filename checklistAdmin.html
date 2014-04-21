@@ -1,12 +1,12 @@
 <apex:page docType="html-5.0"
-    sidebar="false" 
-    showheader="false"
-    standardStylesheets="false"
-    Controller="ChecklistAdminController"
-    applyHtmlTag="false"
-    applyBodyTag="false"   
-    id="todo"
-    >
+sidebar="false" 
+showheader="false"
+standardStylesheets="false"
+Controller="ChecklistAdminController"
+applyHtmlTag="false"
+applyBodyTag="false"   
+id="todo"
+>
 <html ng-app="checklistApp">        
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1, user-scalable=no"/>
@@ -17,34 +17,54 @@
 
 <body>
     <div ng-controller="AdminCtrl">
-<form name="newChecklistForm">
-  <h1>Checklist Name</h1>
-  <input type="text" ng-model="checklist.name" name="formName" ng-required="true"></input>
-  <h1>Checklist Description</h1>
-  <input type="text" ng-model="checklist.description"></input>
-  <input type="submit" value="Submit " ng-click="submitChecklist()"> </input>
-</form>
-</div>
-<div ng-model="Questions">
-     
-</div>
+        <form name="newChecklistForm">
+          <h1>Checklist Name</h1>
+          <input type="text" ng-model="checklist.name" name="formName" ng-required="true"></input>
+          <h1>Checklist Description</h1>
+          <input type="text" ng-model="checklist.description"></input>
+          <h1>Question 1</h1>
+          <input type="text" ng-model="items[0]['Question__c']" name="Q1" ng-required="true"></input>
+          <input type="number" ng-model="items[0]['Order__c']" name="O1" ng-required="true"></input>
+          {{items[0]['Question__c']}}
+          <h1>Question 2</h1>
+          <input type="text" ng-model="items[1]['Question__c']" name="Q2" ng-required="true"></input>
+          <input type="number" ng-model="items[1]['Order__c']" name="O2" ng-required="true"></input>
+          {{items[1]['Question__c']}}
+          <input type="submit" value="Submit " ng-click="addQuestion()"> </input>
+      </form>
+      <div id="checklistList" >
+            <li ng-repeat="item in checklists track by $index| orderBy: 'Id'"> 
+                <p> Name: {{item.Name}} </p>
+                <p> Description: {{item.Description__c}} </p>
+                <p> Id: {{item.Id}} </p>
+            </li>
+        </div>
+  </div>
+  <div ng-model="Questions">
+
+  </div>
 </body>
 
 <script>
- /* Angular */
+/* Angular */
 var checklistApp = angular.module('checklistApp', []);
 var checklistitems;
 
 checklistApp.controller("AdminCtrl", function ($scope) {
-    $scope.numQuestions = 0;
+    $scope.numQuestions = 2;
+    $scope.items = new Array();
+    $scope.items[0] = new Object();
+    $scope.items[1] = new Object();
     $scope.checklist = new Object();
     $scope.checklist.name = 'Default Name';
     $scope.checklist.description = 'Default Desc';
+    $scope.checklists = {!CheckLists};
+    console.log($scope.checklists);
     $scope.createChecklist = function() {
-    Visualforce.remoting.Manager.invokeAction(
-        '{!$RemoteAction.ChecklistAdminController.createChecklist}',
-        $scope.checklist.name,
-        $scope.checklist.description,
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ChecklistAdminController.createChecklist}',
+            $scope.checklist.name,
+            $scope.checklist.description,
             function(result, event){
                 if (event.status) {
                     console.log('SUCCESS!');
@@ -55,20 +75,35 @@ checklistApp.controller("AdminCtrl", function ($scope) {
                     console.log('Error!');
                 }
             },
-        {escape: true}
-    );};
-    $scope.submitChecklist = function() {
-        if($scope.newChecklistForm.formName.$valid) {
-            console.log('valid');
-            $scope.createChecklist();
-        } else {
-            console.log('invalid');
-        }
-    };
-    $scope.addQUestion = function() {
-        var el = angular.element('<input></input>');
-    };
-});
+            {escape: true}
+            );};
+        $scope.submitChecklist = function() {
+            if($scope.newChecklistForm.formName.$valid) {
+                console.log('valid');
+                $scope.createChecklist();
+            } else {
+                console.log('invalid');
+            }
+        };
+        $scope.addQuestion = function() {
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.ChecklistAdminController.createChecklistWithQuestions}',
+                $scope.checklist.name,
+                $scope.checklist.description,
+                $scope.items,
+                function(result, event) {
+                    if (event.status) {
+                        console.log('Created everything')
+                    } else if (event.type == 'exception') {
+                        console.log('Exception');
+                    } else {
+                        console.log('Error!');
+                    }
+                },
+                {escape: true}
+                );
+        };
+    });
 
 </script>
 
