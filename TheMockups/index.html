@@ -14,7 +14,7 @@ body {
     padding: 0px;
     height: 100%;
     overflow: hidden;
-    background: #CCC;
+    background: #cccccc;
 }
     
 *:focus {
@@ -52,23 +52,25 @@ p {
 #logo {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-    height: 20%;
+    height: 30%;
     width: 100%;
-    background: #333;
+    background: url('http://www.qvidian.com/sites/default/files/Salesforce1.png');
+    background-size: cover;
+    background-position: center;
 }
     
 .link {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     display: block;
-    color: #999;
+    color: #4d4d4d;
     text-decoration: none;
     text-transform: uppercase;
     text-align: left;
     font-size: 24px;
     padding: 25px;
     padding-bottom: 24px;
-    box-shadow: 0px -1px 0px #CCC;
+    box-shadow: 0px -1px 0px #cccccc;
     background: #FFF;
     width: 100%;
 }
@@ -79,8 +81,8 @@ p {
 	width: 10px; 
 	height: 10px;
     -webkit-transform: rotate(45deg);
-	border-top: 3px solid #CCC;
-	border-right: 3px solid #CCC;
+	border-top: 3px solid #cccccc;
+	border-right: 3px solid #cccccc;
 }
     
 .title {
@@ -94,7 +96,7 @@ p {
     font-size: 24px;
     padding: 25px;
     padding-bottom: 24px;
-    background: #333;
+    background: #333333;
     width: 100%;
 }
     
@@ -102,13 +104,13 @@ p {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     display: block;
-    color: #999;
+    color: #4d4d4d;
     text-decoration: none;
     text-align: left;
     font-size: 24px;
     padding: 25px;
     padding-bottom: 24px;
-    box-shadow: 0px -1px 0px #CCC;
+    box-shadow: 0px -1px 0px #cccccc;
     background: #FFF;
     width: 100%;
 }
@@ -117,13 +119,13 @@ input, textarea, select {
     font-family: Source Sans Pro, sans-serif;
     font-weight: 200;
     font-size: 24px;
-    color: #999;
+    color: #4d4d4d;
     width: 80%;
     margin-top: 16px;
     padding: 5px;
     padding-left: 10px;
     outline: none;
-    border: 1px solid #CCC;
+    border: 1px solid #999999;
     margin-right: 20%;
     max-width: 800px;
     background: transparent;
@@ -137,6 +139,7 @@ textarea {
     
 select {
     background: url(arrow-bottom.png) no-repeat right;
+    /*background: url({!$Resource.checklist_arrow}) no-repeat right;*/
     background-size: 60px 60px;
 }
     
@@ -160,10 +163,10 @@ select {
     padding: 5px;
     padding-right: 10px;
     padding-left: 10px;
-    color: #CCC;
+    color: #b3b3b3;
     text-transform: uppercase;
-    background: #CCC;
-    border: 1px solid #CCC;
+    background: #b3b3b3;
+    border: 1px solid #b3b3b3;
     padding-right: 5px;
     border-right: none;
     border-top-left-radius: 5px;
@@ -174,10 +177,10 @@ select {
     padding: 5px;
     padding-right: 10px;
     padding-left: 10px;
-    color: #CCC;
+    color: #b3b3b3;
     text-transform: uppercase;
-    background: #CCC;
-    border: 1px solid #CCC;
+    background: #b3b3b3;
+    border: 1px solid #b3b3b3;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
 }
@@ -188,7 +191,7 @@ input[type="radio"].toggle {
     
 input[type="radio"]#yes:checked ~ #yes-button {
     color: #FFF;
-    background: #8bc763;
+    background: #8cd250;
 }
     
 input[type="radio"]#no:checked ~ #no-button {
@@ -209,7 +212,7 @@ input[type="range"] {
     background-color: #FFF;
     height: 5px;
     border-radius: 5px;
-    border: 1px solid #CCC;
+    border: 1px solid #999999;
 }
     
 input[type="range"]::-webkit-slider-thumb {
@@ -219,7 +222,7 @@ input[type="range"]::-webkit-slider-thumb {
     margin-bottom: 0px;
     border-radius: 10px;
     background-color: #FFF;
-    border: 1px solid #CCC;
+    border: 1px solid #999999;
     height: 20px;
     width: 20px;
 }
@@ -232,6 +235,7 @@ input[type="checkbox"] {
     
 input[type="checkbox"]:checked {
     background: url(check.svg) no-repeat center;
+    /*background: url({!$Resource.checklist_check}) no-repeat center;*/
     background-size: cover;
     box-shadow: none;
 }
@@ -243,7 +247,7 @@ input[type="checkbox"]:checked {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     display: block;
-    color: #8bc763;
+    color: #FFF;
     text-decoration: none;
     text-transform: uppercase;
     text-align: center;
@@ -252,8 +256,8 @@ input[type="checkbox"]:checked {
     padding-bottom: 24px;
     border: none;
     margin: 0px;
-    box-shadow: 0px -1px 0px #CCC;
-    background: #FFF;
+    box-shadow: 0px -1px 0px #cccccc;
+    background: #8cd250;
     width: 100%;
 }
     
@@ -263,11 +267,12 @@ input[type="checkbox"]:checked {
 
 #return {
     text-align: center;
-    color: #8bc763;
+    color: #FFF;
+    background: #8cd250;
 }
     
 .blue {
-    border-left: 15px solid #5596cf;
+    border-left: 15px solid #32aad2;
 }
 
 .magenta {
@@ -275,11 +280,11 @@ input[type="checkbox"]:checked {
 }
 
 .green {
-    border-left: 15px solid #8bc763;
+    border-left: 15px solid #8cd250;
 }
-    
+
 .green_text {
-    color: #8bc763;
+    color: #8cd250;
 }
 
 .red {
@@ -287,7 +292,7 @@ input[type="checkbox"]:checked {
 }
 
 .orange {
-    border-left: 15px solid #fabc5f;
+    border-left: 15px solid #fabe50;
 }
 </style>
 </head>
@@ -312,7 +317,7 @@ input[type="checkbox"]:checked {
                 <div class="arrow-right"></div>
             </a>
             <a class="link orange" data-section="two" href="#">
-                Checklist 4
+                Checklist 5
                 <div class="arrow-right"></div>
             </a>
         </section>
