@@ -5,7 +5,7 @@ global with sharing class ChecklistController {
        return JSON.serialize(checklists);
     } 
 
-    private static List<Checklist__c> getAllChecklists(){
+    public static List<Checklist__c> getAllChecklists(){
         return [SELECT Name, Description__c, Id FROM Checklist__c];
     }
 
@@ -14,7 +14,7 @@ global with sharing class ChecklistController {
     //    return JSON.serialize(checklists);
     // } 
 
-    private static List<Checklist_Item__c> getAllChecklistItems(Id checklist){
+    public static List<Checklist_Item__c> getAllChecklistItems(Id checklist){
         return [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
                 FROM Checklist_Item__c WHERE Checklist__c=:checklist];
 
