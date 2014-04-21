@@ -9,7 +9,7 @@ id="todo"
 >
 <html ng-app="myApp">        
 <head>
-    <apex:stylesheet value="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200"/>
+    <apex:stylesheet value="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400"/>
     <meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1, user-scalable=no"/>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"> </script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -123,6 +123,7 @@ id="todo"
     .title {
         box-sizing: border-box;
         -moz-box-sizing: border-box;
+        font-weight: 400;
         display: block;
         color: #FFF;
         text-decoration: none;
@@ -194,6 +195,7 @@ id="todo"
     }
 
     #yes-button {
+        font-weight: 400;
         padding: 5px;
         padding-right: 10px;
         padding-left: 10px;
@@ -208,6 +210,7 @@ id="todo"
     }
     
     #no-button {
+        font-weight: 400;
         padding: 5px;
         padding-right: 10px;
         padding-left: 10px;
@@ -260,6 +263,12 @@ id="todo"
         height: 20px;
         width: 20px;
     }
+
+    input[type="date"] {
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 48px;
+    }
     
     input[type="checkbox"] {
         width: 30px;
@@ -275,7 +284,7 @@ id="todo"
     
     .submit {
         font-family: Source Sans Pro, sans-serif;
-        font-weight: 200;
+        font-weight: 400;
         max-width: 100%;
         box-sizing: border-box;
         -moz-box-sizing: border-box;
@@ -299,6 +308,7 @@ id="todo"
     }
 
     #return {
+        font-weight: 400;
         text-align: center;
         color: #FFF;
         background: #8cd250;
