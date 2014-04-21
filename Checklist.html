@@ -33,7 +33,7 @@
 			<div id="checklist">
 		    	<ul>
 				    <li ng-show="!checklistitems.length">No checklistitems</li>
-				    <form onsubmit="submitForm()">
+				    <form ng-submit="submitForm()">
 					    <li ng-repeat="checklistitem in checklistitems | orderBy: 'Order__c'"> 
 					    	<span ng-switch="checklistitem.Type__c">
 						    	<p> Question: {{checklistitem.Question__c}} </p> 
@@ -112,9 +112,11 @@ myApp.service('userService', function() {
         );
     }
 
+    // returns the Check List Items for a given checklist_id
     this.getCLIs = function () {
         return checklistitems;
     };
+
 })
 
 myApp.controller("ListCtrl", function ($scope, userService) {
@@ -133,79 +135,151 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         // Make sure the scope refreshes itself
         $scope.$apply();
     };
+
+    $scope.submitForm = function() {
+        // Iterate through checklistitems
+        var safety_check = ["Text", "Long Text"];
+        checklist_item_id_list = []; // list of all checklist item id's
+        answer_list = []; // list of all answers
+
+        checklistitems = $scope.checklistitems;
+
+        for (var i = 0; i < checklistitems.length; i++) {
+            var key = checklistitems[i].Type__c.toLowerCase();
+            var id = checklistitems[i].Id;
+            var input_id = 'form_' + key + '_' + id;
+            var inputElement = $('#' + input_id);
+            var value = inputElement.val();
+
+            // protection with HTML escape
+            if (checklistitems[i].Type__c == "Text" || checklistitems[i].Type__c == "Long Text") {
+                if (inputElement!= null && inputElement.length != 0){
+                    value = inputElement.val().trim();
+                    // html escape
+                    var entityMap = {
+                      "&": "&amp;",
+                      "<": "&lt;",
+                      ">": "&gt;",
+                      '"': '&quot;',
+                      "'": '&#39;',
+                      "/": '&#x2F;'
+                    };
+                    function escapeHtml(string) {
+                      return String(string).replace(/[&<>"'\/]/g, function (s) {
+                        return entityMap[s];
+                      });
+                    }
+                    value = escapeHtml(value);
+                }
+            }
+            // value contains the input stuff
+            checklist_id = $('#checklist_id').val();
+            checklist_item_id_list.push(id);
+            answer_list.push(value);
+        }
+
+        // create javascript remoting calls to backend
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ChecklistController.save_responses}',
+            checklist_id,
+            checklist_item_id_list,
+            answer_list,
+                function(result, event){
+                    if (event.status) {
+                        console.log('SUCCESS!');
+                    } else if (event.type === 'exception') {
+                        console.log('Exception!');
+                    } else {
+                        console.log('Error!');
+                    }
+                },
+            {escape: true}
+        );
+
+        $("#messages").text('Success!');
+
+        // Clearing Input for next checklist
+        for (var i = 0; i < checklistitems.length; i++) {
+            var key = checklistitems[i].Type__c.toLowerCase();
+            var id = checklistitems[i].Id;
+            var input_id = 'form_' + key + '_' + id;
+            var inputElement = $('#' + input_id);
+            inputElement.val('');
+            inputElement.focus();
+        }
+    }
 });
 
-function submitForm() {
-	// Iterate through checklistitems
-	var safety_check = ["Text", "Long Text"];
-	checklist_item_id_list = []; // list of all checklist item id's
-    answer_list = []; // list of all answers
+// function submitForm() {
+// 	// Iterate through checklistitems
+// 	var safety_check = ["Text", "Long Text"];
+// 	checklist_item_id_list = []; // list of all checklist item id's
+//     answer_list = []; // list of all answers
 
-    for (var i = 0; i < checklistitems.length; i++) {
-    	var key = checklistitems[i].Type__c.toLowerCase();
-    	var id = checklistitems[i].Id;
-    	var input_id = 'form_' + key + '_' + id;
-    	var inputElement = $('#' + input_id);
-    	var value = inputElement.val();
+//     for (var i = 0; i < checklistitems.length; i++) {
+//     	var key = checklistitems[i].Type__c.toLowerCase();
+//     	var id = checklistitems[i].Id;
+//     	var input_id = 'form_' + key + '_' + id;
+//     	var inputElement = $('#' + input_id);
+//     	var value = inputElement.val();
 
-    	// protection with HTML escape
-    	if (checklistitems[i].Type__c == "Text" || checklistitems[i].Type__c == "Long Text") {
-	    	if (inputElement!= null && inputElement.length != 0){
-		        value = inputElement.val().trim();
-		        // html escape
-		        var entityMap = {
-		          "&": "&amp;",
-		          "<": "&lt;",
-		          ">": "&gt;",
-		          '"': '&quot;',
-		          "'": '&#39;',
-		          "/": '&#x2F;'
-		        };
-		        function escapeHtml(string) {
-		          return String(string).replace(/[&<>"'\/]/g, function (s) {
-		            return entityMap[s];
-		          });
-		        }
-		        value = escapeHtml(value);
-		    }
-    	}
-    	// value contains the input stuff
-    	checklist_id = $('#checklist_id').val();
-    	checklist_item_id_list.push(id);
-    	answer_list.push(value);
-    }
+//     	// protection with HTML escape
+//     	if (checklistitems[i].Type__c == "Text" || checklistitems[i].Type__c == "Long Text") {
+// 	    	if (inputElement!= null && inputElement.length != 0){
+// 		        value = inputElement.val().trim();
+// 		        // html escape
+// 		        var entityMap = {
+// 		          "&": "&amp;",
+// 		          "<": "&lt;",
+// 		          ">": "&gt;",
+// 		          '"': '&quot;',
+// 		          "'": '&#39;',
+// 		          "/": '&#x2F;'
+// 		        };
+// 		        function escapeHtml(string) {
+// 		          return String(string).replace(/[&<>"'\/]/g, function (s) {
+// 		            return entityMap[s];
+// 		          });
+// 		        }
+// 		        value = escapeHtml(value);
+// 		    }
+//     	}
+//     	// value contains the input stuff
+//     	checklist_id = $('#checklist_id').val();
+//     	checklist_item_id_list.push(id);
+//     	answer_list.push(value);
+//     }
 
-    // create javascript remoting calls to backend
-    Visualforce.remoting.Manager.invokeAction(
-        '{!$RemoteAction.ChecklistController.save_responses}',
-        checklist_id,
-        checklist_item_id_list,
-        answer_list,
-            function(result, event){
-                if (event.status) {
-                    console.log('SUCCESS!');
-                } else if (event.type === 'exception') {
-                    console.log('Exception!');
-                } else {
-                    console.log('Error!');
-                }
-            },
-        {escape: true}
-    );
+//     // create javascript remoting calls to backend
+//     Visualforce.remoting.Manager.invokeAction(
+//         '{!$RemoteAction.ChecklistController.save_responses}',
+//         checklist_id,
+//         checklist_item_id_list,
+//         answer_list,
+//             function(result, event){
+//                 if (event.status) {
+//                     console.log('SUCCESS!');
+//                 } else if (event.type === 'exception') {
+//                     console.log('Exception!');
+//                 } else {
+//                     console.log('Error!');
+//                 }
+//             },
+//         {escape: true}
+//     );
 
-    $("#messages").text('Success!');
+//     $("#messages").text('Success!');
 
-    // Clearing Input for next checklist
-    for (var i = 0; i < checklistitems.length; i++) {
-    	var key = checklistitems[i].Type__c.toLowerCase();
-    	var id = checklistitems[i].Id;
-    	var input_id = 'form_' + key + '_' + id;
-    	var inputElement = $('#' + input_id);
-    	inputElement.val('');
-    	inputElement.focus();
-    }
-
-}
+//     // Clearing Input for next checklist
+//     for (var i = 0; i < checklistitems.length; i++) {
+//     	var key = checklistitems[i].Type__c.toLowerCase();
+//     	var id = checklistitems[i].Id;
+//     	var input_id = 'form_' + key + '_' + id;
+//     	var inputElement = $('#' + input_id);
+//     	inputElement.val('');
+//     	inputElement.focus();
+//     }
+// }
 
 var controllers = {};
 
