@@ -33,10 +33,10 @@ id="todo"
           <input type="submit" value="Submit " ng-click="addQuestion()"> </input>
       </form>
       <div id="checklistList" >
-            <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToDetailPage(checklist.Id)"> 
-                <p> Name: {{checklist.Name}} </p>
-                <p> Description: {{checklist.Description__c}} </p>
-                <p> Id: {{checklist.Id}} </p>
+            <li ng-repeat="item in checklists track by $index| orderBy: 'Id'"> 
+                <p> Name: {{item.Name}} </p>
+                <p> Description: {{item.Description__c}} </p>
+                <p> Id: {{item.Id}} </p>
             </li>
         </div>
   </div>
@@ -58,6 +58,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.checklist = new Object();
     $scope.checklist.name = 'Default Name';
     $scope.checklist.description = 'Default Desc';
+    console.log($scope.checklists);
     $scope.createChecklist = function() {
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistAdminController.createChecklist}',
