@@ -2,7 +2,8 @@
     sidebar="false" 
     showheader="false"
     standardStylesheets="false"
-    Controller="CheckListController"
+    standardController="Checklist_Response__c"
+    extensions="ChecklistExtension"
     applyHtmlTag="false"
     applyBodyTag="false"   
     id="todo"
@@ -16,56 +17,56 @@
 </head>    
 
 <body>
-	<div ng-controller="PagesController">
-		<input class='normal' id='checklist_id' type='hidden' value='{!$CurrentPage.parameters.checklist_id}'/>
-		<div id="messages"></div>
+    <div ng-controller="PagesController">
+        <input class='normal' id='checklist_id' type='hidden' value='{!$CurrentPage.parameters.checklist_id}'/>
+        <div id="messages"></div>
 
-		<div id="checklistListPage" ng-controller="ListCtrl" ng-show="listPageActive">
-		    <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToDetailPage(checklist.Id)"> 
-		    	<p> Name: {{checklist.Name}} </p>
-		    	<p> Description: {{checklist.Description__c}} </p>
-		    	<p> Id: {{checklist.Id}} </p>
-		    </li>
-		</div>
-		<!-- End of checklistListPage -->
+        <div id="checklistListPage" ng-controller="ListCtrl" ng-show="listPageActive">
+            <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToDetailPage(checklist.Id)"> 
+                <p> Name: {{checklist.Name}} </p>
+                <p> Description: {{checklist.Description__c}} </p>
+                <p> Id: {{checklist.Id}} </p>
+            </li>
+        </div>
+        <!-- End of checklistListPage -->
 
-		<div id="checklistDetailPage" ng-controller="ChecklistCtrl" ng-show="detailPageActive">
-			<div id="checklist">
-		    	<ul>
-				    <li ng-show="!checklistitems.length">No checklistitems</li>
-				    <form ng-submit="submitForm()">
-					    <li ng-repeat="checklistitem in checklistitems | orderBy: 'Order__c'"> 
-					    	<span ng-switch="checklistitem.Type__c">
-						    	<p> Question: {{checklistitem.Question__c}} </p> 
-						    	<p> Required: {{checklistitem.Required__c}} </p> 
-						    	<p> Type: {{checklistitem.Type__c}} </p> 
-						    	<p> Id: {{checklistitem.Id}} </p> 
-						    	<p> Checklist Id: {{checklistitem.Checklist__c}} </p> 
-						    	<p> Order: {{checklistitem.Order__c}} </p> 
-							    <input id="form_yes/no_{{checklistitem.Id}}" type="checkbox" ng-switch-when="Yes/No"> </input>
-							    <input id="form_number_{{checklistitem.Id}}" type="number" ng-switch-when="Number"> </input>
-							    <input id="form_text_{{checklistitem.Id}}" type="text" ng-switch-when="Text"> </input>
-							    <input id="form_date_{{checklistitem.Id}}" type="date" ng-switch-when="Date"> </input>
-							    <textarea id="form_longtext_{{checklistitem.Id}}" ng-switch-when="Long Text">Enter response here...</textarea>
-								<!-- Multiple Values from Database -->
-							    <input id="form_rating_{{checklistitem.Id}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}"> </input>
-							    <select id="form_date_{{checklistitem.Id}}" ng-switch-when="Picklist"> 
-							    	<option value="{{checklistitems.Values__c[0]}}">{{checklistitems.Values__c[0]}}</option>
-									<option value="{{checklistitems.Values__c[3]}}">checklistitems.Values__c[3]</option>
-							    </select>
-							    <input id="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input>
-							    <input id="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input>
-							 </span>
-					    </li>
-					    <input type="submit" value="Submit"> </input>
-			    	</form>
-			    </ul>
-			    <div ng-click="goToHomepage()">Back to List View</div>
-			</div>
-		</div>
-		<!-- End of checklistDetailPage -->
+        <div id="checklistDetailPage" ng-controller="ChecklistCtrl" ng-show="detailPageActive">
+            <div id="checklist">
+                <ul>
+                    <li ng-show="!checklistitems.length">No checklistitems</li>
+                    <form ng-submit="submitForm()">
+                        <li ng-repeat="checklistitem in checklistitems | orderBy: 'Order__c'"> 
+                            <span ng-switch="checklistitem.Type__c">
+                                <p> Question: {{checklistitem.Question__c}} </p> 
+                                <p> Required: {{checklistitem.Required__c}} </p> 
+                                <p> Type: {{checklistitem.Type__c}} </p> 
+                                <p> Id: {{checklistitem.Id}} </p> 
+                                <p> Checklist Id: {{checklistitem.Checklist__c}} </p> 
+                                <p> Order: {{checklistitem.Order__c}} </p> 
+                                <input id="form_yes/no_{{checklistitem.Id}}" type="checkbox" ng-switch-when="Yes/No"> </input>
+                                <input id="form_number_{{checklistitem.Id}}" type="number" ng-switch-when="Number"> </input>
+                                <input id="form_text_{{checklistitem.Id}}" type="text" ng-switch-when="Text"> </input>
+                                <input id="form_date_{{checklistitem.Id}}" type="date" ng-switch-when="Date"> </input>
+                                <textarea id="form_longtext_{{checklistitem.Id}}" ng-switch-when="Long Text">Enter response here...</textarea>
+                                <!-- Multiple Values from Database -->
+                                <input id="form_rating_{{checklistitem.Id}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}"> </input>
+                                <select id="form_date_{{checklistitem.Id}}" ng-switch-when="Picklist"> 
+                                    <option value="{{checklistitems.Values__c[0]}}">{{checklistitems.Values__c[0]}}</option>
+                                    <option value="{{checklistitems.Values__c[3]}}">checklistitems.Values__c[3]</option>
+                                </select>
+                                <input id="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input>
+                                <input id="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input>
+                             </span>
+                        </li>
+                        <input type="submit" value="Submit"> </input>
+                    </form>
+                </ul>
+                <div ng-click="goToHomepage()">Back to List View</div>
+            </div>
+        </div>
+        <!-- End of checklistDetailPage -->
 
-	</div>
+    </div>
 </body>
 
 <script>
@@ -95,7 +96,7 @@ myApp.service('userService', function() {
     this.get_checklist_items = function(checklist_id) {
         var that = this;
         Visualforce.remoting.Manager.invokeAction(
-        '{!$RemoteAction.ChecklistController.checklist_items}',
+        '{!$RemoteAction.ChecklistExtension.checklist_items}',
         checklist_id,
             function(result, event){
                 if (event.status) {
@@ -120,8 +121,8 @@ myApp.service('userService', function() {
 })
 
 myApp.controller("ListCtrl", function ($scope, userService) {
-	checklists = {!CheckLists};
-	$scope.checklists = checklists;
+    checklists = {!CheckLists};
+    $scope.checklists = checklists;
 });
 
 myApp.controller("ChecklistCtrl", function ($scope, userService) {
@@ -196,7 +197,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
 
         // create javascript remoting calls to backend
         Visualforce.remoting.Manager.invokeAction(
-            '{!$RemoteAction.ChecklistController.save_responses}',
+            '{!$RemoteAction.ChecklistExtension.save_responses}',
             checklist_id,
             checklist_item_id_list,
             answer_list,
@@ -236,7 +237,7 @@ controllers.PagesController = function ($scope, userService) {
     $scope.goToDetailPage = function(checklist_id) {
         $scope.checklist_id = checklist_id;
         $('#checklist_id').val(checklist_id);
-		userService.get_checklist_items(checklist_id);
+        userService.get_checklist_items(checklist_id);
         $scope.listPageActive = false;
         $scope.detailPageActive = true;        
     };
