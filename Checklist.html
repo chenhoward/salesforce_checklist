@@ -100,8 +100,6 @@ myApp.service('userService', function() {
             function(result, event){
                 if (event.status) {
                     checklistitems = result;
-                    console.log('result: ' + result);
-                    console.log(checklistitems);
                     // PUT NOTIFIERS/OBSERVORS HERE
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
@@ -113,6 +111,10 @@ myApp.service('userService', function() {
         {escape: true}
         );
     }
+
+    this.getCLIs = function () {
+        return checklistitems;
+    };
 })
 
 myApp.controller("ListCtrl", function ($scope, userService) {
@@ -123,12 +125,11 @@ myApp.controller("ListCtrl", function ($scope, userService) {
 myApp.controller("ChecklistCtrl", function ($scope, userService) {
     init();
     function init() {
-        $scope.checklistitems = userService.checklistitems;
+        $scope.checklistitems = userService.getCLIs();
         userService.registerObserverCallback(updateChecklistitems);
     }
     function updateChecklistitems() {
-        $scope.checklistitems = userService.checklistitems;
-        console.log('checklistitems: ' + userService.checklistitems);
+        $scope.checklistitems = userService.getCLIs();
         // Make sure the scope refreshes itself
         $scope.$apply();
     };
@@ -214,11 +215,11 @@ controllers.PagesController = function ($scope, userService) {
     $scope.checklist_id = null;
 
     $scope.goToDetailPage = function(checklist_id) {
-        $scope.listPageActive = false;
-        $scope.detailPageActive = true;
         $scope.checklist_id = checklist_id;
         $('#checklist_id').val(checklist_id);
-		userService.get_checklist_items(checklist_id);        
+		userService.get_checklist_items(checklist_id);
+        $scope.listPageActive = false;
+        $scope.detailPageActive = true;        
     };
     $scope.goToHomepage = function() {
         $scope.listPageActive = true;
