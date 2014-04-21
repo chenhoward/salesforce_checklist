@@ -7,4 +7,12 @@ global with sharing class ChecklistAdminController {
         Checklist__c checklist = ChecklistUtilities.createChecklist(listName, description);
         return checklist;
     }
+
+    /** Remote call that creates a checklist called LISTNAME with a DESCRIPTION with a list of Checklist ITEMS. */
+    @RemoteAction
+    global static Checklist__c createChecklistWithQuestions(String listName, String description, Checklist_Item__c[] items) {
+        Checklist__c checklist = ChecklistUtilities.createChecklist(listName, description);
+        ChecklistUtilities.addChecklistItems(checklist, items);
+        return checklist;
+    }
 }
