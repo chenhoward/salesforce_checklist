@@ -2,7 +2,8 @@
     sidebar="false" 
     showheader="false"
     standardStylesheets="false"
-    Controller="CheckListController"
+    standardController="Checklist_Response__c"
+    extensions="ChecklistExtension"
     applyHtmlTag="false"
     applyBodyTag="false"   
     id="todo"
@@ -16,182 +17,235 @@
 </head>    
 
 <body>
-	<div ng-controller="PagesController">
-		<input class='normal' id='checklist_id' type='hidden' value='{!$CurrentPage.parameters.checklist_id}'/>
-		<div id="messages"></div>
+    <div ng-controller="PagesController">
+        <input class='normal' id='checklist_id' type='hidden' value='{!$CurrentPage.parameters.checklist_id}'/>
+        <div id="messages"></div>
 
-		<div id="checklistListPage" ng-controller="ListCtrl" ng-show="listPageActive">
-		    <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToDetailPage(checklist.Id)"> 
-		    	<p> Name: {{checklist.Name}} </p>
-		    	<p> Description: {{checklist.Description__c}} </p>
-		    	<p> Id: {{checklist.Id}} </p>
-		    </li>
-		</div>
-		<!-- End of checklistListPage -->
+        <div id="checklistListPage" ng-controller="ListCtrl" ng-show="listPageActive">
+            <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToDetailPage(checklist.Id)"> 
+                <p> Name: {{checklist.Name}} </p>
+                <p> Description: {{checklist.Description__c}} </p>
+                <p> Id: {{checklist.Id}} </p>
+            </li>
+        </div>
+        <!-- End of checklistListPage -->
 
-		<div id="checklistDetailPage" ng-controller="ChecklistCtrl" ng-show="detailPageActive">
-			<div id="checklist">
-		    	<ul>
-				    <li ng-show="!checklistitems.length">No checklistitems</li>
-				    <form onsubmit="submitForm()">
-					    <li ng-repeat="checklistitem in checklistitems | orderBy: 'Order__c'"> 
-					    	<span ng-switch="checklistitem.Type__c">
-						    	<p> Question: {{checklistitem.Question__c}} </p> 
-						    	<p> Required: {{checklistitem.Required__c}} </p> 
-						    	<p> Type: {{checklistitem.Type__c}} </p> 
-						    	<p> Id: {{checklistitem.Id}} </p> 
-						    	<p> Checklist Id: {{checklistitem.Checklist__c}} </p> 
-						    	<p> Order: {{checklistitem.Order__c}} </p> 
-							    <input id="form_yes/no_{{checklistitem.Id}}" type="checkbox" ng-switch-when="Yes/No"> </input>
-							    <input id="form_number_{{checklistitem.Id}}" type="number" ng-switch-when="Number"> </input>
-							    <input id="form_text_{{checklistitem.Id}}" type="text" ng-switch-when="Text"> </input>
-							    <input id="form_date_{{checklistitem.Id}}" type="date" ng-switch-when="Date"> </input>
-							    <textarea id="form_longtext_{{checklistitem.Id}}" ng-switch-when="Long Text">Enter response here...</textarea>
-								<!-- Multiple Values from Database -->
-							    <input id="form_rating_{{checklistitem.Id}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}"> </input>
-							    <select id="form_date_{{checklistitem.Id}}" ng-switch-when="Picklist"> 
-							    	<option value="{{checklistitems.Values__c[0]}}">{{checklistitems.Values__c[0]}}</option>
-									<option value="{{checklistitems.Values__c[3]}}">checklistitems.Values__c[3]</option>
-							    </select>
-							    <input id="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input>
-							    <input id="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input>
-							 </span>
-					    </li>
-					    <input type="submit" value="Submit"> </input>
-			    	</form>
-			    </ul>
-			    <div ng-click="goToHomepage()">Back to List View</div>
-			</div>
-		</div>
-		<!-- End of checklistDetailPage -->
+        <div id="checklistDetailPage" ng-controller="ChecklistCtrl" ng-show="detailPageActive">
+            <div id="checklist">
+                <ul>
+                    <li ng-show="!checklistitems.length">No checklistitems</li>
+                    <form ng-submit="submitForm()">
+                        <li ng-repeat="checklistitem in checklistitems | orderBy: 'Order__c'"> 
+                            <span ng-switch="checklistitem.Type__c">
+                                <p> Question: {{checklistitem.Question__c}} </p> 
+                                <p> Required: {{checklistitem.Required__c}} </p> 
+                                <p> Type: {{checklistitem.Type__c}} </p> 
+                                <p> Id: {{checklistitem.Id}} </p> 
+                                <p> Checklist Id: {{checklistitem.Checklist__c}} </p> 
+                                <p> Order: {{checklistitem.Order__c}} </p> 
+                                <input id="form_yes/no_{{checklistitem.Id}}" type="checkbox" ng-switch-when="Yes/No"> </input>
+                                <input id="form_number_{{checklistitem.Id}}" type="number" ng-switch-when="Number"> </input>
+                                <input id="form_text_{{checklistitem.Id}}" type="text" ng-switch-when="Text"> </input>
+                                <input id="form_date_{{checklistitem.Id}}" type="date" ng-switch-when="Date"> </input>
+                                <textarea id="form_longtext_{{checklistitem.Id}}" ng-switch-when="Long Text">Enter response here...</textarea>
+                                <!-- Multiple Values from Database -->
+                                <input id="form_rating_{{checklistitem.Id}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}"> </input>
+                                <select id="form_date_{{checklistitem.Id}}" ng-switch-when="Picklist"> 
+                                    <option value="{{checklistitems.Values__c[0]}}">{{checklistitems.Values__c[0]}}</option>
+                                    <option value="{{checklistitems.Values__c[3]}}">checklistitems.Values__c[3]</option>
+                                </select>
+                                <input id="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input>
+                                <input id="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input>
+                             </span>
+                        </li>
+                        <input type="submit" value="Submit"> </input>
+                    </form>
+                </ul>
+                <div ng-click="goToHomepage()">Back to List View</div>
+            </div>
+        </div>
+        <!-- End of checklistDetailPage -->
 
-	</div>
+    </div>
 </body>
 
 <script>
  /* Angular */
 var myApp = angular.module('myApp', []);
-var checklistitems;
-var checklists;
 
-myApp.controller("ListCtrl", function ($scope) {
-	checklists = {!CheckLists};
-	$scope.checklists = checklists;
-});
+myApp.service('userService', function() {
 
-myApp.controller("ChecklistCtrl", function ($scope) {
-	$scope.checklistitems = checklistitems;
-});
+    var checklistitems;
+    var checklists;
+    var checklist_id;
 
-function submitForm() {
-	// Iterate through checklistitems
-	var safety_check = ["Text", "Long Text"];
-	checklist_item_id_list = []; // list of all checklist item id's
-    answer_list = []; // list of all answers
+    var observerCallbacks = [];
 
-    for (var i = 0; i < checklistitems.length; i++) {
-    	var key = checklistitems[i].Type__c.toLowerCase();
-    	var id = checklistitems[i].Id;
-    	var input_id = 'form_' + key + '_' + id;
-    	var inputElement = $('#' + input_id);
-    	var value = inputElement.val();
+    // Register an Observer
+    this.registerObserverCallback = function(callback){
+        observerCallbacks.push(callback);
+    };
 
-    	// protection with HTML escape
-    	if (checklistitems[i].Type__c == "Text" || checklistitems[i].Type__c == "Long Text") {
-	    	if (inputElement!= null && inputElement.length != 0){
-		        value = inputElement.val().trim();
-		        // html escape
-		        var entityMap = {
-		          "&": "&amp;",
-		          "<": "&lt;",
-		          ">": "&gt;",
-		          '"': '&quot;',
-		          "'": '&#39;',
-		          "/": '&#x2F;'
-		        };
-		        function escapeHtml(string) {
-		          return String(string).replace(/[&<>"'\/]/g, function (s) {
-		            return entityMap[s];
-		          });
-		        }
-		        value = escapeHtml(value);
-		    }
-    	}
-    	// value contains the input stuff
-    	checklist_id = $('#checklist_id').val();
-    	checklist_item_id_list.push(id);
-    	answer_list.push(value);
-    }
+    //call this when you know 'foo' has been changed
+    this.notifyObservers = function() {
+        angular.forEach(observerCallbacks, function(callback){
+            callback();
+        });
+    };
 
-    // create javascript remoting calls to backend
-    Visualforce.remoting.Manager.invokeAction(
-        '{!$RemoteAction.ChecklistController.save_responses}',
+    this.get_checklist_items = function(checklist_id) {
+        var that = this;
+        Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistExtension.checklist_items}',
         checklist_id,
-        checklist_item_id_list,
-        answer_list,
             function(result, event){
                 if (event.status) {
-                    console.log('SUCCESS!');
+                    checklistitems = result;
+                    // PUT NOTIFIERS/OBSERVORS HERE
+                    that.notifyObservers();
                 } else if (event.type === 'exception') {
-                    console.log('Exception!');
+                    console.log('Exception: ' + event.message);
                 } else {
                     console.log('Error!');
                 }
             },
         {escape: true}
-    );
-
-    $("#messages").text('Success!');
-
-    // Clearing Input for next checklist
-    for (var i = 0; i < checklistitems.length; i++) {
-    	var key = checklistitems[i].Type__c.toLowerCase();
-    	var id = checklistitems[i].Id;
-    	var input_id = 'form_' + key + '_' + id;
-    	var inputElement = $('#' + input_id);
-    	inputElement.val('');
-    	inputElement.focus();
+        );
     }
 
-}
+    // returns the Check List Items for a given checklist_id
+    this.getCLIs = function () {
+        return checklistitems;
+    };
+
+})
+
+myApp.controller("ListCtrl", function ($scope, userService) {
+    checklists = {!CheckLists};
+    $scope.checklists = checklists;
+});
+
+myApp.controller("ChecklistCtrl", function ($scope, userService) {
+    init();
+    function init() {
+        $scope.checklistitems = userService.getCLIs();
+        userService.registerObserverCallback(updateChecklistitems);
+    }
+    function updateChecklistitems() {
+        $scope.checklistitems = userService.getCLIs();
+        // Make sure the scope refreshes itself
+        $scope.$apply();
+    };
+
+    $scope.submitForm = function() {
+        // Iterate through checklistitems
+        var safety_check = ["Text", "Long Text"];
+        checklist_item_id_list = []; // list of all checklist item id's
+        answer_list = []; // list of all answers
+
+        checklistitems = $scope.checklistitems;
+
+        for (var i = 0; i < checklistitems.length; i++) {
+            var key = checklistitems[i].Type__c.toLowerCase();
+            var id = checklistitems[i].Id;
+            var input_id = 'form_' + key + '_' + id;
+            var inputElement = $('#' + input_id);
+            var value = inputElement.val();
+
+            if (key == "yes/no") {
+                console.log('input: ' + input_id);
+                console.log('input element: ' + inputElement);
+                console.log('checked or not: ' + inputElement.checked);
+                if (inputElement.prop('checked')) {
+                    value = "True";
+                } else {
+                    value = "False";
+                }
+            }
+
+            console.log(key);
+            console.log(id);
+            console.log(value);
+            return;
+
+            // protection with HTML escape
+            if (checklistitems[i].Type__c == "Text" || checklistitems[i].Type__c == "Long Text") {
+                if (inputElement!= null && inputElement.length != 0){
+                    value = inputElement.val().trim();
+                    // html escape
+                    var entityMap = {
+                      "&": "&amp;",
+                      "<": "&lt;",
+                      ">": "&gt;",
+                      '"': '&quot;',
+                      "'": '&#39;',
+                      "/": '&#x2F;'
+                    };
+                    function escapeHtml(string) {
+                      return String(string).replace(/[&<>"'\/]/g, function (s) {
+                        return entityMap[s];
+                      });
+                    }
+                    value = escapeHtml(value);
+                }
+            }
+            // value contains the input stuff
+            checklist_id = $('#checklist_id').val();
+            checklist_item_id_list.push(id);
+            answer_list.push(value);
+        }
+
+        // create javascript remoting calls to backend
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ChecklistExtension.save_responses}',
+            checklist_id,
+            checklist_item_id_list,
+            answer_list,
+                function(result, event){
+                    if (event.status) {
+                        console.log('SUCCESS!');
+                    } else if (event.type === 'exception') {
+                        console.log('Exception: ' + event.message);
+                    } else {
+                        console.log('Error!');
+                    }
+                },
+            {escape: true}
+        );
+
+        $("#messages").text('Success!');
+
+        // Clearing Input for next checklist
+        for (var i = 0; i < checklistitems.length; i++) {
+            var key = checklistitems[i].Type__c.toLowerCase();
+            var id = checklistitems[i].Id;
+            var input_id = 'form_' + key + '_' + id;
+            var inputElement = $('#' + input_id);
+            inputElement.val('');
+            inputElement.focus();
+        }
+    }
+});
 
 var controllers = {};
 
-controllers.PagesController = function ($scope) {
+controllers.PagesController = function ($scope, userService) {
     $scope.listPageActive = true;
     $scope.detailPageActive = false;
     $scope.checklist_id = null;
 
     $scope.goToDetailPage = function(checklist_id) {
-        $scope.listPageActive = false;
-        $scope.detailPageActive = true;
         $scope.checklist_id = checklist_id;
-		get_checklist_items(checklist_id);        
+        $('#checklist_id').val(checklist_id);
+        userService.get_checklist_items(checklist_id);
+        $scope.listPageActive = false;
+        $scope.detailPageActive = true;        
     };
     $scope.goToHomepage = function() {
         $scope.listPageActive = true;
         $scope.detailPageActive = false;                    
     }
 }
-
-function get_checklist_items(checklist_id) {
-	Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistController.checklist_items}',
-    checklist_id,
-        function(result, event){
-            if (event.status) {
-                checklistitems = result;
-                // PUT NOTIFIERS/OBSERVORS HERE
-            } else if (event.type === 'exception') {
-                console.log('Exception!');
-            } else {
-                console.log('Error!');
-            }
-        },
-    {escape: true}
-    );
-}
-
 
 myApp.controller(controllers);
 
