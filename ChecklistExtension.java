@@ -16,8 +16,11 @@ global with sharing class ChecklistExtension {
                 FROM Checklist_Item__c WHERE Checklist__c=:checklist];
         if (to_return.size() == 0) {
             // handle checklist_response here
-            return [SELECT Checklist__c, Responder__c 
-                    FROM Checklist_Response__c WHERE Id=:checklist];
+            Checklist_Response__c r = [SELECT Checklist__c, Responder__c 
+                                       FROM Checklist_Response__c WHERE Id=:checklist];
+            List<Checklist_Item_Response__c> answers = [SELECT Answer__c, Checklist_Item__c, Checklist_Response__c 
+                                                       FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:r.id];
+            return answers;
         }
         return to_return;
     }
