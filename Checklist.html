@@ -210,77 +210,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
     }
 });
 
-// function submitForm() {
-// 	// Iterate through checklistitems
-// 	var safety_check = ["Text", "Long Text"];
-// 	checklist_item_id_list = []; // list of all checklist item id's
-//     answer_list = []; // list of all answers
-
-//     for (var i = 0; i < checklistitems.length; i++) {
-//     	var key = checklistitems[i].Type__c.toLowerCase();
-//     	var id = checklistitems[i].Id;
-//     	var input_id = 'form_' + key + '_' + id;
-//     	var inputElement = $('#' + input_id);
-//     	var value = inputElement.val();
-
-//     	// protection with HTML escape
-//     	if (checklistitems[i].Type__c == "Text" || checklistitems[i].Type__c == "Long Text") {
-// 	    	if (inputElement!= null && inputElement.length != 0){
-// 		        value = inputElement.val().trim();
-// 		        // html escape
-// 		        var entityMap = {
-// 		          "&": "&amp;",
-// 		          "<": "&lt;",
-// 		          ">": "&gt;",
-// 		          '"': '&quot;',
-// 		          "'": '&#39;',
-// 		          "/": '&#x2F;'
-// 		        };
-// 		        function escapeHtml(string) {
-// 		          return String(string).replace(/[&<>"'\/]/g, function (s) {
-// 		            return entityMap[s];
-// 		          });
-// 		        }
-// 		        value = escapeHtml(value);
-// 		    }
-//     	}
-//     	// value contains the input stuff
-//     	checklist_id = $('#checklist_id').val();
-//     	checklist_item_id_list.push(id);
-//     	answer_list.push(value);
-//     }
-
-//     // create javascript remoting calls to backend
-//     Visualforce.remoting.Manager.invokeAction(
-//         '{!$RemoteAction.ChecklistController.save_responses}',
-//         checklist_id,
-//         checklist_item_id_list,
-//         answer_list,
-//             function(result, event){
-//                 if (event.status) {
-//                     console.log('SUCCESS!');
-//                 } else if (event.type === 'exception') {
-//                     console.log('Exception!');
-//                 } else {
-//                     console.log('Error!');
-//                 }
-//             },
-//         {escape: true}
-//     );
-
-//     $("#messages").text('Success!');
-
-//     // Clearing Input for next checklist
-//     for (var i = 0; i < checklistitems.length; i++) {
-//     	var key = checklistitems[i].Type__c.toLowerCase();
-//     	var id = checklistitems[i].Id;
-//     	var input_id = 'form_' + key + '_' + id;
-//     	var inputElement = $('#' + input_id);
-//     	inputElement.val('');
-//     	inputElement.focus();
-//     }
-// }
-
 var controllers = {};
 
 controllers.PagesController = function ($scope, userService) {
@@ -300,7 +229,6 @@ controllers.PagesController = function ($scope, userService) {
         $scope.detailPageActive = false;                    
     }
 }
-
 
 myApp.controller(controllers);
 
