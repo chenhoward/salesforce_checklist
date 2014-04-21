@@ -151,6 +151,22 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             var inputElement = $('#' + input_id);
             var value = inputElement.val();
 
+            if (key == "yes/no") {
+                console.log('input: ' + input_id);
+                console.log('input element: ' + inputElement);
+                console.log('checked or not: ' + inputElement.checked);
+                if (inputElement.prop('checked')) {
+                    value = "True";
+                } else {
+                    value = "False";
+                }
+            }
+
+            console.log(key);
+            console.log(id);
+            console.log(value);
+            return;
+
             // protection with HTML escape
             if (checklistitems[i].Type__c == "Text" || checklistitems[i].Type__c == "Long Text") {
                 if (inputElement!= null && inputElement.length != 0){
@@ -188,7 +204,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
                     if (event.status) {
                         console.log('SUCCESS!');
                     } else if (event.type === 'exception') {
-                        console.log('Exception!');
+                        console.log('Exception: ' + event.message);
                     } else {
                         console.log('Error!');
                     }
