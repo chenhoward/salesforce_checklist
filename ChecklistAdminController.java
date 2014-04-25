@@ -25,4 +25,11 @@ global with sharing class ChecklistAdminController {
     global static Checklist__c updateChecklist(Checklist__c checklist) {
         return ChecklistUtilities.updateChecklist(checklist);
     }
+
+    /** Adds the ITEMS to the CHECKLIST. */
+    @RemoteAction
+    global static Checklist__c addChecklistItems(Checklist__c checklist, Checklist_Item__c[] items) {
+        ChecklistExtension.addChecklistItems(checklist, items);
+        return checklist;
+    }
 }
