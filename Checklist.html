@@ -183,18 +183,20 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             if (key == "yes/no") {
                 // console.log('input: ' + input_id);
                 // console.log(inputElement);
-                console.log('checked or not: ' + inputElement.checked);
+                console.log('checked or not: ' + inputElement.is(':checked'));
+                console.log('checked or not: ' + inputElement.attr('checked'));
+                console.log('checked or not: ' + inputElement.prop('checked'));
                 if (inputElement.attr('checked')) {
                     value = "True";
                 } else {
                     value = "False";
                 }
+                console.log('key: ' + key);
+                console.log('id: ' + id);
+                console.log(value);
+                return;
             }
-
-            // console.log(key);
-            // console.log(id);
-            console.log(value);
-            // return;
+            
 
             /* handling photo upload
             if (key == "photo") {
