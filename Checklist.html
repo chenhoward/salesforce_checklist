@@ -100,13 +100,20 @@ myApp.service('userService', function() {
         checklist_id,
             function(result, event){
                 if (event.status) {
-                    console.log('result: ' + result);
-                    if (result.length > 0) {
+                    // console.log('result: ' + result);
+                    if (result.length > 1) {
+                        console.log('result: ' + result);
                         console.log('this is a response id!');
-                        console.log(result[0]);
-                        console.log(result[1]);
+                        checklistitems = result[0];
+                        that.notifyObservers();
+                        for (var i=0; i<result[1].length; i++) {
+                            object = result[1][i];
+                            inputElement = $('#form_' + object.Type__c.toLowerCase() + '_' + object.Checklist_Item__c);
+                            inputElement.val(object.Answer__c); 
+                        }
+                        return;
                     }
-                    checklistitems = result;
+                    checklistitems = result[0];
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
@@ -147,6 +154,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         var safety_check = ["Text", "Long Text"];
         checklist_item_id_list = []; // list of all checklist item id's
         answer_list = []; // list of all answers
+        type_list = [];
 
         checklistitems = $scope.checklistitems;
 
@@ -198,6 +206,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             checklist_id = $('#checklist_id').val();
             checklist_item_id_list.push(id);
             answer_list.push(value);
+            type_list.push(key);
         }
 
         // create javascript remoting calls to backend
@@ -206,6 +215,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             checklist_id,
             checklist_item_id_list,
             answer_list,
+            type_list,
                 function(result, event){
                     if (event.status) {
                         console.log('SUCCESS!');
