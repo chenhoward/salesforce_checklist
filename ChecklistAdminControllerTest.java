@@ -9,6 +9,13 @@ public class ChecklistAdminControllerTest {
         System.assertNotEquals(test, null);
         System.assertEquals(test.Name, 'Nom');
         System.assertEquals(test.Description__c, 'Description');
+        test.Name = 'newName';
+        ChecklistAdminController.updateChecklist(test);
+        test = ChecklistUtilities.findChecklist(test.ID);
+        System.assertNotEquals(test, null);
+        System.assertEquals(test.Name, 'newName');
+        System.assertEquals(test.Description__c, 'Description');
+        System,assertNotEquals(ChecklistAdminController.getCheckLists(), null);
     }
 
 /** Tests the creation of a Checklist item. */
