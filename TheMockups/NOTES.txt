@@ -1,0 +1,20 @@
+NOTES
+
+Search bar could cause complications, since you will be modifying the form.
+Unless search bar was more of a CTRL+F where you jump to the given place.
+
+white background behind the checklists
+
+hover over counting question / total questions.
+
+Custom branding ideas?
+
+fix toggle so one click changes (DONE)
+
+Value for rating slider + min + max
+
+Star rating
+
+Rating using radio buttons, Excellent to okay to bad
+
+Mainpage_link and ulti-select ellipses

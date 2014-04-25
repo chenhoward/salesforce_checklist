@@ -9,7 +9,7 @@ id="todo"
 >
 <html ng-app="myApp">        
 <head>
-    <apex:stylesheet value="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400"/>
+    <apex:stylesheet value="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400"/>
     <meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1, user-scalable=no"/>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"> </script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -44,12 +44,12 @@ id="todo"
     <style type="text/css">
     body {
         font-family: Source Sans Pro, sans-serif;
-        font-weight: 200;
+        font-weight: 300;
         margin: 0px;
         padding: 0px;
         height: 100%;
         overflow: hidden;
-        background: #cccccc;
+        background: #FFF;
     }
     
     *:focus {
@@ -100,7 +100,6 @@ id="todo"
         display: block;
         color: #4d4d4d;
         text-decoration: none;
-        text-transform: uppercase;
         text-align: left;
         font-size: 24px;
         padding: 25px;
@@ -108,6 +107,10 @@ id="todo"
         box-shadow: 0px -1px 0px #cccccc;
         background: #FFF;
         width: 100%;
+    }
+
+    .last {
+        border-bottom: 1px solid #cccccc;
     }
     
     .arrow-right {
@@ -127,7 +130,6 @@ id="todo"
         display: block;
         color: #FFF;
         text-decoration: none;
-        text-transform: uppercase;
         text-align: center;
         font-size: 24px;
         padding: 25px;
@@ -153,7 +155,7 @@ id="todo"
 
     input, textarea, select {
         font-family: Source Sans Pro, sans-serif;
-        font-weight: 200;
+        font-weight: 300;
         font-size: 24px;
         color: #4d4d4d;
         width: 80%;
@@ -200,9 +202,8 @@ id="todo"
         padding-right: 10px;
         padding-left: 10px;
         color: #b3b3b3;
-        text-transform: uppercase;
         background: #b3b3b3;
-        border: 1px solid #b3b3b3;
+        border: 1px solid #999999;
         padding-right: 5px;
         border-right: none;
         border-top-left-radius: 5px;
@@ -214,26 +215,25 @@ id="todo"
         padding: 5px;
         padding-right: 10px;
         padding-left: 10px;
-        color: #b3b3b3;
-        text-transform: uppercase;
-        background: #b3b3b3;
-        border: 1px solid #b3b3b3;
+        color: #FFF;
+        background: #f06060;
+        border: 1px solid #999999;
         border-top-right-radius: 5px;
         border-bottom-right-radius: 5px;
     }
     
-    input[type="radio"].toggle {
+    #yesno {
         display: none;
     }
-    
-    input[type="radio"]#yes:checked ~ #yes-button {
+
+    #yesno:checked ~ #yes-button {
         color: #FFF;
         background: #8cd250;
     }
     
-    input[type="radio"]#no:checked ~ #no-button {
-        color: #FFF;
-        background: #f06060;
+    #yesno:checked ~ #no-button {
+        color: #b3b3b3;
+        background: #b3b3b3;
     }
     
     input[type="number"] {
@@ -270,18 +270,19 @@ id="todo"
         height: 48px;
     }
     
-    input[type="checkbox"] {
+    input[type="checkbox"], input[type="radio"] {
         width: 30px;
         height: 30px;
         margin: 0px;
+        background: #FFF;
     }
     
-    input[type="checkbox"]:checked {
+    input[type="checkbox"]:checked, input[type="radio"]:checked {
         background: url({!$Resource.checklist_check}) no-repeat center;
         background-size: cover;
         box-shadow: none;
     }
-    
+
     .submit {
         font-family: Source Sans Pro, sans-serif;
         font-weight: 400;
@@ -291,7 +292,6 @@ id="todo"
         display: block;
         color: #FFF;
         text-decoration: none;
-        text-transform: uppercase;
         text-align: center;
         font-size: 24px;
         padding: 25px;
@@ -359,14 +359,19 @@ id="todo"
                 Checklist 4
                 <div class="arrow-right"></div>
             </a>
-            <a class="link orange" data-section="two" href="#">
+            <a class="link orange last" data-section="two" href="#">
                 Checklist 5
                 <div class="arrow-right"></div>
             </a>
+            <!--
+            <a class="link blue" data-section="two" href="#">
+                A very long checklist name like this because names like this are the best yea yea yea
+                <div class="arrow-right"></div>
+            </a>-->
         </section>
         <section id="two">
             <form>
-                <div class="title"> CHECKLIST WITH A LONG NAME LIKE THIS </div>
+                <div class="title"> Checklist With A Long Name Like This  </div>
                 <div class="question">
                     <p> This is a text question? </p>
                     <input type="text" name="text"></input>
@@ -386,10 +391,9 @@ id="todo"
                 <div class="question">
                     <p> This is a yes or no question? </p>
                     <p class="toggle-spacer"></p>
-                    <input class="toggle" type="radio" id="yes" name="toggle" checked="true"></input>
-                    <label for="yes" id="yes-button"> Yes </label>
-                    <input class="toggle" type="radio" id="no" name="toggle"></input>
-                    <label for="no" id="no-button"> No </label>
+                    <input type="checkbox" id="yesno" name="yesno"></input>
+                    <label class="switch" for="yesno" id="yes-button"> Yes </label>
+                    <label class="switch" for="yesno" id="no-button"> No </label>
                 </div>
                 <div class="question">
                     <p> This is a long text question? </p>
@@ -399,11 +403,11 @@ id="todo"
                     <p> This is a number question? </p>
                     <input type="number" name="number"></input>
                 </div>
+                <!-- SLIDER STYLING NOT COMPLETE
                 <div class="question">
                     <p> This is a rating question? </p>
-                    <!-- SLIDER STYLING NOT COMPLETE -->
                     <input type="range" name="rating" min="1" max="10" value="5"></input>
-                </div>
+                </div>-->
                 <div class="question">
                     <p> This is a date question? </p>
                     <input type="date" name="date"></input>
@@ -434,15 +438,59 @@ id="todo"
                     <input type="checkbox" name="Sandeep"></input>
                     <label class="check-label" for="Sandeep"> Sandeep </label>
                 </div>
-                <input class="submit" type="button" name="submit" value="Submit" onclick="setSection($('#container section#three'), $('.active'));"></input>
+                <div class="question">
+                    <p> This is a radio button question? </p>
+                    <p class="check-spacer"></p>
+                    <input type="radio" name="experience"></input>
+                    <label class="check-label"> Very unsatisfied </label>
+                    <p class="check-spacer"></p>
+                    <input type="radio" name="experience"></input>
+                    <label class="check-label"> Unsatisfied </label>
+                    <p class="check-spacer"></p>
+                    <input type="radio" name="experience"></input>
+                    <label class="check-label"> Neutral </label>
+                    <p class="check-spacer"></p>
+                    <input type="radio" name="experience"></input>
+                    <label class="check-label"> Satisfied </label>
+                    <p class="check-spacer"></p>
+                    <input type="radio" name="experience"></input>
+                    <label class="check-label"> Very Satisfied </label>
+                </div>
+                <style>
+                /* 'star-rating' component */
+                .starRate {position:relative; margin:20px; overflow:hidden; zoom:1;}
+                .starRate ul {width:160px; margin:0; padding:0;}
+                .starRate li {display:inline; list-style:none;}
+                .starRate a, .starRate b {background:url(star_rate.gif) left top repeat-x;}
+                .starRate a {float:right; margin:0 80px 0 -144px; width:80px; height:16px; background-position:left 16px; color:#000; text-decoration:none;}
+                .starRate a:hover {background-position:left -32px;}
+                .starRate b {position:absolute; z-index:-1; width:80px; height:16px; background-position:left -16px;}
+                .starRate div b {left:0px; bottom:0px; background-position:left top;}
+                .starRate a span {position:absolute; left:-300px;}
+                .starRate a:hover span {left:90px; width:100%;}
+                </style>
+                <!-- STAR RATING QUESTION NOT FINISHED YET
+                <div class="question">
+                    <p> This is a star rating question? </p>
+                    <div class="starRate">
+                    <ul>
+                    <li><a href="#"><span>Give it 5 stars</span></a></li>
+                    <li><a href="#"><span>Give it 4 stars</span></a></li>
+                    <li><a href="#"><span>Give it 3 stars</span><b></b></a></li>
+                    <li><a href="#"><span>Give it 2 stars</span></a></li>
+                    <li><a href="#"><span>Give it 1 star</span></a></li>
+                    </ul>
+                    </div>
+                </div>-->
+                <input class="submit last" type="button" name="submit" value="Submit" onclick="setSection($('#container section#three'), $('.active'));"></input>
             </form>
         </section>
         <section id="three">
-            <div class="title"> CHECKLIST WITH A LONG NAME LIKE THIS </div>
+            <div class="title"> Checklist With A Long Name Like This </div>
             <div class="question">
                 <p id="conclusion"> You've just submitted a review of <span class="green_text"> Location 1</span>. </p>
             </div>
-            <a class="link" id="return" data-section="one" href="#"> Return </a>
+            <a class="link last" id="return" data-section="one" href="#"> Return </a>
         </section>
     </div>
 </body> 

@@ -32,6 +32,16 @@ id="todo"
           {{items[1]['Question__c']}}
           <input type="submit" value="Submit " ng-click="addQuestion()"> </input>
       </form>
+      <div id="checklistList" >
+           <form name="EditChecklistForm">
+            <li ng-repeat=""> 
+                <p> Name: </p> <input type="text" ng-model="item.Name" ng-required="true"></input>
+                <p> Description: {{itemi5.Description__c}} </p>
+                <p> Id: {{itemi5.Id}} </p>
+                <input type="submit" value="Submit" ng-click="editChecklist()" ></input>
+            </li>
+        </form>
+        </div>
   </div>
   <div ng-model="Questions">
 
@@ -51,6 +61,9 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.checklist = new Object();
     $scope.checklist.name = 'Default Name';
     $scope.checklist.description = 'Default Desc';
+    $scope.checklists = {!CheckLists};
+    $scope.item = $scope.checklists[0];
+    console.log($scope.checklists);
     $scope.createChecklist = function() {
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistAdminController.createChecklist}',
@@ -84,7 +97,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
                 $scope.items,
                 function(result, event) {
                     if (event.status) {
-                        console.log('Created everything')
+                        console.log('Created everything');
                     } else if (event.type == 'exception') {
                         console.log('Exception');
                     } else {
@@ -94,6 +107,25 @@ checklistApp.controller("AdminCtrl", function ($scope) {
                 {escape: true}
                 );
         };
+
+        $scope.editChecklist = function() {
+            delete $scope.item.attributes;
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.ChecklistAdminController.updateChecklist}',
+                $scope.item,
+                function(result, event) {
+                    if (event.status) {
+                        console.log('Updated everything');
+                    } else if (event.type == 'exeception') {
+                        console.log('Exception');
+                    } else {
+                        console.log('Error!');
+                    }
+                },
+                {escape: true}
+                );
+        };
+
     });
 
 </script>
