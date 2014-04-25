@@ -101,7 +101,8 @@ myApp.service('userService', function() {
             function(result, event){
                 if (event.status) {
                     // console.log('result: ' + result);
-                    if (result.length > 0) {
+                    if (result.length > 1) {
+                        console.log('result: ' + result);
                         console.log('this is a response id!');
                         checklistitems = result[0];
                         that.notifyObservers();

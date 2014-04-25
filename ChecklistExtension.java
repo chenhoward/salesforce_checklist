@@ -37,7 +37,7 @@ global with sharing class ChecklistExtension {
 
     // Creates Checklist Response Item Objects
     @RemoteAction
-    global static String[] save_responses(Id checklist, Id[] checklist_items, String[] answers) {
+    global static String[] save_responses(Id checklist, Id[] checklist_items, String[] answers, String[] types) {
         Checklist_Response__c new_response = new Checklist_Response__c();
         new_response.Checklist__c = checklist;
         insert(new_response);
@@ -47,6 +47,7 @@ global with sharing class ChecklistExtension {
             new_item_response.Checklist_Item__c = checklist_items[i];
             new_item_response.Checklist_Response__c = new_response.Id;
             new_item_response.Answer__c = answers[i];
+            new_item_response.Type__c = types[i];
             // new_item_response.Answer__c = answers[i];
             insert new_item_response;
         }
