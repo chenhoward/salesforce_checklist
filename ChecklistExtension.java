@@ -11,52 +11,41 @@ global with sharing class ChecklistExtension {
         return [SELECT Name, Description__c, Id FROM Checklist__c];
     }
 
-    public static List<List<Object>> getAllChecklistItems(Id checklist){
+    public static List<Checklist_Item_Response__c> getAllChecklistItems(Id checklist){
         List<Checklist_Item__c> to_return = [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
-                FROM Checklist_Item__c WHERE Checklist__c=:checklist];
-        List<List<Object>> message = new List<List<Object>>();
-        if (to_return.size() == 0) {
-            // handle checklist_response here
-            Checklist_Response__c r = [SELECT Checklist__c, Responder__c 
-                                       FROM Checklist_Response__c WHERE Id=:checklist];
-            List<Checklist_Item_Response__c> responses = [SELECT Answer__c, Checklist_Item__c, Checklist_Response__c, Type__c 
-                                                       FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:r.id];
-            List<Checklist_Item__c> questions = [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
-                FROM Checklist_Item__c WHERE Checklist__c=:r.Checklist__c];
-            List<Object> answers = new List<Object>();
-            for (Integer i=0; i<responses.size(); i++) {
-                answers.add(responses[i].Answer__c);
-            }
-            message.add(questions);
-            message.add(responses);
-            return message;
-        }
-        message.add(to_return);
-        return message;
+                FROM Checklist_Item__c WHERE Checklist__c=:checklist order by Order__c];
+
+        List<Checklist_Item_Response__c> responses = new List<Checklist_Item_Response__c>();
+        
+        for (Checklist_Item__c item : to_return){
+            Checklist_Item_Response__c resp = new Checklist_Item_Response__c(Checklist_Item__c = item.Id, 
+                                                                             Checklist_Item__r = item);
+            responses.add(resp);            
+        }   
+        return responses;
     }
 
     // Creates Checklist Response Item Objects
     @RemoteAction
-    global static String[] save_responses(Id checklist, Id[] checklist_items, String[] answers, String[] types) {
+    global static void save_responses(Id checklist, List<Checklist_Item_Response__c> responses) {
         Checklist_Response__c new_response = new Checklist_Response__c();
         new_response.Checklist__c = checklist;
         insert(new_response);
 
-        for (Integer i=0; i<checklist_items.size(); i++) {
-            Checklist_Item_Response__c new_item_response = new Checklist_Item_Response__c();
-            new_item_response.Checklist_Item__c = checklist_items[i];
-            new_item_response.Checklist_Response__c = new_response.Id;
-            new_item_response.Answer__c = answers[i];
-            new_item_response.Type__c = types[i];
-            // new_item_response.Answer__c = answers[i];
-            insert new_item_response;
+        List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
+        for(Checklist_Item_Response__c resp : responses){
+            resp.Checklist_Response__c = new_response.Id;
+            System.debug(resp.Answer__c);
+            if (resp.Answer__c != null && resp.Answer__c.trim() != ''){
+                finalResponses.add(resp);
+            }
         }
-        return new String[]{}; // can include succes message?
+        insert finalResponses;
     }
 
     // Creates Checklist Response Item Objects
     @RemoteAction
-    global static List<List<Object>> checklist_items(Id checklist) {
+    global static List<Checklist_Item_Response__c> checklist_items(Id checklist) {
         return getAllChecklistItems(checklist);
     }
 
@@ -64,10 +53,6 @@ global with sharing class ChecklistExtension {
     global static String lat_long(Id checklist_response) {
         Checklist_Response__c response = [SELECT Location__c FROM Checklist_Response__c WHERE Id=: checklist_response];
         return JSON.serialize(response);
-        // List<Integer> data = new List<Integer>();
-        // data.add(response.Location__c.Latitude);
-        // data.add(response.Location__c.Longitude);
-        // return data;
     }
 
 }

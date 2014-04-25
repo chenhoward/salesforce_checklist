@@ -43,29 +43,29 @@
                 <ul>
                     <li ng-show="!checklistitems.length">No checklistitems</li>
                     <form ng-submit="submitForm()">
-                        <li ng-repeat="checklistitem in checklistitems | orderBy: 'Order__c'"> 
-                            <span ng-switch="checklistitem.Type__c">
-                                <p> Question: {{checklistitem.Question__c}} </p> 
-                                <p> Required: {{checklistitem.Required__c}} </p> 
-                                <p> Type: {{checklistitem.Type__c}} </p> 
-                                <p> Id: {{checklistitem.Id}} </p> 
-                                <p> Checklist Id: {{checklistitem.Checklist__c}} </p> 
-                                <p> Order: {{checklistitem.Order__c}} </p> 
-                                <input id="form_yes/no_{{checklistitem.Id}}" type="checkbox" ng-switch-when="Yes/No"> </input>
-                                <input id="form_number_{{checklistitem.Id}}" type="number" ng-switch-when="Number"> </input>
-                                <input id="form_text_{{checklistitem.Id}}" type="text" ng-switch-when="Text"> </input>
-                                <input id="form_date_{{checklistitem.Id}}" type="date" ng-switch-when="Date"> </input>
+                        <li ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'"> 
+                            <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
+                                <p> Question: {{checklistitem.Checklist_Item__r.Question__c}} </p> 
+                                <p> Required: {{checklistitem.Checklist_Item__r.Required__c}} </p> 
+                                <p> Type: {{checklistitem.Checklist_Item__r.Type__c}} </p> 
+                                <p> Id: {{checklistitem.Checklist_Item__c}} </p> 
+                                <p> Checklist Id: {{checklistitem.Checklist_Item__r.Checklist__c}} </p> 
+                                <p> Order: {{checklistitem.Checklist_Item__r.Order__c}} </p> 
+                                <input id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c"> </input>
+                                <input id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-switch-when="Number" ng-model="checklistitem.Answer__c"> </input>
+                                <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c"> </input>
+                                <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c"> </input>
                                 <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo"/>
 
-                                <textarea id="form_longtext_{{checklistitem.Id}}" ng-switch-when="Long Text">Enter response here...</textarea>
+                                <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c">Enter response here...</textarea>
                                 <!-- Multiple Values from Database -->
-                                <input id="form_rating_{{checklistitem.Id}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}"> </input>
-                                <select id="form_date_{{checklistitem.Id}}" ng-switch-when="Picklist"> 
+                                <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}" ng-model="checklistitem.Answer__c"> </input>
+                                <!--select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c"> 
                                     <option value="{{checklistitems.Values__c[0]}}">{{checklistitems.Values__c[0]}}</option>
                                     <option value="{{checklistitems.Values__c[3]}}">checklistitems.Values__c[3]</option>
                                 </select>
-                                <input id="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input>
-                                <input id="form_checkbox_{{checklistitem.Id}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input>
+                                <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input>
+                                <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input-->
                              </span>
                         </li>
                         <input type="submit" value="Submit"> </input>
@@ -115,20 +115,7 @@ myApp.service('userService', function() {
         checklist_id,
             function(result, event){
                 if (event.status) {
-                    // console.log('result: ' + result);
-                    if (result.length > 1) {
-                        console.log('result: ' + result);
-                        console.log('this is a response id!');
-                        checklistitems = result[0];
-                        that.notifyObservers();
-                        for (var i=0; i<result[1].length; i++) {
-                            object = result[1][i];
-                            inputElement = $('#form_' + object.Type__c.toLowerCase() + '_' + object.Checklist_Item__c);
-                            inputElement.val(object.Answer__c); 
-                        }
-                        return;
-                    }
-                    checklistitems = result[0];
+                    checklistitems = result;
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
@@ -165,103 +152,16 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
     };
 
     $scope.submitForm = function() {
-        // Iterate through checklistitems
-        var safety_check = ["Text", "Long Text"];
-        checklist_item_id_list = []; // list of all checklist item id's
-        answer_list = []; // list of all answers
-        type_list = [];
-
-        checklistitems = $scope.checklistitems;
-
-        for (var i = 0; i < checklistitems.length; i++) {
-            var key = checklistitems[i].Type__c.toLowerCase();
-            var id = checklistitems[i].Id;
-            var input_id = 'form_' + key + '_' + id;
-            var inputElement = $('#' + input_id);
-            var value = inputElement.val();
-
-            if (key == "yes/no") {
-                // console.log('input: ' + input_id);
-                // console.log(inputElement);
-                console.log('checked or not: ' + inputElement.is(':checked'));
-                console.log('checked or not: ' + inputElement.attr('checked'));
-                console.log('checked or not: ' + inputElement.prop('checked'));
-                if (inputElement.attr('checked')) {
-                    value = "True";
-                } else {
-                    value = "False";
-                }
-                console.log('key: ' + key);
-                console.log('id: ' + id);
-                console.log(value);
-                return;
-            }
-            
-
-            /* handling photo upload
-            if (key == "photo") {
-                var file = evt.target.files[0];
-                var reader = new FileReader();
-                reader.onload = (function(theFile) {
-                    return function(e) {
-                        // Extract raw base64 data from data URL
-                        $("#image").attr('src',e.target.result);
-                        imageData = e.target.result.split(',')[1];
-                    };
-                })(file);
-                reader.readAsDataURL(file);
-                if ((typeof imageData != 'undefined') && imageData != ''){
-                    forcetkClient.query("SELECT Id FROM StaticResource where name LIKE '%RollCall_Background_Img%' LIMIT 1", function(response){
-                        var image = {'Body':imageData};
-                        forcetkClient.update('StaticResource',
-                            response.records[0].Id,
-                            image,
-                            function(){
-                                imageData = '';
-                            },
-                            function (err) {
-                            }
-                        );
-                    });
-                } 
-            }
-            */
-
-            // protection with HTML escape
-            if (checklistitems[i].Type__c == "Text" || checklistitems[i].Type__c == "Long Text") {
-                if (inputElement!= null && inputElement.length != 0){
-                    value = inputElement.val().trim();
-                    // html escape
-                    var entityMap = {
-                      "&": "&amp;",
-                      "<": "&lt;",
-                      ">": "&gt;",
-                      '"': '&quot;',
-                      "'": '&#39;',
-                      "/": '&#x2F;'
-                    };
-                    function escapeHtml(string) {
-                      return String(string).replace(/[&<>"'\/]/g, function (s) {
-                        return entityMap[s];
-                      });
-                    }
-                    value = escapeHtml(value);
-                }
-            }
-            // value contains the input stuff
-            checklist_id = $('#checklist_id').val();
-            checklist_item_id_list.push(id);
-            answer_list.push(value);
-            type_list.push(key);
+        checklist_id = $('#checklist_id').val();
+        for(var i = 0; i < $scope.checklistitems.length; i++) {
+            delete $scope.checklistitems[i].$$hashKey;
         }
-
+        delete $scope.checklistitems.attributes;
         // create javascript remoting calls to backend
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.save_responses}',
             checklist_id,
-            checklist_item_id_list,
-            answer_list,
-            type_list,
+            $scope.checklistitems,
                 function(result, event){
                     if (event.status) {
                         console.log('SUCCESS!');
@@ -277,14 +177,14 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         $("#messages").text('Success!');
 
         // Clearing Input for next checklist
-        for (var i = 0; i < checklistitems.length; i++) {
-            var key = checklistitems[i].Type__c.toLowerCase();
-            var id = checklistitems[i].Id;
-            var input_id = 'form_' + key + '_' + id;
-            var inputElement = $('#' + input_id);
-            inputElement.val('');
-            inputElement.focus();
-        }
+        // for (var i = 0; i < checklistitems.length; i++) {
+        //     var key = checklistitems[i].Type__c.toLowerCase();
+        //     var id = checklistitems[i].Id;
+        //     var input_id = 'form_' + key + '_' + id;
+        //     var inputElement = $('#' + input_id);
+        //     inputElement.val('');
+        //     inputElement.focus();
+        // }
     }
 });
 
