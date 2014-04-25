@@ -11,18 +11,28 @@ global with sharing class ChecklistExtension {
         return [SELECT Name, Description__c, Id FROM Checklist__c];
     }
 
-    public static List<sObject> getAllChecklistItems(Id checklist){
+    public static List<List<Object>> getAllChecklistItems(Id checklist){
         List<Checklist_Item__c> to_return = [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
                 FROM Checklist_Item__c WHERE Checklist__c=:checklist];
+        List<List<Object>> message = new List<List<Object>>();
         if (to_return.size() == 0) {
             // handle checklist_response here
             Checklist_Response__c r = [SELECT Checklist__c, Responder__c 
                                        FROM Checklist_Response__c WHERE Id=:checklist];
-            List<Checklist_Item_Response__c> answers = [SELECT Answer__c, Checklist_Item__c, Checklist_Response__c 
+            List<Checklist_Item_Response__c> responses = [SELECT Answer__c, Checklist_Item__c, Checklist_Response__c 
                                                        FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:r.id];
-            return answers;
+            List<Checklist_Item__c> questions = [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
+                FROM Checklist_Item__c WHERE Checklist__c=:r.Checklist__c];
+            List<Object> answers = new List<Object>();
+            for (Integer i=0; i<responses.size(); i++) {
+                answers.add(responses[i].Answer__c);
+            }
+            message.add(questions);
+            message.add(responses);
+            return message;
         }
-        return to_return;
+        message.add(to_return);
+        return message;
     }
 
     // Creates Checklist Response Item Objects
@@ -44,7 +54,7 @@ global with sharing class ChecklistExtension {
 
     // Creates Checklist Response Item Objects
     @RemoteAction
-    global static List<Checklist_Item__c> checklist_items(Id checklist) {
+    global static List<List<Object>> checklist_items(Id checklist) {
         return getAllChecklistItems(checklist);
     }
 
