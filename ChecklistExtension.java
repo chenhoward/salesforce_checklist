@@ -19,7 +19,7 @@ global with sharing class ChecklistExtension {
             // handle checklist_response here
             Checklist_Response__c r = [SELECT Checklist__c, Responder__c 
                                        FROM Checklist_Response__c WHERE Id=:checklist];
-            List<Checklist_Item_Response__c> responses = [SELECT Answer__c, Checklist_Item__c, Checklist_Response__c 
+            List<Checklist_Item_Response__c> responses = [SELECT Answer__c, Checklist_Item__c, Checklist_Response__c, Type__c 
                                                        FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:r.id];
             List<Checklist_Item__c> questions = [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
                 FROM Checklist_Item__c WHERE Checklist__c=:r.Checklist__c];
@@ -47,6 +47,7 @@ global with sharing class ChecklistExtension {
             new_item_response.Checklist_Item__c = checklist_items[i];
             new_item_response.Checklist_Response__c = new_response.Id;
             new_item_response.Answer__c = answers[i];
+            // new_item_response.Answer__c = answers[i];
             insert new_item_response;
         }
         return new String[]{}; // can include succes message?
