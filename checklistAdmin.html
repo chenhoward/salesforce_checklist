@@ -27,12 +27,13 @@ id="todo"
             <input type="text" ng-model="item.Question__c" name="Q1" ng-required="true"></input>
             <input type="number" ng-model="item.Order__c" name="O2" ng-required="true"></input>
             <input type="checkbox" ng-model="item.Required__c" name="O3"></input>
+            <select ng-model="item.Type__c" ng-options="type for type in types" ng-required="true"></select>
             {{item.Question__c}}
         </div>
         <input type="button" value="+" ng-click="addQuestion()"></input>
         <input type="button" value="-" ng-click="removeQuestion()"></input>
 
-        <input type="submit" value="Submit " ng-click="createChecklist()"> </input>
+        <input type="submit" value="Submit " ng-click="newChecklist()"> </input>
 
     </form>
     <div id="checklistList" >
@@ -67,10 +68,19 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.checklist.description = 'Default Description';
     $scope.checklists = {!CheckLists};
     $scope.item = $scope.checklists[3];
+    $scope.types = ['Yes/No', 'Number', 'Text', 'Date','Long Text', 'Rating', 'Picklist', 'Multi-Select'];
     console.log($scope.checklists);
+    $scope.newChecklist = function() {
+         if ($scope.newChecklistForm.$valid) {
+            $scope.createChecklist();
+         } else {
+            console.log('invalid');
+         }
+    }
     $scope.createChecklist = function() {
         for(var i = 0; i < $scope.items.length; i++) {
             delete $scope.items[i].$$hashKey;
+            console.log($scope.items[i].Type__c);
         }
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistAdminController.createChecklistWithQuestions}',
