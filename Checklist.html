@@ -14,6 +14,7 @@
     <meta name="viewport" content="initial-scale = 1.0, user-scalable = no"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"> </script>
+    <!-- <apex:includeScript value="{!URLFOR($Resource.RollCallAssets, 'forceTK/forceTK.js')}"/> -->
 </head>    
 
 <body>
@@ -47,6 +48,8 @@
                                 <input id="form_number_{{checklistitem.Id}}" type="number" ng-switch-when="Number"> </input>
                                 <input id="form_text_{{checklistitem.Id}}" type="text" ng-switch-when="Text"> </input>
                                 <input id="form_date_{{checklistitem.Id}}" type="date" ng-switch-when="Date"> </input>
+                                <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo"/>
+
                                 <textarea id="form_longtext_{{checklistitem.Id}}" ng-switch-when="Long Text">Enter response here...</textarea>
                                 <!-- Multiple Values from Database -->
                                 <input id="form_rating_{{checklistitem.Id}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}"> </input>
@@ -166,20 +169,49 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             var value = inputElement.val();
 
             if (key == "yes/no") {
-                console.log('input: ' + input_id);
-                console.log('input element: ' + inputElement);
+                // console.log('input: ' + input_id);
+                // console.log(inputElement);
                 console.log('checked or not: ' + inputElement.checked);
-                if (inputElement.prop('checked')) {
+                if (inputElement.attr('checked')) {
                     value = "True";
                 } else {
                     value = "False";
                 }
             }
 
-            console.log(key);
-            console.log(id);
+            // console.log(key);
+            // console.log(id);
             console.log(value);
-            return;
+            // return;
+
+            /* handling photo upload
+            if (key == "photo") {
+                var file = evt.target.files[0];
+                var reader = new FileReader();
+                reader.onload = (function(theFile) {
+                    return function(e) {
+                        // Extract raw base64 data from data URL
+                        $("#image").attr('src',e.target.result);
+                        imageData = e.target.result.split(',')[1];
+                    };
+                })(file);
+                reader.readAsDataURL(file);
+                if ((typeof imageData != 'undefined') && imageData != ''){
+                    forcetkClient.query("SELECT Id FROM StaticResource where name LIKE '%RollCall_Background_Img%' LIMIT 1", function(response){
+                        var image = {'Body':imageData};
+                        forcetkClient.update('StaticResource',
+                            response.records[0].Id,
+                            image,
+                            function(){
+                                imageData = '';
+                            },
+                            function (err) {
+                            }
+                        );
+                    });
+                } 
+            }
+            */
 
             // protection with HTML escape
             if (checklistitems[i].Type__c == "Text" || checklistitems[i].Type__c == "Long Text") {
