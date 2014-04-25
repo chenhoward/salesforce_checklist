@@ -60,4 +60,14 @@ global with sharing class ChecklistExtension {
         return getAllChecklistItems(checklist);
     }
 
+    @RemoteAction
+    global static String lat_long(Id checklist_response) {
+        Checklist_Response__c response = [SELECT Location__c FROM Checklist_Response__c WHERE Id=: checklist_response];
+        return JSON.serialize(response);
+        // List<Integer> data = new List<Integer>();
+        // data.add(response.Location__c.Latitude);
+        // data.add(response.Location__c.Longitude);
+        // return data;
+    }
+
 }

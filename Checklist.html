@@ -14,7 +14,14 @@
     <meta name="viewport" content="initial-scale = 1.0, user-scalable = no"/>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"> </script>
+    <script language="javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
     <!-- <apex:includeScript value="{!URLFOR($Resource.RollCallAssets, 'forceTK/forceTK.js')}"/> -->
+
+    <style type="text/css">
+        #map {
+            height:400px;
+        }
+    </style>
 </head>    
 
 <body>
@@ -65,6 +72,11 @@
                     </form>
                 </ul>
                 <div ng-click="goToHomepage()">Back to List View</div>
+
+
+                <div id="map" ng-show="mapActive"></div>
+
+
             </div>
         </div>
         <!-- End of checklistDetailPage -->
@@ -298,6 +310,7 @@ controllers.PagesController = function ($scope, userService) {
         $scope.listPageActive = false;
         $scope.detailPageActive = true;
         $scope.checklist_id = checklist;
+        $scope.mapActive = false;
         userService.get_checklist_items(checklist);
     }
 
@@ -306,6 +319,7 @@ controllers.PagesController = function ($scope, userService) {
         $scope.listPageActive = false;
         $scope.detailPageActive = true;
         $scope.checklist_id = response;
+        $scope.mapActive = true;
         userService.get_checklist_items(response);
     }
 
@@ -324,11 +338,64 @@ controllers.PagesController = function ($scope, userService) {
     };
     $scope.goToHomepage = function() {
         $scope.listPageActive = true;
-        $scope.detailPageActive = false;                    
+        $scope.detailPageActive = false; 
+        $scope.mapActive = false;                   
     }
 }
 
 myApp.controller(controllers);
+
+google.maps.event.addDomListener(window, "load", initMap);
+function initMap(){
+
+    // Get Url Parameters
+    function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+    response = getUrlVars()['id'];
+
+    console.log(response);
+    var latlng = new google.maps.LatLng(-34.397, 150.644);
+    var myOptions = {
+        zoom: 5,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("map"),myOptions);
+    /*
+    Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistExtension.lat_long}',
+        response,
+            function(result, event){
+                if (event.status) {
+                    console.log('result: ' + result);
+                    console.log(result['&quot;Location__c&quot;']);
+
+                    var latlng = new google.maps.LatLng(-34.397, 150.644);
+                    var myOptions = {
+                        zoom: 5,
+                        center: latlng,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    var map = new google.maps.Map(document.getElementById("map"),myOptions);
+                } else if (event.type === 'exception') {
+                    console.log('Exception: ' + event.message);
+                } else {
+                    console.log('Error!');
+                }
+            },
+        {escape: true}
+    );
+    */
+
+};
 
 </script>
 
