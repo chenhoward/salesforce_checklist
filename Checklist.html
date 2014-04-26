@@ -127,6 +127,26 @@ myApp.service('userService', function() {
         );
     }
 
+    this.edit_checklist_items = function(checklist_id) {
+        var that = this;
+        Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistExtension.edit_checklist_items}',
+        checklist_id,
+            function(result, event){
+                if (event.status) {
+                    checklistitems = result;
+                    console.log(result);
+                    that.notifyObservers();
+                } else if (event.type === 'exception') {
+                    console.log('Exception: ' + event.message);
+                } else {
+                    console.log('Error!');
+                }
+            },
+        {escape: true}
+        );
+    }
+
     // returns the Check List Items for a given checklist_id
     this.getCLIs = function () {
         return checklistitems;
@@ -177,14 +197,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         $("#messages").text('Success!');
 
         // Clearing Input for next checklist
-        // for (var i = 0; i < checklistitems.length; i++) {
-        //     var key = checklistitems[i].Type__c.toLowerCase();
-        //     var id = checklistitems[i].Id;
-        //     var input_id = 'form_' + key + '_' + id;
-        //     var inputElement = $('#' + input_id);
-        //     inputElement.val('');
-        //     inputElement.focus();
-        // }
     }
 });
 
@@ -222,7 +234,7 @@ controllers.PagesController = function ($scope, userService) {
         $scope.detailPageActive = true;
         $scope.checklist_id = response;
         $scope.mapActive = true;
-        userService.get_checklist_items(response);
+        userService.edit_checklist_items(response);
     }
 
     if (checklist == undefined && response == undefined) {
@@ -263,7 +275,7 @@ function initMap(){
     }
     response = getUrlVars()['id'];
 
-    console.log(response);
+    // console.log(response);
     var latlng = new google.maps.LatLng(-34.397, 150.644);
     var myOptions = {
         zoom: 5,

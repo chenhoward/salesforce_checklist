@@ -34,19 +34,33 @@ global with sharing class ChecklistExtension {
 
         List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
         for(Checklist_Item_Response__c resp : responses){
-            resp.Checklist_Response__c = new_response.Id;
+            System.debug(resp.Checklist_Item__r.Type__c);
             System.debug(resp.Answer__c);
-            if (resp.Answer__c != null && resp.Answer__c.trim() != ''){
+            System.debug(Type.forName(resp.Answer__c).getName());
+            resp.Checklist_Response__c = new_response.Id;
+            // change yes/no, etc. to string
+            if (resp.Answer__c != null){//} && resp.Answer__c != ''){
                 finalResponses.add(resp);
             }
         }
+        System.debug(finalResponses);
         insert finalResponses;
+        System.debug('Done');
     }
 
     // Creates Checklist Response Item Objects
     @RemoteAction
     global static List<Checklist_Item_Response__c> checklist_items(Id checklist) {
         return getAllChecklistItems(checklist);
+    }
+
+    @RemoteAction
+    global static List<Checklist_Item_Response__c> edit_checklist_items(Id checklist) {
+        List<Checklist_Item_Response__c> to_return = [SELECT Answer__c, Checklist_Item__c, Checklist_Item__r.Order__c, Checklist_Item__r.Question__c, 
+                                                      Checklist_Item__r.Required__c, Checklist_Item__r.Type__c
+                                                      FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:checklist 
+                                                      order by Checklist_Item__r.Order__c];
+        return to_return;
     }
 
     @RemoteAction
