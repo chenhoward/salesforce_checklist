@@ -29,14 +29,32 @@
         <input class='normal' id='checklist_id' type='hidden' value='{!$CurrentPage.parameters.checklist_id}'/>
         <div id="messages"></div>
 
-        <div id="checklistListPage" ng-controller="ListCtrl" ng-show="listPageActive">
+        <div id="homePage" ng-controller="homeCtrl" ng-show="homePageActive">
+            <div ng-click="goToNewListpage()"> Start a New Checklist </div>
+            <div ng-click="goToPendingListpage()">Work on a Pending Checklist</div>
+            <div ng-click="goToCompletedListpage()">Look at Completed Checklists</div>
+        </div>
+        <!-- End of homePage -->
+
+        <div id="newListPage" ng-controller="NewListCtrl" ng-show="newlistPageActive">
             <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToDetailPage(checklist.Id)"> 
                 <p> Name: {{checklist.Name}} </p>
                 <p> Description: {{checklist.Description__c}} </p>
                 <p> Id: {{checklist.Id}} </p>
             </li>
+            <div ng-click="goHome()">Go Home</div>
         </div>
-        <!-- End of checklistListPage -->
+        <!-- End of newListPage -->
+
+        <div id="pendingListPage" ng-controller="PendingListCtrl" ng-show="pendinglistPageActive">
+            <!-- <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToDetailPage(checklist.Id)"> 
+                <p> Name: {{checklist.Name}} </p>
+                <p> Description: {{checklist.Description__c}} </p>
+                <p> Id: {{checklist.Id}} </p>
+            </li> -->
+            <div ng-click="goHome()">Go Home</div>
+        </div>
+        <!-- End of pendingListPage -->
 
         <div id="checklistDetailPage" ng-controller="ChecklistCtrl" ng-show="detailPageActive">
             <div id="checklist">
@@ -71,7 +89,7 @@
                         <input type="submit" value="Submit"> </input>
                     </form>
                 </ul>
-                <div ng-click="goToHomepage()">Back to List View</div>
+                <div ng-click="goToNewListpage()">Back to List View</div>
 
 
                 <div id="map" ng-show="mapActive"></div>
@@ -162,8 +180,18 @@ myApp.service('userService', function() {
 
 })
 
-myApp.controller("ListCtrl", function ($scope, userService) {
+myApp.controller("homeCtrl", function ($scope, userService) {
     checklists = {!CheckLists};
+    $scope.checklists = checklists;
+});
+
+myApp.controller("NewListCtrl", function ($scope, userService) {
+    checklists = {!CheckLists};
+    $scope.checklists = checklists;
+});
+
+myApp.controller("PendingListCtrl", function ($scope, userService) {
+    checklists = {!PendingCheckLists};
     $scope.checklists = checklists;
 });
 
@@ -244,7 +272,7 @@ controllers.PagesController = function ($scope, userService) {
 
     // Specific checklist
     if (checklist != null ) {
-        $scope.listPageActive = false;
+        $scope.newlistPageActive = false;
         $scope.detailPageActive = true;
         $scope.checklist_id = checklist;
         $scope.mapActive = false;
@@ -253,7 +281,7 @@ controllers.PagesController = function ($scope, userService) {
 
     // Specific response
     if (response != null ) {
-        $scope.listPageActive = false;
+        $scope.newlistPageActive = false;
         $scope.detailPageActive = true;
         $scope.checklist_id = response;
         $scope.mapActive = true;
@@ -261,23 +289,47 @@ controllers.PagesController = function ($scope, userService) {
     }
 
     if (checklist == undefined && response == undefined) {
-        $scope.listPageActive = true;
+        $scope.newlistPageActive = true;
         $scope.detailPageActive = false;
         $scope.checklist_id = null;
+        $scope.homePageActive = false;
     }
 
+    $scope.goHome = function() {
+        $scope.homePageActive = true; 
+        $scope.goToDetailPage = false;   
+        $scope.goToNewListpage = false;   
+        $scope.goToPendingListpage = false; 
+        $scope.goToCompletedListpage = false;
+    }
     $scope.goToDetailPage = function(checklist_id) {
         $scope.checklist_id = checklist_id;
         $('#checklist_id').val(checklist_id);
         userService.get_checklist_items(checklist_id);
-        $scope.listPageActive = false;
-        $scope.detailPageActive = true;        
+        $scope.newlistPageActive = false;
+        $scope.detailPageActive = true;
+        $scope.homePageActive = false;        
     };
-    $scope.goToHomepage = function() {
-        $scope.listPageActive = true;
+    $scope.goToNewListpage = function() {
+        $scope.newlistPageActive = true;
         $scope.detailPageActive = false; 
-        $scope.mapActive = false;                   
-    }
+        $scope.mapActive = false;    
+        $scope.homePageActive = false;               
+    };
+    $scope.goToPendingListpage = function() {
+        $scope.newlistPageActive = false;
+        $scope.detailPageActive = false; 
+        $scope.mapActive = false;      
+        $scope.newlistPageActive = true;
+        $scope.homePageActive = false;
+    };
+    $scope.goToCompletedListpage = function() {
+        $scope.newlistPageActive = false;
+        $scope.detailPageActive = false; 
+        $scope.mapActive = false;    
+        $scope.pendinglistPageActive = true;            
+        $scope.homePageActive = false;
+    };
 }
 
 myApp.controller(controllers);
