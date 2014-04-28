@@ -190,7 +190,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
                 return vars;
             } 
             checklist_id = getUrlVars()['id'];
-            console.log('checklist_id: ' + checklist_id);
         }
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.save_responses}',
