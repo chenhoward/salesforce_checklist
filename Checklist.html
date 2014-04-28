@@ -297,10 +297,11 @@ controllers.PagesController = function ($scope, userService) {
 
     $scope.goHome = function() {
         $scope.homePageActive = true; 
-        $scope.goToDetailPage = false;   
-        $scope.goToNewListpage = false;   
-        $scope.goToPendingListpage = false; 
-        $scope.goToCompletedListpage = false;
+        $scope.detailPage = false;   
+        $scope.newListpage = false;   
+        $scope.pendingListpage = false; 
+        $scope.completedListpage = false;
+        $scope.newlistPageActive = false;
     }
     $scope.goToDetailPage = function(checklist_id) {
         $scope.checklist_id = checklist_id;
@@ -314,7 +315,8 @@ controllers.PagesController = function ($scope, userService) {
         $scope.newlistPageActive = true;
         $scope.detailPageActive = false; 
         $scope.mapActive = false;    
-        $scope.homePageActive = false;               
+        $scope.homePageActive = false;    
+        $scope.pendinglistPageActive = false;           
     };
     $scope.goToPendingListpage = function() {
         $scope.newlistPageActive = false;
@@ -322,6 +324,7 @@ controllers.PagesController = function ($scope, userService) {
         $scope.mapActive = false;      
         $scope.newlistPageActive = true;
         $scope.homePageActive = false;
+        $scope.pending = false;
     };
     $scope.goToCompletedListpage = function() {
         $scope.newlistPageActive = false;
