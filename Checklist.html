@@ -135,6 +135,15 @@ myApp.service('userService', function() {
             function(result, event){
                 if (event.status) {
                     checklistitems = result;
+                    for (var i=0; i<result.length; i++) {
+                        if (result[i].Answer__c == "true") { 
+                            result[i].Answer__c = true;
+                        } else if (result[i].Answer__c == "false") {
+                            result[i].Answer__c = false;
+                        } else if (!isNaN(result[i].Answer__c)) {
+                            result[i].Answer__c = parseInt(result[i].Answer__c);
+                        }
+                    }
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
