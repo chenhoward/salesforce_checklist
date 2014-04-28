@@ -5,6 +5,11 @@ global with sharing class ChecklistAdminController {
         return ChecklistExtension.getCheckLists();
     } 
 
+    @RemoteAction
+    global static Checklist_Item__c[] getChecklistItems(Checklist__c checklist) {
+        return ChecklistUtilities.findChecklistItems(checklist);
+    }
+
     /** Remote call used by admin pages to create a checklist. */
     @RemoteAction
     global static Checklist__c createChecklist(String listName, String description) {
@@ -29,7 +34,7 @@ global with sharing class ChecklistAdminController {
     /** Adds the ITEMS to the CHECKLIST. */
     @RemoteAction
     global static Checklist__c addChecklistItems(Checklist__c checklist, Checklist_Item__c[] items) {
-        ChecklistExtension.addChecklistItems(checklist, items);
+        ChecklistUtilities.addChecklistItems(checklist, items);
         return checklist;
     }
 }
