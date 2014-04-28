@@ -32,9 +32,19 @@
         <div id="homePage" ng-controller="homeCtrl" ng-show="homePageActive">
             <div ng-click="goToNewListpage()"> Start a New Checklist </div>
             <div ng-click="goToPendingListpage()">Work on a Pending Checklist</div>
-            <div ng-click="goToCompletedListpage()">Look at Completed Checklists</div>
+            <div ng-click="goTocompletedListPage()">Look at Completed Checklists</div>
         </div>
         <!-- End of homePage -->
+
+        <div id="completedListPage" ng-controller="CompletedListCtrl" ng-show="completedListPageActive">
+            <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToDetailPage(checklist.Id)"> 
+                <p> Name: {{checklist.Name}} </p>
+                <p> Description: {{checklist.Description__c}} </p>
+                <p> Id: {{checklist.Id}} </p>
+            </li>
+            <div ng-click="goHome()">Go Home</div>
+        </div>
+        <!-- End of newListPage -->
 
         <div id="newListPage" ng-controller="NewListCtrl" ng-show="newlistPageActive">
             <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToDetailPage(checklist.Id)"> 
@@ -181,7 +191,10 @@ myApp.service('userService', function() {
 })
 
 myApp.controller("homeCtrl", function ($scope, userService) {
-    checklists = {!CheckLists};
+});
+
+myApp.controller("CompletedListCtrl", function ($scope, userService) {
+    checklists = {!CompletedCheckLists};
     $scope.checklists = checklists;
 });
 
@@ -300,8 +313,9 @@ controllers.PagesController = function ($scope, userService) {
         $scope.detailPage = false;   
         $scope.newListpage = false;   
         $scope.pendingListpage = false; 
-        $scope.completedListpage = false;
+        $scope.completedListPage = false;
         $scope.newlistPageActive = false;
+        $scope.completedListPageActive = false;
     }
     $scope.goToDetailPage = function(checklist_id) {
         $scope.checklist_id = checklist_id;
@@ -325,13 +339,15 @@ controllers.PagesController = function ($scope, userService) {
         $scope.newlistPageActive = true;
         $scope.homePageActive = false;
         $scope.pending = false;
+        $scope.completedListPageActive = false;
     };
-    $scope.goToCompletedListpage = function() {
+    $scope.goTocompletedListPage = function() {
         $scope.newlistPageActive = false;
         $scope.detailPageActive = false; 
         $scope.mapActive = false;    
-        $scope.pendinglistPageActive = true;            
+        $scope.pendinglistPageActive = false;            
         $scope.homePageActive = false;
+        $scope.completedListPageActive = true;
     };
 }
 
