@@ -31,7 +31,6 @@ global with sharing class ChecklistExtension {
     // Creates Checklist Response Item Objects
     @RemoteAction
     global static List<Checklist__c> save_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
-        //List<Checklist_Response__c> response = [SELECT Checklist__c, Checklist__r.Id From Checklist_Response__c WHERE Id =: checklist];
         if (responses == null || responses.size() == 0)
             return new List<Checklist__c>();
         if (checkistResp != null && checkistResp != '') {
@@ -40,10 +39,9 @@ global with sharing class ChecklistExtension {
                 if (resp.Answer__c != null){
                     resp.Answer__c = String.valueOf(resp.Answer__c);
                     finalResponses.add(resp);
-                    upsert resp;
-                }
+                 }
             }
-            // upsert finalResponses;
+            upsert finalResponses;
         } else {
             Checklist_Response__c new_response = new Checklist_Response__c();
             new_response.Checklist__c = responses[0].Checklist_Item__r.Checklist__c;
@@ -74,38 +72,33 @@ global with sharing class ChecklistExtension {
                                                       FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:checklist_response 
                                                       order by Checklist_Item__r.Order__c];
 
-       Map<Id, Checklist_Item_Response__c> checklistItemId2Resp = new Map<Id, Checklist_Item_Response__c>();
-       for (Checklist_Item_Response__c r : to_return){
+        Map<Id, Checklist_Item_Response__c> checklistItemId2Resp = new Map<Id, Checklist_Item_Response__c>();
+        for (Checklist_Item_Response__c r : to_return){
             checklistItemId2Resp.put(r.Checklist_Item__c, r);
-       }
-
-       Id checklistId;
-       if (to_return.size() == 0)
-       {
+        }
+        Id checklistId;
+        if (to_return.size() == 0) {
             Checklist_Response__c[] resp = [select Checklist__c from Checklist_Response__c where id = :checklist_response limit 1];
-            if (resp.size() == 1){
+            if (resp.size() == 1) {
                 checklistId = resp[0].Checklist__c;
             }
-
-       } else{
+        } else {
             checklistId = to_return[0].Checklist_Item__r.Checklist__c;
-       }
-
-
-       // if (to_return.size() == 0)
-       //      return;
+        }
+        if (to_return.size() == 0)
+            return new List<Checklist_Item_Response__c>();
         List<Checklist_Item_Response__c> responses = new List<Checklist_Item_Response__c>();
         
-        for ( Checklist_Item__c item : [  SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
+        for (Checklist_Item__c item : [  SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
                                           FROM Checklist_Item__c WHERE Checklist__c=:checklistId 
-                                          AND isActive__c = True order by Order__c]){
+                                          AND isActive__c = True order by Order__c ]) {
             Checklist_Item_Response__c r = checklistItemId2Resp.get(item.Id);
-            if (r == null){
+            if (r == null) {
                 Checklist_Item_Response__c emptyResp = new Checklist_Item_Response__c(Checklist_Item__c = item.Id, 
                                                                                         Checklist_Item__r = item,
                                                                                        Checklist_Response__c = checklist_response);
                 responses.add(emptyResp);                                                                               
-            }else{
+            } else {
                 responses.add(r);
             }
 
