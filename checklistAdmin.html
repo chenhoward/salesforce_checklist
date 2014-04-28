@@ -45,11 +45,15 @@ id="todo"
             <input type="submit" value="Submit" ng-click="editChecklist()"></input>
         </li>
     </form>
+    <div>
+      swag
+        <div ng-repeat="question in questions">
+          swag
+      </div>
+  </div>
 </div>
 </div>
-<div ng-model="Questions">
 
-</div>
 </body>
 
 <script>
@@ -71,58 +75,77 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.types = ['Yes/No', 'Number', 'Text', 'Date','Long Text', 'Rating', 'Picklist', 'Multi-Select'];
     console.log($scope.checklists);
     $scope.newChecklist = function() {
-         if ($scope.newChecklistForm.$valid) {
-            $scope.createChecklist();
-         } else {
-            console.log('invalid');
-         }
+     if ($scope.newChecklistForm.$valid) {
+        $scope.createChecklist();
+    } else {
+        console.log('invalid');
     }
-    $scope.createChecklist = function() {
-        for(var i = 0; i < $scope.items.length; i++) {
-            delete $scope.items[i].$$hashKey;
-            console.log($scope.items[i].Type__c);
-        }
-        Visualforce.remoting.Manager.invokeAction(
-            '{!$RemoteAction.ChecklistAdminController.createChecklistWithQuestions}',
-            $scope.checklist.name,
-            $scope.checklist.description,
-            $scope.items,
-            function(result, event) {
-                if (event.status) {
-                    console.log('Created everything');
-                } else if (event.type == 'exception') {
-                    console.log('Exception');
-                } else {
-                    console.log('Error!');
-                }
-            },
-            {escape: true}
-            );
-    };
-    $scope.addQuestion = function() {
-        $scope.items.push(new Object());
+}
+$scope.createChecklist = function() {
+    for(var i = 0; i < $scope.items.length; i++) {
+        delete $scope.items[i].$$hashKey;
+        console.log($scope.items[i].Type__c);
     }
-    $scope.removeQuestion = function() {
-        $scope.items.pop();
-    }
-    $scope.editChecklist = function() {
-        delete $scope.item.attributes;
-        Visualforce.remoting.Manager.invokeAction(
-            '{!$RemoteAction.ChecklistAdminController.updateChecklist}',
-            $scope.item,
-            function(result, event) {
-                if (event.status) {
-                    console.log('Updated everything');
-                } else if (event.type == 'exeception') {
-                    console.log('Exception');
-                } else {
-                    console.log('Error!');
-                }
-            },
-            {escape: true}
-            );
-    };
-
+    Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistAdminController.createChecklistWithQuestions}',
+        $scope.checklist.name,
+        $scope.checklist.description,
+        $scope.items,
+        function(result, event) {
+            if (event.status) {
+                console.log('Created everything');
+            } else if (event.type == 'exception') {
+                console.log('Exception');
+            } else {
+                console.log('Error!');
+            }
+        },
+        {escape: true}
+        );
+};
+$scope.addQuestion = function() {
+    $scope.items.push(new Object());
+}
+$scope.removeQuestion = function() {
+    $scope.items.pop();
+}
+$scope.editChecklist = function() {
+    delete $scope.item.attributes;
+    Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistAdminController.updateChecklist}',
+        $scope.item,
+        function(result, event) {
+            if (event.status) {
+                console.log('Updated everything');
+            } else if (event.type == 'exeception') {
+                console.log('Exception');
+            } else {
+                console.log('Error!');
+            }
+        },
+        {escape: true}
+        );
+};
+$scope.getChecklistItems = function() {
+    delete $scope.item.attributes;
+    Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistAdminController.getChecklistItems}',
+        $scope.item,
+        function(result, event) {
+            if(event.status) {
+                console.log(result);
+                $scope.questions = result;
+                $scope.$apply();
+            } else if (event.type == 'exception') {
+                console.log('Exception');
+            } else {
+                console.log('Error!');
+            }
+        },
+        {escape:true}
+        );
+};
+$scope.getChecklistItems();
 });
 
 </script>
