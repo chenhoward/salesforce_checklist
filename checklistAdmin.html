@@ -45,12 +45,11 @@ id="todo"
             <input type="submit" value="Submit" ng-click="editChecklist()"></input>
         </li>
     </form>
-    <div>
-      swag
         <div ng-repeat="question in questions">
-          swag
+          <input type="text" ng-model="question.Question__c" ng-required="true"></input>
+          {{question.Order__c}}
+          {{question.isActive__c}}
       </div>
-  </div>
 </div>
 </div>
 
@@ -73,7 +72,6 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.checklists = {!CheckLists};
     $scope.item = $scope.checklists[3];
     $scope.types = ['Yes/No', 'Number', 'Text', 'Date','Long Text', 'Rating', 'Picklist', 'Multi-Select'];
-    console.log($scope.checklists);
     $scope.newChecklist = function() {
      if ($scope.newChecklistForm.$valid) {
         $scope.createChecklist();
@@ -133,7 +131,6 @@ $scope.getChecklistItems = function() {
         $scope.item,
         function(result, event) {
             if(event.status) {
-                console.log(result);
                 $scope.questions = result;
                 $scope.$apply();
             } else if (event.type == 'exception') {
