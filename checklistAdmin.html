@@ -51,6 +51,8 @@ id="todo"
           <input type="checkbox" ng-model="question.isActive__c"></input>
           {{question.isActive__c}}
       </div>
+              <input type="button" value="+" ng-click="addQuestionEdit()"></input>
+
 </div>
 </div>
 
@@ -105,6 +107,11 @@ $scope.createChecklist = function() {
 $scope.addQuestion = function() {
     $scope.items.push(new Object());
 }
+$scope.addQuestionEdit = function() {
+    var item = {isActive__c : true, Order__c: $scope.questions.length + 1}
+    $scope.questions.push(item);
+    console.log($scope.questions.length);
+}
 $scope.removeQuestion = function() {
     $scope.items.pop();
 }
@@ -126,7 +133,9 @@ $scope.editChecklist = function() {
         );
     for(var i = 0; i < $scope.questions.length; i++) {
         delete $scope.questions[i].$$hashKey;
+        $scope.questions[i].Checklist__c = $scope.item.Id;
     }
+    console.log($scope.questions);
     Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistAdminController.updateChecklistItems}',
         $scope.questions,
