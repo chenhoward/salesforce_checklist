@@ -172,13 +172,14 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
     };
 
     $scope.submitForm = function() {
-        checklist_id = $('#checklist_id').val();
+        var that = this;
+        var checklist_response = '';
         for(var i = 0; i < $scope.checklistitems.length; i++) {
             delete $scope.checklistitems[i].$$hashKey;
         }
         delete $scope.checklistitems.attributes;
         // create javascript remoting calls to backend
-        if (checklist_id == '') {
+        if (checklist_response == '') {
             function getUrlVars() {
                 var vars = [], hash;
                 var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
@@ -189,15 +190,20 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
                 }
                 return vars;
             } 
-            checklist_id = getUrlVars()['id'];
+            checklist_response = getUrlVars()['id'];
         }
+
+        console.log('calls save responses');
+
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.save_responses}',
-            checklist_id,
+            checklist_response,
             $scope.checklistitems,
                 function(result, event){
                     if (event.status) {
                         console.log('SUCCESS!');
+                        $scope.checklistitems = result; 
+                        userService.edit_checklist_items(checklist_response);
                     } else if (event.type === 'exception') {
                         console.log('Exception: ' + event.message);
                     } else {
@@ -208,7 +214,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         );
 
         $("#messages").text('Success!');
-
         // Clearing Input for next checklist
     }
 });

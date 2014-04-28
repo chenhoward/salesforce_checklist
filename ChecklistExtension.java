@@ -27,21 +27,28 @@ global with sharing class ChecklistExtension {
 
     // Creates Checklist Response Item Objects
     @RemoteAction
-    global static void save_responses(Id checklist, Id checkistResp, List<Checklist_Item_Response__c> responses) {
-        List<Checklist_Response__c> response = [SELECT Checklist__c, Checklist__r.Id From Checklist_Response__c WHERE Id =: checklist];
-        if (response.size() == 1) {
+    global static List<Checklist__c> save_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
+        //List<Checklist_Response__c> response = [SELECT Checklist__c, Checklist__r.Id From Checklist_Response__c WHERE Id =: checklist];
+        if (responses == null || responses.size() == 0)
+            return new List<Checklist__c>();
+
+        System.debug(checkistResp);
+        System.debug(responses);
+        if (checkistResp != null && checkistResp != '') {
             List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
             for(Checklist_Item_Response__c resp : responses){
-                if (resp.Checklist_Item__r.Type__c == 'Yes/No') {
-                    resp.Answer__c = String.valueOf(resp.Answer__c);
+                if (resp.Answer__c != null){
+                    if (resp.Checklist_Item__r.Type__c == 'Yes/No') {
+                        resp.Answer__c = String.valueOf(resp.Answer__c);
+                    }
+                    System.debug(resp);
+                    finalResponses.add(resp);
                 }
-                System.debug(resp);
-                finalResponses.add(resp);
             }
-            update finalResponses;
+            upsert finalResponses;
         } else {
             Checklist_Response__c new_response = new Checklist_Response__c();
-            new_response.Checklist__c = checklist;
+            new_response.Checklist__c = responses[0].Checklist_Item__r.Checklist__c;
             insert(new_response);
             List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
             for(Checklist_Item_Response__c resp : responses){
@@ -53,22 +60,10 @@ global with sharing class ChecklistExtension {
                     finalResponses.add(resp);
                 }
             }
-            upsert finalResponses;
+            insert finalResponses;
         }
-        
-
-        // insert(new_response);
-        // List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
-        // for(Checklist_Item_Response__c resp : responses){
-        //     resp.Checklist_Response__c = new_response.Id;
-        //     if (resp.Answer__c != null){
-        //         if (resp.Checklist_Item__r.Type__c == 'Yes/No') {
-        //             resp.Answer__c = String.valueOf(resp.Answer__c);
-        //         }
-        //         finalResponses.add(resp);
-        //     }
-        // }
-        // insert finalResponses;
+        system.debug('got to end');
+        return [SELECT Name, Description__c, Id FROM Checklist__c];
     }
 
     // Creates Checklist Response Item Objects
@@ -79,20 +74,48 @@ global with sharing class ChecklistExtension {
 
     @RemoteAction
     global static List<Checklist_Item_Response__c> edit_checklist_items(Id checklist_response) {
-        List<Checklist_Item_Response__c> to_return = [SELECT Answer__c, Checklist_Item__c, Checklist_Item__r.Order__c, Checklist_Item__r.Question__c, Checklist_Item__r.Checklist__c,
+        List<Checklist_Item_Response__c> to_return = [SELECT Id, Answer__c, Checklist_Item__c, Checklist_Item__r.Order__c, Checklist_Item__r.Question__c, Checklist_Item__r.Checklist__c,
                                                       Checklist_Item__r.Required__c, Checklist_Item__r.Type__c
                                                       FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:checklist_response 
                                                       order by Checklist_Item__r.Order__c];
 
        Map<Id, Checklist_Item_Response__c> checklistItemId2Resp = new Map<Id, Checklist_Item_Response__c>();
+       for (Checklist_Item_Response__c r : to_return){
+            checklistItemId2Resp.put(r.Checklist_Item__c, r);
+       }
 
-
+       Id checklistId;
        if (to_return.size() == 0)
-            return;
-        // crosscheck with other questions to return a list of all questions
-        List<Checklist_Item__c> to_return = [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
-                FROM Checklist_Item__c WHERE Checklist__c=:to_return[0].Checklist_Item__r.Checklist__c AND isActive__c = True order by Order__c];
-        return to_return;
+       {
+            Checklist_Response__c[] resp = [select Checklist__c from Checklist_Response__c where id = :checklist_response limit 1];
+            if (resp.size() == 1){
+                checklistId = resp[0].Checklist__c;
+            }
+
+       } else{
+            checklistId = to_return[0].Checklist_Item__r.Checklist__c;
+       }
+
+
+       // if (to_return.size() == 0)
+       //      return;
+        List<Checklist_Item_Response__c> responses = new List<Checklist_Item_Response__c>();
+        
+        for ( Checklist_Item__c item : [  SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
+                                          FROM Checklist_Item__c WHERE Checklist__c=:checklistId 
+                                          AND isActive__c = True order by Order__c]){
+            Checklist_Item_Response__c r = checklistItemId2Resp.get(item.Id);
+            if (r == null){
+                Checklist_Item_Response__c emptyResp = new Checklist_Item_Response__c(Checklist_Item__c = item.Id, 
+                                                                                        Checklist_Item__r = item,
+                                                                                       Checklist_Response__c = checklist_response);
+                responses.add(emptyResp);                                                                               
+            }else{
+                responses.add(r);
+            }
+
+        }
+        return responses;
     }
 
     @RemoteAction
