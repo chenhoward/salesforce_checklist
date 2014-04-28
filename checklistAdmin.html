@@ -45,9 +45,10 @@ id="todo"
             <input type="submit" value="Submit" ng-click="editChecklist()"></input>
         </li>
     </form>
-        <div ng-repeat="question in questions">
+        <div ng-repeat="question in questions | filter:{isActive__c:'true'}">
           <input type="text" ng-model="question.Question__c" ng-required="true"></input>
           {{question.Order__c}}
+          <input type="checkbox" ng-model="question.isActive__c"></input>
           {{question.isActive__c}}
       </div>
 </div>
