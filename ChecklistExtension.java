@@ -2,6 +2,9 @@ global with sharing class ChecklistExtension {
 
     public ChecklistExtension(ApexPages.StandardController stdController) {}
 
+
+    // public static final String[] QUESTION_Types = new String[]{"Yes_No", "Number", "Text", "Date", "Long_Text", "Rating", "Picklist", "Multi_Select", "Photo"};
+
     public static String getCheckLists() {
        List<Checklist__c> checklists = getAllChecklists(); 
        return JSON.serialize(checklists);
@@ -35,13 +38,12 @@ global with sharing class ChecklistExtension {
             List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
             for(Checklist_Item_Response__c resp : responses){
                 if (resp.Answer__c != null){
-                    if (resp.Checklist_Item__r.Type__c == 'Yes/No') {
-                        resp.Answer__c = String.valueOf(resp.Answer__c);
-                    }
+                    resp.Answer__c = String.valueOf(resp.Answer__c);
                     finalResponses.add(resp);
+                    upsert resp;
                 }
             }
-            upsert finalResponses;
+            // upsert finalResponses;
         } else {
             Checklist_Response__c new_response = new Checklist_Response__c();
             new_response.Checklist__c = responses[0].Checklist_Item__r.Checklist__c;
@@ -50,9 +52,7 @@ global with sharing class ChecklistExtension {
             for(Checklist_Item_Response__c resp : responses){
                 resp.Checklist_Response__c = new_response.Id;
                 if (resp.Answer__c != null){
-                    if (resp.Checklist_Item__r.Type__c == 'Yes/No') {
-                        resp.Answer__c = String.valueOf(resp.Answer__c);
-                    }
+                    resp.Answer__c = String.valueOf(resp.Answer__c);
                     finalResponses.add(resp);
                 }
             }
