@@ -135,7 +135,6 @@ myApp.service('userService', function() {
             function(result, event){
                 if (event.status) {
                     checklistitems = result;
-                    console.log(result);
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
@@ -193,7 +192,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             checklist_response = getUrlVars()['id'];
         }
 
-        console.log('calls save responses');
 
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.save_responses}',
@@ -201,7 +199,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             $scope.checklistitems,
                 function(result, event){
                     if (event.status) {
-                        console.log('SUCCESS!');
                         $scope.checklistitems = result; 
                         userService.edit_checklist_items(checklist_response);
                     } else if (event.type === 'exception') {
@@ -293,7 +290,6 @@ function initMap(){
     }
     response = getUrlVars()['id'];
 
-    // console.log(response);
     var latlng = new google.maps.LatLng(-34.397, 150.644);
     var myOptions = {
         zoom: 5,

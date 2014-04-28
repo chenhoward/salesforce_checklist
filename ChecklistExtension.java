@@ -31,9 +31,6 @@ global with sharing class ChecklistExtension {
         //List<Checklist_Response__c> response = [SELECT Checklist__c, Checklist__r.Id From Checklist_Response__c WHERE Id =: checklist];
         if (responses == null || responses.size() == 0)
             return new List<Checklist__c>();
-
-        System.debug(checkistResp);
-        System.debug(responses);
         if (checkistResp != null && checkistResp != '') {
             List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
             for(Checklist_Item_Response__c resp : responses){
@@ -41,7 +38,6 @@ global with sharing class ChecklistExtension {
                     if (resp.Checklist_Item__r.Type__c == 'Yes/No') {
                         resp.Answer__c = String.valueOf(resp.Answer__c);
                     }
-                    System.debug(resp);
                     finalResponses.add(resp);
                 }
             }
@@ -62,7 +58,6 @@ global with sharing class ChecklistExtension {
             }
             insert finalResponses;
         }
-        system.debug('got to end');
         return [SELECT Name, Description__c, Id FROM Checklist__c];
     }
 
