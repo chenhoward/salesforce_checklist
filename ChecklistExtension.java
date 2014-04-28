@@ -28,24 +28,48 @@ global with sharing class ChecklistExtension {
     // Creates Checklist Response Item Objects
     @RemoteAction
     global static void save_responses(Id checklist, List<Checklist_Item_Response__c> responses) {
-        Checklist_Response__c new_response = new Checklist_Response__c();
-        new_response.Checklist__c = checklist;
-        insert(new_response);
-
-        List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
-        for(Checklist_Item_Response__c resp : responses){
-            System.debug(resp.Checklist_Item__r.Type__c);
-            System.debug(resp.Answer__c);
-            System.debug(Type.forName(resp.Answer__c).getName());
-            resp.Checklist_Response__c = new_response.Id;
-            // change yes/no, etc. to string
-            if (resp.Answer__c != null){//} && resp.Answer__c != ''){
-                finalResponses.add(resp);
+        List<Checklist_Response__c> response = [SELECT Checklist__c, Checklist__r.Id From Checklist_Response__c WHERE Id =: checklist];
+        if (response.size() == 1) {
+            List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
+            for(Checklist_Item_Response__c resp : responses){
+                if (resp.Answer__c != null){
+                    if (resp.Checklist_Item__r.Type__c == 'Yes/No') {
+                        resp.Answer__c = String.valueOf(resp.Answer__c);
+                    }
+                    finalResponses.add(resp);
+                }
             }
+            update finalResponses;
+        } else {
+            Checklist_Response__c new_response = new Checklist_Response__c();
+            new_response.Checklist__c = checklist;
+            insert(new_response);
+            List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
+            for(Checklist_Item_Response__c resp : responses){
+                resp.Checklist_Response__c = new_response.Id;
+                if (resp.Answer__c != null){
+                    if (resp.Checklist_Item__r.Type__c == 'Yes/No') {
+                        resp.Answer__c = String.valueOf(resp.Answer__c);
+                    }
+                    finalResponses.add(resp);
+                }
+            }
+            insert finalResponses;
         }
-        System.debug(finalResponses);
-        insert finalResponses;
-        System.debug('Done');
+        
+
+        // insert(new_response);
+        // List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
+        // for(Checklist_Item_Response__c resp : responses){
+        //     resp.Checklist_Response__c = new_response.Id;
+        //     if (resp.Answer__c != null){
+        //         if (resp.Checklist_Item__r.Type__c == 'Yes/No') {
+        //             resp.Answer__c = String.valueOf(resp.Answer__c);
+        //         }
+        //         finalResponses.add(resp);
+        //     }
+        // }
+        // insert finalResponses;
     }
 
     // Creates Checklist Response Item Objects
@@ -60,6 +84,7 @@ global with sharing class ChecklistExtension {
                                                       Checklist_Item__r.Required__c, Checklist_Item__r.Type__c
                                                       FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:checklist 
                                                       order by Checklist_Item__r.Order__c];
+        // crosscheck with other questions to return a list of all questions
         return to_return;
     }
 
