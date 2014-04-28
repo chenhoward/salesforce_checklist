@@ -124,6 +124,22 @@ $scope.editChecklist = function() {
         },
         {escape: true}
         );
+    for(var i = 0; i < $scope.questions.length; i++) {
+        delete $scope.questions[i].$$hashKey;
+    }
+    Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistAdminController.updateChecklistItems}',
+        $scope.questions,
+        function(result, event) {
+            if (event.status) {
+                console.log('Updated everything items');
+            } else if (event.type == 'exeception') {
+                console.log('Exception');
+            } else {
+                console.log('Error!');
+            }
+        }, {escape: true}
+        );
 };
 $scope.getChecklistItems = function() {
     delete $scope.item.attributes;
