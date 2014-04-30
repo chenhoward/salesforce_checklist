@@ -57,11 +57,11 @@
         <!-- End of newListPage -->
 
         <div id="pendingListPage" ng-controller="PendingListCtrl" ng-show="pendinglistPageActive">
-            <!-- <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToDetailPage(checklist.Id)"> 
+            <li ng-repeat="checklist in pendingchecklistresponses"> 
                 <p> Name: {{checklist.Name}} </p>
                 <p> Description: {{checklist.Description__c}} </p>
                 <p> Id: {{checklist.Id}} </p>
-            </li> -->
+            </li>
             <div ng-click="goHome()">Go Home</div>
         </div>
         <!-- End of pendingListPage -->
@@ -178,6 +178,7 @@ myApp.service('userService', function() {
 
     this.get_pending_CLRI = function(checklist_response_id) {
         var that = this;
+        console.log('got here');
         Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.pending_checklists}',
         checklist_response_id,
@@ -263,13 +264,16 @@ myApp.controller("homeCtrl", function ($scope, userService) {
 });
 
 myApp.controller("CompletedListCtrl", function ($scope, userService) {
-    // right hting to do ?init();
+    // right hting to do ?
+    init();
     function init() {
-        $scope.checklistresponses = userService.getCLIs();
+        $scope.pendingchecklistresponses = userService.getPendingCLRs();
+        $scope.completedchecklistresponses = userService.getCompletedCLRs();
         userService.registerObserverCallback(updatechecklistresponses);
     }
     function updatechecklistresponses() {
-        $scope.checklistresponses = userService.getCLIs();
+        $scope.pendingchecklistresponses = userService.getPendingCLRs();
+        $scope.completedchecklistresponses = userService.getCompletedCLRs();
         // Make sure the scope refreshes itself
         $scope.$apply();
     };
@@ -299,11 +303,13 @@ myApp.controller("PendingListCtrl", function ($scope, userService) {
     // right thing to do ?
     init();
     function init() {
-        $scope.checklistresponses = userService.getCLIs();
+        $scope.pendingchecklistresponses = userService.getPendingCLRs();
+        $scope.completedchecklistresponses = userService.getCompletedCLRs();
         userService.registerObserverCallback(updatechecklistresponses);
     }
     function updatechecklistresponses() {
-        $scope.checklistresponses = userService.getCLIs();
+        $scope.pendingchecklistresponses = userService.getPendingCLRs();
+        $scope.completedchecklistresponses = userService.getCompletedCLRs();
         // Make sure the scope refreshes itself
         $scope.$apply();
     };
@@ -457,6 +463,7 @@ controllers.PagesController = function ($scope, userService) {
         $scope.homePageActive = false;
         $scope.pending = false;
         $scope.completedListPageActive = false;
+        userService.getPendingCLRs();
     };
     $scope.goTocompletedListPage = function() {
         $scope.newlistPageActive = false;
@@ -465,6 +472,7 @@ controllers.PagesController = function ($scope, userService) {
         $scope.pendinglistPageActive = false;            
         $scope.homePageActive = false;
         $scope.completedListPageActive = true;
+        userService.getCompletedCLRs();
     };
 }
 
