@@ -157,14 +157,15 @@ myApp.service('userService', function() {
         );
     }
 
-    this.get_completed_CLRI = function(checklist_response_id) {
+    this.get_completed_CLRI = function() {
         var that = this;
         Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.completed_checklists}',
-        checklist_response_id,
             function(result, event){
                 if (event.status) {
+                    console.log('completed CLRIs: ' + result);
                     completedchecklistresponses = result;
+                    console.log(completedchecklistresponses);
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
@@ -176,15 +177,16 @@ myApp.service('userService', function() {
         );
     }
 
-    this.get_pending_CLRI = function(checklist_response_id) {
+    this.get_pending_CLRI = function() {
         var that = this;
-        console.log('got here');
+        // LOOK HERE
         Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.pending_checklists}',
-        checklist_response_id,
             function(result, event){
                 if (event.status) {
+                    console.log('pending CLRIs: ' + result);
                     pendingchecklistresponses = result;
+                    console.log(pendingchecklistresponses);
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
@@ -463,7 +465,7 @@ controllers.PagesController = function ($scope, userService) {
         $scope.homePageActive = false;
         $scope.pending = false;
         $scope.completedListPageActive = false;
-        userService.getPendingCLRs();
+        userService.get_pending_CLRI();
     };
     $scope.goTocompletedListPage = function() {
         $scope.newlistPageActive = false;
@@ -472,7 +474,7 @@ controllers.PagesController = function ($scope, userService) {
         $scope.pendinglistPageActive = false;            
         $scope.homePageActive = false;
         $scope.completedListPageActive = true;
-        userService.getCompletedCLRs();
+        userService.get_completed_CLRI();
     };
 }
 

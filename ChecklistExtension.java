@@ -11,17 +11,19 @@ global with sharing class ChecklistExtension {
     } 
 
     @RemoteAction
-    global static String pending_checklists() {
+    global static List<Checklist_Response__c> pending_checklists() {
        List<Checklist_Response__c> checklists = [SELECT Checklist__r.Name, Checklist__r.Description__c, 
                                                 Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending'];
-       return JSON.serialize(checklists);
+       return checklists;
+       // return JSON.serialize(checklists);
     } 
 
     @RemoteAction
-    global static String completed_checklists() {
+    global static List<Checklist_Response__c> completed_checklists() {
        List<Checklist_Response__c> checklists = [SELECT Checklist__r.Name, Checklist__r.Description__c, 
                                                 Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Complete'];
-       return JSON.serialize(checklists);
+       return checklists;
+       // return JSON.serialize(checklists);
     } 
 
     public static List<Checklist__c> getAllChecklists(){
