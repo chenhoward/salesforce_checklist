@@ -194,8 +194,21 @@ myApp.controller("homeCtrl", function ($scope, userService) {
 });
 
 myApp.controller("CompletedListCtrl", function ($scope, userService) {
-    checklists = {!CompletedCheckLists};
-    $scope.checklists = checklists;
+    // right hting to do ?
+    Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistExtension.completed_checklists}',
+            function(result, event){
+                if (event.status) {
+                    $scope.checklistitems = result; 
+                    // userService.edit_checklist_items(checklist_response);
+                } else if (event.type === 'exception') {
+                    console.log('Exception: ' + event.message);
+                } else {
+                    console.log('Error!');
+                }
+            },
+        {escape: true}
+    );
 });
 
 myApp.controller("NewListCtrl", function ($scope, userService) {
@@ -204,8 +217,22 @@ myApp.controller("NewListCtrl", function ($scope, userService) {
 });
 
 myApp.controller("PendingListCtrl", function ($scope, userService) {
-    checklists = {!PendingCheckLists};
-    $scope.checklists = checklists;
+    // right thing to do ?
+    Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistExtension.pending_checklists}',
+            function(result, event){
+                if (event.status) {
+                    $scope.checklistitems = result; 
+                    // userService.edit_checklist_items(checklist_response);
+                } else if (event.type === 'exception') {
+                    console.log('Exception: ' + event.message);
+                } else {
+                    console.log('Error!');
+                }
+            },
+        {escape: true}
+    );
+
 });
 
 myApp.controller("ChecklistCtrl", function ($scope, userService) {
