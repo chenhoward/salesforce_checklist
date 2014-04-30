@@ -126,4 +126,21 @@ global with sharing class ChecklistExtension {
         return JSON.serialize(response);
     }
 
+    @RemoteAction
+    global static String[] finish_checklist_items(Id checklist_response_id) {
+       Checklist_Response__c r = [SELECT Id FROM Checklist_Response__c WHERE Id=:checklist_response_id];
+       r.Status__c = 'Complete';
+       update(r);
+       List<Checklist_Response__c> pending_checklists = [SELECT Checklist__r.Name, Checklist__r.Description__c, 
+                                                         Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending'];
+       List<Checklist_Response__c> completed_checklists = [SELECT Checklist__r.Name, Checklist__r.Description__c, 
+                                                          Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Complete'];
+       String return_pending = JSON.serialize(pending_checklists);
+       String return_completed = JSON.serialize(completed_checklists);       
+       String[] to_return = new String[]{};
+       to_return[0] = return_pending;
+       to_return[1] = return_completed;
+       return to_return;
+    }
+
 }

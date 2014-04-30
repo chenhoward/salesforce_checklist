@@ -119,6 +119,8 @@ var myApp = angular.module('myApp', []);
 myApp.service('userService', function() {
 
     var checklistitems;
+    var pendingchecklistresponses;
+    var completedchecklistresponses;
     var checklists;
     var checklist_id;
 
@@ -144,6 +146,44 @@ myApp.service('userService', function() {
             function(result, event){
                 if (event.status) {
                     checklistitems = result;
+                    that.notifyObservers();
+                } else if (event.type === 'exception') {
+                    console.log('Exception: ' + event.message);
+                } else {
+                    console.log('Error!');
+                }
+            },
+        {escape: true}
+        );
+    }
+
+    this.get_completed_CLRI = function(checklist_response_id) {
+        var that = this;
+        Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistExtension.completed_checklists}',
+        checklist_response_id,
+            function(result, event){
+                if (event.status) {
+                    completedchecklistresponses = result;
+                    that.notifyObservers();
+                } else if (event.type === 'exception') {
+                    console.log('Exception: ' + event.message);
+                } else {
+                    console.log('Error!');
+                }
+            },
+        {escape: true}
+        );
+    }
+
+    this.get_pending_CLRI = function(checklist_response_id) {
+        var that = this;
+        Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistExtension.pending_checklists}',
+        checklist_response_id,
+            function(result, event){
+                if (event.status) {
+                    pendingchecklistresponses = result;
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
@@ -183,10 +223,39 @@ myApp.service('userService', function() {
         );
     }
 
+    this.finish_checklist_response = function(checklist_response_id) {
+        var that = this;
+        Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistExtension.finish_checklist_items}',
+        checklist_response_id,
+            function(result, event){
+                if (event.status) {
+                    pendingchecklistresponses = result[0];
+                    completedchecklistresponses = result[1];
+                    that.notifyObservers();
+                } else if (event.type === 'exception') {
+                    console.log('Exception: ' + event.message);
+                } else {
+                    console.log('Error!');
+                }
+            },
+        {escape: true}
+        );
+    }
+
+
     // returns the Check List Items for a given checklist_id
     this.getCLIs = function () {
         return checklistitems;
     };
+
+    this.getPendingCLRs = function() {
+        return pendingchecklistresponses;
+    }
+
+    this.getCompletedCLRs = function() {
+        return completedchecklistresponses;
+    }
 
 })
 
@@ -194,7 +263,17 @@ myApp.controller("homeCtrl", function ($scope, userService) {
 });
 
 myApp.controller("CompletedListCtrl", function ($scope, userService) {
-    // right hting to do ?
+    // right hting to do ?init();
+    function init() {
+        $scope.checklistresponses = userService.getCLIs();
+        userService.registerObserverCallback(updatechecklistresponses);
+    }
+    function updatechecklistresponses() {
+        $scope.checklistresponses = userService.getCLIs();
+        // Make sure the scope refreshes itself
+        $scope.$apply();
+    };
+
     Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.completed_checklists}',
             function(result, event){
@@ -218,6 +297,17 @@ myApp.controller("NewListCtrl", function ($scope, userService) {
 
 myApp.controller("PendingListCtrl", function ($scope, userService) {
     // right thing to do ?
+    init();
+    function init() {
+        $scope.checklistresponses = userService.getCLIs();
+        userService.registerObserverCallback(updatechecklistresponses);
+    }
+    function updatechecklistresponses() {
+        $scope.checklistresponses = userService.getCLIs();
+        // Make sure the scope refreshes itself
+        $scope.$apply();
+    };
+
     Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.pending_checklists}',
             function(result, event){
