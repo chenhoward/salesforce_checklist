@@ -197,6 +197,7 @@ myApp.service('userService', function() {
         checklist_response_id,
             function(result, event){
                 if (event.status) {
+                    if (result.length == 0) return;
                     checklistitems = result;
                     for (var i=0; i<result.length; i++) {
                         if (result[i].Answer__c == "true") { 
@@ -444,7 +445,7 @@ controllers.PagesController = function ($scope, userService) {
         $scope.homePageActive = false;        
         $scope.pendinglistPageActive = false;           
         $scope.completedListPageActive = false;
-        // userService.edit_checklist_items(checklist_id);
+        userService.edit_checklist_items(checklist_id);
         // ^with it, pending responses are filled, but start new checklist breaks 
         $scope.detailPageActive = true;
     };

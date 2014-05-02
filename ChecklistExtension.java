@@ -55,6 +55,8 @@ global with sharing class ChecklistExtension {
     // Creates Checklist Response Item Objects
     @RemoteAction
     global static List<Checklist__c> save_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
+        System.debug(checkistResp);
+        SYstem.debug(responses);
         if (responses == null || responses.size() == 0)
             return new List<Checklist__c>();
         if (checkistResp != null && checkistResp != '') {
@@ -62,9 +64,11 @@ global with sharing class ChecklistExtension {
             for(Checklist_Item_Response__c resp : responses){
                 if (resp.Answer__c != null){
                     resp.Answer__c = String.valueOf(resp.Answer__c);
+                    // resp.Checklist_Response__c = checkistResp;
                     finalResponses.add(resp);
                  }
             }
+            // upsert fails; required field missing for checklist response?
             upsert finalResponses;
             List<Checklist_Response__c> response = [SELECT Status__c FROM Checklist_Response__c WHERE Id=:checkistResp];
             response[0].Status__c = 'Complete'; 
@@ -100,6 +104,7 @@ global with sharing class ChecklistExtension {
                                                       FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:checklist_response 
                                                       order by Checklist_Item__r.Order__c];
 
+        if (to_return.size() == 0) return new List<Checklist_Item_Response__c>();
         Map<Id, Checklist_Item_Response__c> checklistItemId2Resp = new Map<Id, Checklist_Item_Response__c>();
         for (Checklist_Item_Response__c r : to_return){
             checklistItemId2Resp.put(r.Checklist_Item__c, r);
