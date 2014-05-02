@@ -96,7 +96,7 @@
                                 <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input-->
                              </span>
                         </li>
-                        <input type="submit" value="Submit"> </input>
+                        <input id='submit_button' type="submit" value="Submit"> </input>
                     </form>
                 </ul>
                 <div ng-click="goHome()">Back to Home</div>
@@ -432,9 +432,11 @@ controllers.PagesController = function ($scope, userService) {
         $scope.completedListPageActive = false;
         $scope.detailPageActive = false;
         $("#messages").text('');
+        $('#submit_button').show();
         $scope.homePageActive = true; 
     };
     $scope.goToDetailPage = function(checklist_id) {
+        console.log(checklist_id);
         $scope.checklist_id = checklist_id;
         $('#checklist_id').val(checklist_id);
         userService.get_checklist_items(checklist_id);
@@ -442,7 +444,8 @@ controllers.PagesController = function ($scope, userService) {
         $scope.homePageActive = false;        
         $scope.pendinglistPageActive = false;           
         $scope.completedListPageActive = false;
-        userService.edit_checklist_items(checklist_id);
+        // userService.edit_checklist_items(checklist_id);
+        // ^with it, pending responses are filled, but start new checklist breaks 
         $scope.detailPageActive = true;
     };
     $scope.goToNewListpage = function() {
@@ -470,6 +473,7 @@ controllers.PagesController = function ($scope, userService) {
         $scope.pendinglistPageActive = false;            
         $scope.homePageActive = false;
         $scope.completedListPageActive = true;
+        $('#submit_button').hide();
     };
 }
 
