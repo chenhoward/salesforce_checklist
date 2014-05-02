@@ -73,6 +73,47 @@ global with sharing class ChecklistExtension {
             System.debug(finalResponses);
             upsert finalResponses;
             List<Checklist_Response__c> response = [SELECT Status__c FROM Checklist_Response__c WHERE Id=:checkistResp];
+            response[0].Status__c = 'Pending'; 
+            update response;
+        } else { // new response created
+            Checklist_Response__c new_response = new Checklist_Response__c();
+            new_response.Checklist__c = responses[0].Checklist_Item__r.Checklist__c;
+            new_response.Status__c = 'Pending';
+            insert(new_response);
+            List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
+            for(Checklist_Item_Response__c resp : responses){
+                resp.Checklist_Response__c = new_response.Id;
+                if (resp.Answer__c != null){
+                    resp.Answer__c = String.valueOf(resp.Answer__c);
+                    finalResponses.add(resp);
+                }
+            }
+            insert finalResponses;
+        }
+        return [SELECT Name, Description__c, Id FROM Checklist__c];
+    }
+
+    // Creates Checklist Response Item Objects
+    @RemoteAction
+    global static List<Checklist__c> submit_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
+        List<Checklist_Response__c> res = [SELECT Id FROM Checklist_Response__c WHERE Id=:checkistResp];
+        System.debug(checkistResp);
+        System.debug(res.size());
+        if (responses == null || responses.size() == 0)
+            return new List<Checklist__c>();
+        if (checkistResp != null && checkistResp != '' && res.size()>0) {
+            List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
+            for(Checklist_Item_Response__c resp : responses){
+                if (resp.Answer__c != null){
+                    resp.Answer__c = String.valueOf(resp.Answer__c);
+                    // resp.Checklist_Response__c = checkistResp;
+                    finalResponses.add(resp);
+                 }
+            }
+            // upsert fails; required field missing for checklist response?
+            System.debug(finalResponses);
+            upsert finalResponses;
+            List<Checklist_Response__c> response = [SELECT Status__c FROM Checklist_Response__c WHERE Id=:checkistResp];
             response[0].Status__c = 'Complete'; 
             update response;
         } else { // new response created

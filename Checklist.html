@@ -97,6 +97,7 @@
                              </span>
                         </li>
                         <input id='submit_button' type="submit" value="Submit"> </input>
+                        <button ng-click="saveResponse()"> Save Response </button>
                     </form>
                 </ul>
                 <!-- <div ng-click="goHome()">Back to Home</div> -->
@@ -359,7 +360,57 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         // var checklist_response = '' //; works for new checklists
         var checklist_response = $('#checklist_id').val(); // works for pending to completed
         console.log(checklist_response);
-        
+
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ChecklistExtension.submit_responses}',
+            checklist_response,
+            $scope.checklistitems,
+                function(result, event){
+                    if (event.status) {
+                        $scope.checklistitems = result; 
+                        userService.edit_checklist_items(checklist_response);
+                    } else if (event.type === 'exception') {
+                        console.log('Exception: ' + event.message);
+                    } else {
+                        console.log('Error!');
+                    }
+                },
+            {escape: true}
+        );
+
+        $("#messages").text('Success!');
+        // Clearing Input for next checklist
+    }
+
+    $scope.saveResponse = function() {
+        var that = this;
+        var checklist_response;
+        for(var i = 0; i < $scope.checklistitems.length; i++) {
+            delete $scope.checklistitems[i].$$hashKey;
+        }
+        delete $scope.checklistitems.attributes;
+        /*
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        } 
+        checklist_response = getUrlVars()['id'];
+        if (checklist_response == null) {
+            checklist_response = '';
+        }
+        */
+
+        // TO DO HERE
+        // var checklist_response = '' //; works for new checklists
+        var checklist_response = $('#checklist_id').val(); // works for pending to completed
+        console.log(checklist_response);
+
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.save_responses}',
             checklist_response,
