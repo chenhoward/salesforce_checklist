@@ -67,9 +67,13 @@ global with sharing class ChecklistExtension {
                  }
             }
             upsert finalResponses;
+            List<Checklist_Response__c> response = [SELECT Status__c FROM Checklist_Response__c WHERE Id=:checkistResp];
+            response[0].Status__c = 'Complete'; 
+            update response;
         } else {
             Checklist_Response__c new_response = new Checklist_Response__c();
             new_response.Checklist__c = responses[0].Checklist_Item__r.Checklist__c;
+            new_response.Status__c = 'Complete';
             insert(new_response);
             List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
             for(Checklist_Item_Response__c resp : responses){

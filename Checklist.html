@@ -100,11 +100,7 @@
                     </form>
                 </ul>
                 <div ng-click="goHome()">Back to Home</div>
-
-
                 <div id="map" ng-show="mapActive"></div>
-
-
             </div>
         </div>
         <!-- End of checklistDetailPage -->
@@ -145,7 +141,6 @@ myApp.service('userService', function() {
         checklist_id,
             function(result, event){
                 if (event.status) {
-                    console.log(result);
                     checklistitems = result;
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
@@ -197,7 +192,6 @@ myApp.service('userService', function() {
 
     this.edit_checklist_items = function(checklist_response_id) {
         var that = this;
-        console.log('checklist_response_id: ' + checklist_response_id);
         Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.edit_checklist_items}',
         checklist_response_id,
@@ -244,7 +238,6 @@ myApp.service('userService', function() {
         );
     }
 
-
     // returns the Check List Items for a given checklist_id
     this.getCLIs = function () {
         return checklistitems;
@@ -264,7 +257,6 @@ myApp.controller("homeCtrl", function ($scope, userService) {
 });
 
 myApp.controller("CompletedListCtrl", function ($scope, userService) {
-    // right hting to do ?
     init();
     function init() {
         $scope.pendingchecklistresponses = userService.getPendingCLRs();
@@ -283,7 +275,6 @@ myApp.controller("CompletedListCtrl", function ($scope, userService) {
             function(result, event){
                 if (event.status) {
                     $scope.checklistitems = result; 
-                    // userService.edit_checklist_items(checklist_response);
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
                 } else {
@@ -300,7 +291,6 @@ myApp.controller("NewListCtrl", function ($scope, userService) {
 });
 
 myApp.controller("PendingListCtrl", function ($scope, userService) {
-    // right thing to do ?
     init();
     function init() {
         $scope.pendingchecklistresponses = userService.getPendingCLRs();
@@ -319,7 +309,6 @@ myApp.controller("PendingListCtrl", function ($scope, userService) {
             function(result, event){
                 if (event.status) {
                     $scope.checklistitems = result; 
-                    // userService.edit_checklist_items(checklist_response);
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
                 } else {
@@ -365,6 +354,9 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         if (checklist_response == null) {
             checklist_response = '';
         }
+
+        checklist_response = $('#checklist_id').val();
+
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.save_responses}',
             checklist_response,
@@ -439,8 +431,9 @@ controllers.PagesController = function ($scope, userService) {
         $scope.newlistPageActive = false;
         $scope.completedListPageActive = false;
         $scope.detailPageActive = false;
+        $("#messages").text('');
         $scope.homePageActive = true; 
-    }
+    };
     $scope.goToDetailPage = function(checklist_id) {
         $scope.checklist_id = checklist_id;
         $('#checklist_id').val(checklist_id);
