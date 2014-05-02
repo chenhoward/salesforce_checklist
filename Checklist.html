@@ -88,9 +88,7 @@
                                 <!-- Multiple Values from Database -->
                                 <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                                 <!-- <select ng-model="checklistitem.Values__c" ng-options="type for type in types"></select> -->
-                                <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> 
-                                    <option value="{{checklistitems.Values__c}}hello">{{checklistitems.Values__c}}</option>
-                                    <option value="{{checklistitems.Values__c}}">{{checklistitems.Values__c}}</option>
+                                <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in {{checklistitem.Values}}"> 
                                 </select>
                                 <!-- <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input> -->
                                 <!-- <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input -->
@@ -139,6 +137,13 @@ myApp.service('userService', function() {
             function(result, event){
                 if (event.status) {
                     checklistitems = result;
+                    for (var i=0; i<checklistitems.length; i++) {
+                        if (checklistitems[i].Checklist_Item__r.Type__c == "Picklist") {
+                            var values = checklistitems[i].Checklist_Item__r.Values__c; 
+                            checklistitems[i].Checklist_Item__r.Values = values.split(', '); 
+                        }
+                    }
+                    console.log(checklistitems);                            
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);

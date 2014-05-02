@@ -2,7 +2,6 @@ global with sharing class ChecklistExtension {
 
     public ChecklistExtension(ApexPages.StandardController stdController) {}
 
-
     // public static final String[] QUESTION_Types = new String[]{"Yes_No", "Number", "Text", "Date", "Long_Text", "Rating", "Picklist", "Multi_Select", "Photo"};
 
     public static String getCheckLists() {
@@ -29,13 +28,13 @@ global with sharing class ChecklistExtension {
     }
 
     public static List<Checklist_Item_Response__c> getAllChecklistItems(Id checklist){
-        List<Checklist_Item__c> to_return = [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
+        List<Checklist_Item__c> to_return = [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c 
                 FROM Checklist_Item__c WHERE Checklist__c=:checklist AND isActive__c = True order by Order__c];
         if (to_return.size() == 0) {
             List<Checklist_Item_Response__c> responses = [SELECT Checklist_Item__r.Order__c, Checklist_Item__r.Question__c,
                                                          Checklist_Item__r.Required__c, Checklist_Item__r.Type__c, 
-                                                         Checklist_Item__r.Checklist__c, Answer__c 
-                                                         FROM Checklist_Item_Response__c
+                                                         Checklist_Item__r.Checklist__c, Checklist_Item__r.Values__c, 
+                                                         Answer__c FROM Checklist_Item_Response__c
                                                          WHERE Checklist_Response__c=:checklist];
             return responses;
         }
