@@ -96,9 +96,9 @@
                                 <!-- <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input -->
                              </span>
                         </li>
-                        <input id='submit_button' type="submit" value="Submit"> </input>
-                        <button ng-click="saveResponse()"> Save Response </button>
+                        <input id="submit_button" type="submit" value="Submit"> </input>
                     </form>
+                    <button id="save_button" ng-click="saveResponse()"> Save Response </button>
                 </ul>
                 <!-- <div ng-click="goHome()">Back to Home</div> -->
                 <div id="map" ng-show="mapActive"></div>
@@ -141,7 +141,6 @@ myApp.service('userService', function() {
         checklist_id,
             function(result, event){
                 if (event.status) {
-                    console.log(result);
                     checklistitems = result;
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
@@ -356,10 +355,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         }
         */
 
-        // TO DO HERE
-        // var checklist_response = '' //; works for new checklists
         var checklist_response = $('#checklist_id').val(); // works for pending to completed
-        console.log(checklist_response);
 
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.submit_responses}',
@@ -406,10 +402,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         }
         */
 
-        // TO DO HERE
-        // var checklist_response = '' //; works for new checklists
         var checklist_response = $('#checklist_id').val(); // works for pending to completed
-        console.log(checklist_response);
 
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.save_responses}',
@@ -505,6 +498,7 @@ controllers.PagesController = function ($scope, userService) {
     $scope.goToNewListpage = function() {
         $("#messages").text('');
         $('#submit_button').show();
+        $('#save_button').show();
         $('#checklist_id').val('');
         $scope.detailPageActive = false; 
         $scope.mapActive = false;    
@@ -516,6 +510,7 @@ controllers.PagesController = function ($scope, userService) {
     $scope.goToPendingListpage = function() {
         $("#messages").text('');
         $('#submit_button').show();
+        $('#save_button').show();
         userService.get_pending_CLRI();
         $scope.newlistPageActive = false;
         $scope.detailPageActive = false; 
@@ -535,6 +530,7 @@ controllers.PagesController = function ($scope, userService) {
         // $scope.homePageActive = false;
         $scope.completedListPageActive = true;
         $('#submit_button').hide();
+        $('#save_button').hide();
     };
 }
 

@@ -15,7 +15,6 @@ global with sharing class ChecklistExtension {
        List<Checklist_Response__c> checklists = [SELECT Checklist__r.Name, Checklist__r.Description__c, 
                                                 Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending'];
        return checklists;
-       // return JSON.serialize(checklists);
     } 
 
     @RemoteAction
@@ -23,7 +22,6 @@ global with sharing class ChecklistExtension {
        List<Checklist_Response__c> checklists = [SELECT Checklist__r.Name, Checklist__r.Description__c, 
                                                 Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Complete'];
        return checklists;
-       // return JSON.serialize(checklists);
     } 
 
     public static List<Checklist__c> getAllChecklists(){
@@ -52,12 +50,9 @@ global with sharing class ChecklistExtension {
         return responses;
     }
 
-    // Creates Checklist Response Item Objects
     @RemoteAction
     global static List<Checklist__c> save_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
         List<Checklist_Response__c> res = [SELECT Id FROM Checklist_Response__c WHERE Id=:checkistResp];
-        System.debug(checkistResp);
-        System.debug(res.size());
         if (responses == null || responses.size() == 0)
             return new List<Checklist__c>();
         if (checkistResp != null && checkistResp != '' && res.size()>0) {
@@ -65,12 +60,9 @@ global with sharing class ChecklistExtension {
             for(Checklist_Item_Response__c resp : responses){
                 if (resp.Answer__c != null){
                     resp.Answer__c = String.valueOf(resp.Answer__c);
-                    // resp.Checklist_Response__c = checkistResp;
                     finalResponses.add(resp);
                  }
             }
-            // upsert fails; required field missing for checklist response?
-            System.debug(finalResponses);
             upsert finalResponses;
             List<Checklist_Response__c> response = [SELECT Status__c FROM Checklist_Response__c WHERE Id=:checkistResp];
             response[0].Status__c = 'Pending'; 
@@ -93,12 +85,9 @@ global with sharing class ChecklistExtension {
         return [SELECT Name, Description__c, Id FROM Checklist__c];
     }
 
-    // Creates Checklist Response Item Objects
     @RemoteAction
     global static List<Checklist__c> submit_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
         List<Checklist_Response__c> res = [SELECT Id FROM Checklist_Response__c WHERE Id=:checkistResp];
-        System.debug(checkistResp);
-        System.debug(res.size());
         if (responses == null || responses.size() == 0)
             return new List<Checklist__c>();
         if (checkistResp != null && checkistResp != '' && res.size()>0) {
@@ -106,12 +95,9 @@ global with sharing class ChecklistExtension {
             for(Checklist_Item_Response__c resp : responses){
                 if (resp.Answer__c != null){
                     resp.Answer__c = String.valueOf(resp.Answer__c);
-                    // resp.Checklist_Response__c = checkistResp;
                     finalResponses.add(resp);
                  }
             }
-            // upsert fails; required field missing for checklist response?
-            System.debug(finalResponses);
             upsert finalResponses;
             List<Checklist_Response__c> response = [SELECT Status__c FROM Checklist_Response__c WHERE Id=:checkistResp];
             response[0].Status__c = 'Complete'; 
