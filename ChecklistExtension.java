@@ -37,7 +37,8 @@ global with sharing class ChecklistExtension {
         if (to_return.size() == 0) {
             List<Checklist_Item_Response__c> responses = [SELECT Checklist_Item__r.Order__c, Checklist_Item__r.Question__c,
                                                          Checklist_Item__r.Required__c, Checklist_Item__r.Type__c, 
-                                                         Checklist_Item__r.Checklist__c FROM Checklist_Item_Response__c
+                                                         Checklist_Item__r.Checklist__c, Answer__c 
+                                                         FROM Checklist_Item_Response__c
                                                          WHERE Checklist_Response__c=:checklist];
             return responses;
         }

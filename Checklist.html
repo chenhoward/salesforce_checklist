@@ -145,6 +145,7 @@ myApp.service('userService', function() {
         checklist_id,
             function(result, event){
                 if (event.status) {
+                    console.log(result);
                     checklistitems = result;
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
@@ -194,11 +195,12 @@ myApp.service('userService', function() {
         );
     }
 
-    this.edit_checklist_items = function(checklist_id) {
+    this.edit_checklist_items = function(checklist_response_id) {
         var that = this;
+        console.log('checklist_response_id: ' + checklist_response_id);
         Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.edit_checklist_items}',
-        checklist_id,
+        checklist_response_id,
             function(result, event){
                 if (event.status) {
                     checklistitems = result;
@@ -447,6 +449,7 @@ controllers.PagesController = function ($scope, userService) {
         $scope.homePageActive = false;        
         $scope.pendinglistPageActive = false;           
         $scope.completedListPageActive = false;
+        userService.edit_checklist_items(checklist_id);
         $scope.detailPageActive = true;
     };
     $scope.goToNewListpage = function() {
