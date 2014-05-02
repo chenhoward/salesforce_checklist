@@ -37,7 +37,7 @@
         <!-- End of homePage -->
 
         <div id="completedListPage" ng-controller="CompletedListCtrl" ng-show="completedListPageActive">
-            <li ng-repeat="checklist in completedchecklistresponses"> 
+            <li ng-repeat="checklist in completedchecklistresponses" ng-click="goToDetailPage(checklist.Id)"> 
                 <p> Name: {{checklist.Name}} </p>
                 <p> Description: {{checklist.Description__c}} </p>
                 <p> Id: {{checklist.Id}} </p>
@@ -57,7 +57,7 @@
         <!-- End of newListPage -->
 
         <div id="pendingListPage" ng-controller="PendingListCtrl" ng-show="pendinglistPageActive">
-            <li ng-repeat="checklist in pendingchecklistresponses"> 
+            <li ng-repeat="checklist in pendingchecklistresponses" ng-click="goToDetailPage(checklist.Id)"> 
                 <p> Name: {{checklist.Name}} </p>
                 <p> Description: {{checklist.Description__c}} </p>
                 <p> Id: {{checklist.Id}} </p>
@@ -99,7 +99,7 @@
                         <input type="submit" value="Submit"> </input>
                     </form>
                 </ul>
-                <div ng-click="goToNewListpage()">Back to List View</div>
+                <div ng-click="goHome()">Back to Home</div>
 
 
                 <div id="map" ng-show="mapActive"></div>
@@ -163,9 +163,7 @@ myApp.service('userService', function() {
         '{!$RemoteAction.ChecklistExtension.completed_checklists}',
             function(result, event){
                 if (event.status) {
-                    console.log('completed CLRIs: ' + result);
                     completedchecklistresponses = result;
-                    console.log(completedchecklistresponses);
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
@@ -184,9 +182,7 @@ myApp.service('userService', function() {
         '{!$RemoteAction.ChecklistExtension.pending_checklists}',
             function(result, event){
                 if (event.status) {
-                    console.log('pending CLRIs: ' + result);
                     pendingchecklistresponses = result;
-                    console.log(pendingchecklistresponses);
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
@@ -249,17 +245,14 @@ myApp.service('userService', function() {
 
     // returns the Check List Items for a given checklist_id
     this.getCLIs = function () {
-        // console.log('called getCLIs');
         return checklistitems;
     };
 
     this.getPendingCLRs = function() {
-        // console.log('called getPendingCLIs');
         return pendingchecklistresponses;
     }
 
     this.getCompletedCLRs = function() {
-        // console.log('called getCompletedCLIs');
         return completedchecklistresponses;
     }
 
@@ -413,71 +406,74 @@ controllers.PagesController = function ($scope, userService) {
 
     // Specific checklist
     if (checklist != null ) {
+        userService.get_checklist_items(checklist);
         $scope.newlistPageActive = false;
-        $scope.detailPageActive = true;
         $scope.checklist_id = checklist;
         $scope.mapActive = false;
-        userService.get_checklist_items(checklist);
+        $scope.detailPageActive = true;
     }
 
     // Specific response
     if (response != null ) {
+        userService.edit_checklist_items(response);
         $scope.newlistPageActive = false;
-        $scope.detailPageActive = true;
         $scope.checklist_id = response;
         $scope.mapActive = true;
-        userService.edit_checklist_items(response);
+        $scope.detailPageActive = true;
     }
 
     if (checklist == undefined && response == undefined) {
-        $scope.newlistPageActive = true;
         $scope.detailPageActive = false;
         $scope.checklist_id = null;
-        $scope.homePageActive = false;
+        $scope.newlistPageActive = false;
+        $scope.homePageActive = true;
     }
 
     $scope.goHome = function() {
-        $scope.homePageActive = true; 
         $scope.detailPage = false;   
         $scope.newListpage = false;   
         $scope.pendingListpage = false; 
         $scope.completedListPage = false;
         $scope.newlistPageActive = false;
         $scope.completedListPageActive = false;
+        $scope.detailPageActive = false;
+        $scope.homePageActive = true; 
     }
     $scope.goToDetailPage = function(checklist_id) {
         $scope.checklist_id = checklist_id;
         $('#checklist_id').val(checklist_id);
         userService.get_checklist_items(checklist_id);
         $scope.newlistPageActive = false;
-        $scope.detailPageActive = true;
         $scope.homePageActive = false;        
+        $scope.pendinglistPageActive = false;           
+        $scope.completedListPageActive = false;
+        $scope.detailPageActive = true;
     };
     $scope.goToNewListpage = function() {
-        $scope.newlistPageActive = true;
         $scope.detailPageActive = false; 
         $scope.mapActive = false;    
         $scope.homePageActive = false;    
         $scope.pendinglistPageActive = false;           
+        $scope.newlistPageActive = true;
     };
     $scope.goToPendingListpage = function() {
+        userService.get_pending_CLRI();
         $scope.newlistPageActive = false;
         $scope.detailPageActive = false; 
         $scope.mapActive = false;      
         $scope.newlistPageActive = false;
         $scope.homePageActive = false;
-        $scope.pendinglistPageActive = true;            
         $scope.completedListPageActive = false;
-        userService.get_pending_CLRI();
+        $scope.pendinglistPageActive = true;            
     };
     $scope.goTocompletedListPage = function() {
+        userService.get_completed_CLRI();
         $scope.newlistPageActive = false;
         $scope.detailPageActive = false; 
         $scope.mapActive = false;    
         $scope.pendinglistPageActive = false;            
         $scope.homePageActive = false;
         $scope.completedListPageActive = true;
-        userService.get_completed_CLRI();
     };
 }
 
