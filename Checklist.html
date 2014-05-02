@@ -85,13 +85,17 @@
                                 <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                                 <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
                                 <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
+
+
                                 <!-- Multiple Values from Database -->
-                                <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+                                <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values[0]}}" max="{{checklistitem.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                                 <!-- <select ng-model="checklistitem.Values__c" ng-options="type for type in types"></select> -->
                                 <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in {{checklistitem.Values}}"> 
                                 </select>
                                 <!-- <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input> -->
                                 <!-- <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input -->
+
+                                
                              </span>
                         </li>
                         <input id="submit_button" type="submit" value="Submit"> </input>
@@ -141,6 +145,9 @@ myApp.service('userService', function() {
                         if (checklistitems[i].Checklist_Item__r.Type__c == "Picklist") {
                             var values = checklistitems[i].Checklist_Item__r.Values__c; 
                             checklistitems[i].Checklist_Item__r.Values = values.split(', '); 
+                        } else if (checklistitems[i].Checklist_Item__r.Type__c == "Rating") {
+                            var values = checklistitems[i].Checklist_Item__r.Values__c; 
+                            checklistitems[i].Checklist_Item__r.Values = values.split(', ');
                         }
                     }
                     console.log(checklistitems);                            
