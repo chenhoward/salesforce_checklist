@@ -42,7 +42,7 @@
                 <p> Description: {{checklist.Description__c}} </p>
                 <p> Id: {{checklist.Id}} </p>
             </li>
-            <div ng-click="goHome()">Go Home</div>
+            <!-- <div ng-click="goHome()">Go Home</div> -->
         </div>
         <!-- End of newListPage -->
 
@@ -52,7 +52,7 @@
                 <p> Description: {{checklist.Description__c}} </p>
                 <p> Id: {{checklist.Id}} </p>
             </li>
-            <div ng-click="goHome()">Go Home</div>
+            <!-- <div ng-click="goHome()">Go Home</div> -->
         </div>
         <!-- End of newListPage -->
 
@@ -62,7 +62,7 @@
                 <p> Description: {{checklist.Description__c}} </p>
                 <p> Id: {{checklist.Id}} </p>
             </li>
-            <div ng-click="goHome()">Go Home</div>
+            <!-- <div ng-click="goHome()">Go Home</div> -->
         </div>
         <!-- End of pendingListPage -->
 
@@ -88,18 +88,18 @@
                                 <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c">Enter response here...</textarea>
                                 <!-- Multiple Values from Database -->
                                 <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}" ng-model="checklistitem.Answer__c"> </input>
-                                <!--select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c"> 
+                                <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c"> 
                                     <option value="{{checklistitems.Values__c[0]}}">{{checklistitems.Values__c[0]}}</option>
                                     <option value="{{checklistitems.Values__c[3]}}">checklistitems.Values__c[3]</option>
                                 </select>
-                                <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input>
-                                <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input-->
+                                <!-- <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input> -->
+                                <!-- <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input -->
                              </span>
                         </li>
                         <input id='submit_button' type="submit" value="Submit"> </input>
                     </form>
                 </ul>
-                <div ng-click="goHome()">Back to Home</div>
+                <!-- <div ng-click="goHome()">Back to Home</div> -->
                 <div id="map" ng-show="mapActive"></div>
             </div>
         </div>
@@ -140,6 +140,7 @@ myApp.service('userService', function() {
         checklist_id,
             function(result, event){
                 if (event.status) {
+                    console.log(result);
                     checklistitems = result;
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
@@ -354,8 +355,11 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         }
         */
 
-        checklist_response = $('#checklist_id').val();
-
+        // TO DO HERE
+        // var checklist_response = '' //; works for new checklists
+        var checklist_response = $('#checklist_id').val(); // works for pending to completed
+        console.log(checklist_response);
+        
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.save_responses}',
             checklist_response,
@@ -433,44 +437,51 @@ controllers.PagesController = function ($scope, userService) {
         $scope.completedListPageActive = false;
         $scope.detailPageActive = false;
         $("#messages").text('');
-        $('#submit_button').show();
         $scope.homePageActive = true; 
     };
     $scope.goToDetailPage = function(checklist_id) {
+        $("#messages").text('');
         $scope.checklist_id = checklist_id;
         $('#checklist_id').val(checklist_id);
         userService.get_checklist_items(checklist_id);
         $scope.newlistPageActive = false;
-        $scope.homePageActive = false;        
+        // $scope.homePageActive = false;        
         $scope.pendinglistPageActive = false;           
         $scope.completedListPageActive = false;
         userService.edit_checklist_items(checklist_id);
         $scope.detailPageActive = true;
     };
     $scope.goToNewListpage = function() {
+        $("#messages").text('');
+        $('#submit_button').show();
+        $('#checklist_id').val('');
         $scope.detailPageActive = false; 
         $scope.mapActive = false;    
-        $scope.homePageActive = false;    
+        // $scope.homePageActive = false;    
         $scope.pendinglistPageActive = false;           
+        $scope.completedListPageActive = false;
         $scope.newlistPageActive = true;
     };
     $scope.goToPendingListpage = function() {
+        $("#messages").text('');
+        $('#submit_button').show();
         userService.get_pending_CLRI();
         $scope.newlistPageActive = false;
         $scope.detailPageActive = false; 
         $scope.mapActive = false;      
         $scope.newlistPageActive = false;
-        $scope.homePageActive = false;
+        // $scope.homePageActive = false;
         $scope.completedListPageActive = false;
         $scope.pendinglistPageActive = true;            
     };
     $scope.goTocompletedListPage = function() {
+        $("#messages").text('');
         userService.get_completed_CLRI();
         $scope.newlistPageActive = false;
         $scope.detailPageActive = false; 
         $scope.mapActive = false;    
         $scope.pendinglistPageActive = false;            
-        $scope.homePageActive = false;
+        // $scope.homePageActive = false;
         $scope.completedListPageActive = true;
         $('#submit_button').hide();
     };
