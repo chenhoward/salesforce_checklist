@@ -37,7 +37,7 @@
         <!-- End of homePage -->
 
         <div id="completedListPage" ng-controller="CompletedListCtrl" ng-show="completedListPageActive">
-            <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToDetailPage(checklist.Id)"> 
+            <li ng-repeat="checklist in completedchecklistresponses"> 
                 <p> Name: {{checklist.Name}} </p>
                 <p> Description: {{checklist.Description__c}} </p>
                 <p> Id: {{checklist.Id}} </p>
@@ -249,14 +249,17 @@ myApp.service('userService', function() {
 
     // returns the Check List Items for a given checklist_id
     this.getCLIs = function () {
+        // console.log('called getCLIs');
         return checklistitems;
     };
 
     this.getPendingCLRs = function() {
+        // console.log('called getPendingCLIs');
         return pendingchecklistresponses;
     }
 
     this.getCompletedCLRs = function() {
+        // console.log('called getCompletedCLIs');
         return completedchecklistresponses;
     }
 
@@ -461,9 +464,9 @@ controllers.PagesController = function ($scope, userService) {
         $scope.newlistPageActive = false;
         $scope.detailPageActive = false; 
         $scope.mapActive = false;      
-        $scope.newlistPageActive = true;
+        $scope.newlistPageActive = false;
         $scope.homePageActive = false;
-        $scope.pending = false;
+        $scope.pendinglistPageActive = true;            
         $scope.completedListPageActive = false;
         userService.get_pending_CLRI();
     };
