@@ -88,9 +88,10 @@
                                 <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c">Enter response here...</textarea>
                                 <!-- Multiple Values from Database -->
                                 <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values__c[0]}}" max="{{checklistitem.Values__c[3]}}" ng-model="checklistitem.Answer__c"> </input>
+                                <!-- <select ng-model="checklistitem.Values__c" ng-options="type for type in types"></select> -->
                                 <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c"> 
-                                    <option value="{{checklistitems.Values__c[0]}}">{{checklistitems.Values__c[0]}}</option>
-                                    <option value="{{checklistitems.Values__c[3]}}">checklistitems.Values__c[3]</option>
+                                    <option value="{{checklistitems.Values__c}}hello">{{checklistitems.Values__c}}</option>
+                                    <option value="{{checklistitems.Values__c}}">{{checklistitems.Values__c}}</option>
                                 </select>
                                 <!-- <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input> -->
                                 <!-- <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input -->
@@ -122,18 +123,15 @@ myApp.service('userService', function() {
     var checklist_id;
 
     var observerCallbacks = [];
-
     // Register an Observer
     this.registerObserverCallback = function(callback){
         observerCallbacks.push(callback);
     };
-
     this.notifyObservers = function() {
         angular.forEach(observerCallbacks, function(callback){
             callback();
         });
     };
-
     this.get_checklist_items = function(checklist_id) {
         var that = this;
         Visualforce.remoting.Manager.invokeAction(
@@ -152,7 +150,6 @@ myApp.service('userService', function() {
         {escape: true}
         );
     }
-
     this.get_completed_CLRI = function() {
         var that = this;
         Visualforce.remoting.Manager.invokeAction(
@@ -170,7 +167,6 @@ myApp.service('userService', function() {
         {escape: true}
         );
     }
-
     this.get_pending_CLRI = function() {
         var that = this;
         Visualforce.remoting.Manager.invokeAction(
@@ -188,7 +184,6 @@ myApp.service('userService', function() {
         {escape: true}
         );
     }
-
     this.edit_checklist_items = function(checklist_response_id) {
         var that = this;
         Visualforce.remoting.Manager.invokeAction(
@@ -217,7 +212,6 @@ myApp.service('userService', function() {
         {escape: true}
         );
     }
-
     this.finish_checklist_response = function(checklist_response_id) {
         var that = this;
         Visualforce.remoting.Manager.invokeAction(
@@ -237,19 +231,15 @@ myApp.service('userService', function() {
         {escape: true}
         );
     }
-
     this.getCLIs = function () {
         return checklistitems;
     };
-
     this.getPendingCLRs = function() {
         return pendingchecklistresponses;
     }
-
     this.getCompletedCLRs = function() {
         return completedchecklistresponses;
     }
-
 })
 
 myApp.controller("homeCtrl", function ($scope, userService) {
@@ -268,7 +258,6 @@ myApp.controller("CompletedListCtrl", function ($scope, userService) {
         // Make sure the scope refreshes itself
         $scope.$apply();
     };
-
     Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.completed_checklists}',
             function(result, event){
@@ -302,7 +291,6 @@ myApp.controller("PendingListCtrl", function ($scope, userService) {
         // Make sure the scope refreshes itself
         $scope.$apply();
     };
-
     Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.pending_checklists}',
             function(result, event){
@@ -316,7 +304,6 @@ myApp.controller("PendingListCtrl", function ($scope, userService) {
             },
         {escape: true}
     );
-
 });
 
 myApp.controller("ChecklistCtrl", function ($scope, userService) {
@@ -330,7 +317,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         // Make sure the scope refreshes itself
         $scope.$apply();
     };
-
     $scope.submitForm = function() {
         var that = this;
         var checklist_response;
@@ -354,9 +340,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             checklist_response = '';
         }
         */
-
-        var checklist_response = $('#checklist_id').val(); // works for pending to completed
-
+        var checklist_response = $('#checklist_id').val(); 
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.submit_responses}',
             checklist_response,
@@ -373,9 +357,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
                 },
             {escape: true}
         );
-
         $("#messages").text('Success!');
-        // Clearing Input for next checklist
     }
 
     $scope.saveResponse = function() {
@@ -401,9 +383,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             checklist_response = '';
         }
         */
-
         var checklist_response = $('#checklist_id').val(); // works for pending to completed
-
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.save_responses}',
             checklist_response,
@@ -420,14 +400,11 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
                 },
             {escape: true}
         );
-
         $("#messages").text('Success!');
-        // Clearing Input for next checklist
     }
 });
 
 var controllers = {};
-
 controllers.PagesController = function ($scope, userService) {
     /*
     // Get Url Parameters
@@ -441,7 +418,6 @@ controllers.PagesController = function ($scope, userService) {
         }
         return vars;
     }
-
     var checklist = getUrlVars()['checklist_id']; 
     var response = getUrlVars()['id']; 
 
@@ -453,7 +429,6 @@ controllers.PagesController = function ($scope, userService) {
         $scope.mapActive = false;
         $scope.detailPageActive = true;
     }
-
     // Specific response
     if (response != null ) {
         userService.edit_checklist_items(response);
@@ -462,7 +437,6 @@ controllers.PagesController = function ($scope, userService) {
         $scope.mapActive = true;
         $scope.detailPageActive = true;
     }
-
     if (checklist == undefined && response == undefined) {
         $scope.detailPageActive = false;
         $scope.checklist_id = null;
@@ -471,7 +445,6 @@ controllers.PagesController = function ($scope, userService) {
     }
     */
     $scope.homePageActive = true;
-
     $scope.goHome = function() {
         $scope.detailPage = false;   
         $scope.newListpage = false;   
@@ -538,7 +511,6 @@ myApp.controller(controllers);
 
 google.maps.event.addDomListener(window, "load", initMap);
 function initMap(){
-
     // Get Url Parameters
     function getUrlVars() {
         var vars = [], hash;
@@ -551,7 +523,6 @@ function initMap(){
         return vars;
     }
     response = getUrlVars()['id'];
-
     var latlng = new google.maps.LatLng(-34.397, 150.644);
     var myOptions = {
         zoom: 5,
@@ -584,10 +555,7 @@ function initMap(){
         {escape: true}
     );
     */
-
 };
-
 </script>
-
 </html>
 </apex:page>
