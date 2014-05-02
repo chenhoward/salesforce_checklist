@@ -127,7 +127,6 @@ myApp.service('userService', function() {
         observerCallbacks.push(callback);
     };
 
-    //call this when you know 'foo' has been changed
     this.notifyObservers = function() {
         angular.forEach(observerCallbacks, function(callback){
             callback();
@@ -173,7 +172,6 @@ myApp.service('userService', function() {
 
     this.get_pending_CLRI = function() {
         var that = this;
-        // LOOK HERE
         Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.pending_checklists}',
             function(result, event){
@@ -239,7 +237,6 @@ myApp.service('userService', function() {
         );
     }
 
-    // returns the Check List Items for a given checklist_id
     this.getCLIs = function () {
         return checklistitems;
     };
@@ -340,7 +337,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             delete $scope.checklistitems[i].$$hashKey;
         }
         delete $scope.checklistitems.attributes;
-        // create javascript remoting calls to backend
+        /*
         function getUrlVars() {
             var vars = [], hash;
             var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
@@ -355,6 +352,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         if (checklist_response == null) {
             checklist_response = '';
         }
+        */
 
         checklist_response = $('#checklist_id').val();
 
@@ -383,7 +381,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
 var controllers = {};
 
 controllers.PagesController = function ($scope, userService) {
-
+    /*
     // Get Url Parameters
     function getUrlVars() {
         var vars = [], hash;
@@ -423,6 +421,8 @@ controllers.PagesController = function ($scope, userService) {
         $scope.newlistPageActive = false;
         $scope.homePageActive = true;
     }
+    */
+    $scope.homePageActive = true;
 
     $scope.goHome = function() {
         $scope.detailPage = false;   
@@ -437,7 +437,6 @@ controllers.PagesController = function ($scope, userService) {
         $scope.homePageActive = true; 
     };
     $scope.goToDetailPage = function(checklist_id) {
-        console.log(checklist_id);
         $scope.checklist_id = checklist_id;
         $('#checklist_id').val(checklist_id);
         userService.get_checklist_items(checklist_id);
@@ -446,7 +445,6 @@ controllers.PagesController = function ($scope, userService) {
         $scope.pendinglistPageActive = false;           
         $scope.completedListPageActive = false;
         userService.edit_checklist_items(checklist_id);
-        // ^with it, pending responses are filled, but start new checklist breaks 
         $scope.detailPageActive = true;
     };
     $scope.goToNewListpage = function() {
