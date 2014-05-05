@@ -79,6 +79,7 @@
                                 <p> Id: {{checklistitem.Checklist_Item__c}} </p> 
                                 <p> Checklist Id: {{checklistitem.Checklist_Item__r.Checklist__c}} </p> 
                                 <p> Order: {{checklistitem.Checklist_Item__r.Order__c}} </p> 
+                                <p> Photo: {{checklistitem.Checklist_Item__r.Attach_Photo__c}} </p> 
                                 <input id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                                 <input id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-switch-when="Number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                                 <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
@@ -94,6 +95,7 @@
                                 <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
                                 </select>
                                 <select ng-options="val for val in checklistitem.Checklist_Item__r.Values" ng-multiple="true" multiple="true" ng-switch-when="Multi-Select" ng-model="checklistitem.Answer__c"></select>
+                                <input type="file" id="photoFile" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
                              </span>
                         </li>
                         <input id="submit_button" type="submit" value="Submit"> </input>

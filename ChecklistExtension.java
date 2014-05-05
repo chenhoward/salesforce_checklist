@@ -28,7 +28,7 @@ global with sharing class ChecklistExtension {
     }
 
     public static List<Checklist_Item_Response__c> getAllChecklistItems(Id checklist){
-        List<Checklist_Item__c> to_return = [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c 
+        List<Checklist_Item__c> to_return = [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c, Attach_Photo__c 
                 FROM Checklist_Item__c WHERE Checklist__c=:checklist AND isActive__c = True order by Order__c];
 
         List<Checklist_Item_Response__c> responses = new List<Checklist_Item_Response__c>();
@@ -101,7 +101,7 @@ global with sharing class ChecklistExtension {
     @RemoteAction
     global static List<Checklist_Item_Response__c> edit_checklist_items(Id checklist_response) {
         List<Checklist_Item_Response__c> to_return = [SELECT Id, Answer__c, Checklist_Item__c, Checklist_Item__r.Order__c, Checklist_Item__r.Question__c, Checklist_Item__r.Checklist__c,
-                                                      Checklist_Item__r.Required__c, Checklist_Item__r.Type__c, Checklist_Item__r.Values__c
+                                                      Checklist_Item__r.Required__c, Checklist_Item__r.Type__c, Checklist_Item__r.Values__c, Checklist_Item__r.Attach_Photo__c
                                                       FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:checklist_response 
                                                       order by Checklist_Item__r.Order__c];
 
@@ -122,7 +122,7 @@ global with sharing class ChecklistExtension {
             return new List<Checklist_Item_Response__c>();
         List<Checklist_Item_Response__c> responses = new List<Checklist_Item_Response__c>();
         
-        for (Checklist_Item__c item : [  SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c 
+        for (Checklist_Item__c item : [  SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c, Attach_Photo__c 
                                           FROM Checklist_Item__c WHERE Checklist__c=:checklistId 
                                           AND isActive__c = True order by Order__c ]) {
             Checklist_Item_Response__c r = checklistItemId2Resp.get(item.Id);
