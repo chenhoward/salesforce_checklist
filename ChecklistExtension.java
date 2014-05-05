@@ -86,10 +86,13 @@ global with sharing class ChecklistExtension {
 
     @RemoteAction
     global static List<Checklist__c> submit_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
+        System.debug(checkistResp);
+        // System.debug(responses);
         List<Checklist_Response__c> res = [SELECT Id FROM Checklist_Response__c WHERE Id=:checkistResp];
         if (responses == null || responses.size() == 0)
             return new List<Checklist__c>();
         if (checkistResp != null && checkistResp != '' && res.size()>0) {
+            System.debug('got here1');
             List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
             for(Checklist_Item_Response__c resp : responses){
                 if (resp.Answer__c != null){
@@ -102,6 +105,7 @@ global with sharing class ChecklistExtension {
             response[0].Status__c = 'Complete'; 
             update response;
         } else { // new response created
+            System.debug('got here2');
             Checklist_Response__c new_response = new Checklist_Response__c();
             new_response.Checklist__c = responses[0].Checklist_Item__r.Checklist__c;
             new_response.Status__c = 'Complete';

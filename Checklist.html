@@ -86,16 +86,11 @@
                                 <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
                                 <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
 
-
                                 <!-- Multiple Values from Database -->
-                                <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Values[0]}}" max="{{checklistitem.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                                <!-- <select ng-model="checklistitem.Values__c" ng-options="type for type in types"></select> -->
+                                <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="checklistitem.Values[0]" max="checklistitem.Values[1]" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                                 <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
                                 </select>
-                                <!-- <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[0]}}" ng-switch-when="Multi-Select"> </input> -->
-                                <!-- <input id="form_checkbox_{{checklistitem.Checklist_Item__c}}" type="checkbox" value="{{checklistitems.Values__c[3]}}" ng-switch-when="Multi-Select"> </input -->
-
-
+                                <select ng-switch-when="Multi-Select" multiple="true" ng-multiple="true" ng-model="checklistitem.Answer__c" ng-options="val for val in checklistitem.Checklist_Item__r.Values"></select>
                              </span>
                         </li>
                         <input id="submit_button" type="submit" value="Submit"> </input>
@@ -142,11 +137,14 @@ myApp.service('userService', function() {
                 if (event.status) {
                     checklistitems = result;
                     for (var i=0; i<checklistitems.length; i++) {
-                        if (checklistitems[i].Checklist_Item__r.Type__c == "Picklist") {
+                        var type = checklistitems[i].Checklist_Item__r.Type__c;
+                        if (type == "Picklist") {
                             var values = checklistitems[i].Checklist_Item__r.Values__c; 
                             checklistitems[i].Checklist_Item__r.Values = values.split(', '); 
-                            console.log(checklistitems[i]);
-                        } else if (checklistitems[i].Checklist_Item__r.Type__c == "Rating") {
+                        } else if (type == "Rating") {
+                            var values = checklistitems[i].Checklist_Item__r.Values__c; 
+                            checklistitems[i].Checklist_Item__r.Values = values.split(', ');
+                        } else if (type == "Multi-Select") {
                             var values = checklistitems[i].Checklist_Item__r.Values__c; 
                             checklistitems[i].Checklist_Item__r.Values = values.split(', ');
                         }
@@ -334,6 +332,10 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         var checklist_response;
         for(var i = 0; i < $scope.checklistitems.length; i++) {
             delete $scope.checklistitems[i].$$hashKey;
+            var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
+            if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
+                delete $scope.checklistitems[i].Checklist_Item__r.Values;
+            }
         }
         delete $scope.checklistitems.attributes;
         /*
@@ -353,6 +355,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         }
         */
         var checklist_response = $('#checklist_id').val(); 
+        console.log($scope.checklistitems);
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.submit_responses}',
             checklist_response,
