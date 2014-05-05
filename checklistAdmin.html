@@ -73,8 +73,8 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.checklist.name = 'Default Name';
     $scope.checklist.description = 'Default Description';
     $scope.checklists = {!CheckLists};
-    $scope.item = $scope.checklists[3];
-    $scope.types = ['Yes/No', 'Number', 'Text', 'Date','Long Text', 'Rating', 'Picklist', 'Multi-Select'];
+    $scope.ittypesem = $scope.checklists[3];
+    $scope. = ['Yes/No', 'Number', 'Text', 'Date','Long Text', 'Rating', 'Picklist', 'Multi-Select'];
     $scope.newChecklist = function() {
      if ($scope.newChecklistForm.$valid) {
         $scope.createChecklist();
