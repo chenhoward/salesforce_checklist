@@ -90,7 +90,7 @@
                                 <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="checklistitem.Values[0]" max="checklistitem.Values[1]" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                                 <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
                                 </select>
-                                <select ng-switch-when="Multi-Select" multiple="true" ng-multiple="true" ng-model="checklistitem.Answer__c" ng-options="val for val in checklistitem.Checklist_Item__r.Values"></select>
+                                <select ng-model="checklistitem.Answer__c" ng-options="val for val in checklistitem.Checklist_Item__r.Values" ng-multiple="true" multiple="true" ng-switch-when="Multi-Select"></select>
                              </span>
                         </li>
                         <input id="submit_button" type="submit" value="Submit"> </input>
@@ -327,9 +327,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         // Make sure the scope refreshes itself
         $scope.$apply();
     };
-    $scope.submitForm = function() {
-        var that = this;
-        var checklist_response;
+    function formHelper() {
         for(var i = 0; i < $scope.checklistitems.length; i++) {
             delete $scope.checklistitems[i].$$hashKey;
             var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
@@ -338,17 +336,12 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             }
         }
         delete $scope.checklistitems.attributes;
+    }
+    $scope.submitForm = function() {
+        var that = this;
+        formHelper();
         /*
-        function getUrlVars() {
-            var vars = [], hash;
-            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-            for (var i = 0; i < hashes.length; i++) {
-                hash = hashes[i].split('=');
-                vars.push(hash[0]);
-                vars[hash[0]] = hash[1];
-            }
-            return vars;
-        } 
+        var checklist_response;
         checklist_response = getUrlVars()['id'];
         if (checklist_response == null) {
             checklist_response = '';
@@ -377,22 +370,9 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
 
     $scope.saveResponse = function() {
         var that = this;
-        var checklist_response;
-        for(var i = 0; i < $scope.checklistitems.length; i++) {
-            delete $scope.checklistitems[i].$$hashKey;
-        }
-        delete $scope.checklistitems.attributes;
+        formHelper();
         /*
-        function getUrlVars() {
-            var vars = [], hash;
-            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-            for (var i = 0; i < hashes.length; i++) {
-                hash = hashes[i].split('=');
-                vars.push(hash[0]);
-                vars[hash[0]] = hash[1];
-            }
-            return vars;
-        } 
+        var checklist_response;
         checklist_response = getUrlVars()['id'];
         if (checklist_response == null) {
             checklist_response = '';
@@ -421,29 +401,17 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
 
 var controllers = {};
 controllers.PagesController = function ($scope, userService) {
-    /*
-    // Get Url Parameters
-    function getUrlVars() {
-        var vars = [], hash;
-        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-        for (var i = 0; i < hashes.length; i++) {
-            hash = hashes[i].split('=');
-            vars.push(hash[0]);
-            vars[hash[0]] = hash[1];
-        }
-        return vars;
-    }
-    var checklist = getUrlVars()['checklist_id']; 
+    // var checklist = getUrlVars()['checklist_id']; 
     var response = getUrlVars()['id']; 
 
     // Specific checklist
-    if (checklist != null ) {
-        userService.get_checklist_items(checklist);
-        $scope.newlistPageActive = false;
-        $scope.checklist_id = checklist;
-        $scope.mapActive = false;
-        $scope.detailPageActive = true;
-    }
+    // if (checklist != null ) {
+    //     userService.get_checklist_items(checklist);
+    //     $scope.newlistPageActive = false;
+    //     $scope.checklist_id = checklist;
+    //     $scope.mapActive = false;
+    //     $scope.detailPageActive = true;
+    // }
     // Specific response
     if (response != null ) {
         userService.edit_checklist_items(response);
@@ -452,14 +420,15 @@ controllers.PagesController = function ($scope, userService) {
         $scope.mapActive = true;
         $scope.detailPageActive = true;
     }
-    if (checklist == undefined && response == undefined) {
-        $scope.detailPageActive = false;
-        $scope.checklist_id = null;
-        $scope.newlistPageActive = false;
+    // if (checklist == undefined && response == undefined) {
+    //     $scope.detailPageActive = false;
+    //     $scope.checklist_id = null;
+    //     $scope.newlistPageActive = false;
+    //     $scope.homePageActive = true;
+    // }
+    else {
         $scope.homePageActive = true;
     }
-    */
-    $scope.homePageActive = true;
     $scope.goHome = function() {
         $scope.detailPage = false;   
         $scope.newListpage = false;   
@@ -571,6 +540,18 @@ function initMap(){
     );
     */
 };
+
+// Get Url Parameters
+function getUrlVars() {
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for (var i = 0; i < hashes.length; i++) {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
 </script>
 </html>
 </apex:page>
