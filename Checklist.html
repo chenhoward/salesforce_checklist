@@ -368,30 +368,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
                 var image = $('#photoFile_'+$scope.checklistitems[i].Checklist_Item__c).val();
                 console.log(image);
                 // must convert above to 64 bit image
-
-                function convertImgToBase64(url, callback, outputFormat){
-                    var canvas = document.createElement('CANVAS'),
-                        ctx = canvas.getContext('2d'),
-                        img = new Image;
-                    img.crossOrigin = 'Anonymous';
-                    img.onload = function(){
-                        canvas.height = img.height;
-                        canvas.width = img.width;
-                        ctx.drawImage(img,0,0);
-                        var dataURL = canvas.toDataURL(outputFormat || 'image/png');
-                        callback.call(this, dataURL);
-                        canvas = null; 
-                    };
-                    img.src = url;
-                }
-
-                convertImgToBase64(image, function(base64Img){
-                    // Base64DataURL
-                    console.log(base64Img);
-                });
-
-
-                photoMap[$scope.checklistitems[i].Checklist_Item__c] = $('#photoFile_'+$scope.checklistitems[i].Checklist_Item__c).val();
+                // photoMap[$scope.checklistitems[i].Checklist_Item__c] = $('#photoFile_'+$scope.checklistitems[i].Checklist_Item__c).val();
             }
         }
         var checklist_response = $('#checklist_id').val(); 
