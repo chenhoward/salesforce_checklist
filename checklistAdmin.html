@@ -110,7 +110,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
       $scope.items.push(new Object());
     }
     $scope.addQuestionEdit = function() {
-      var item = {isActive__c : true, Order__c: $scope.questions.length + 1}
+      var item = {isActive__c : true, Order__c: $scope.questionCount() + 1}
       $scope.questions.push(item);
       console.log($scope.questions.length);
     }
