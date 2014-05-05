@@ -11,24 +11,24 @@ global with sharing class ChecklistExtension {
 
     @RemoteAction
     global static List<Checklist_Response__c> pending_checklists() {
-       List<Checklist_Response__c> checklists = [SELECT Checklist__r.Name, Checklist__r.Description__c, 
+       List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
                                                 Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending'];
        return checklists;
     } 
 
     @RemoteAction
     global static List<Checklist_Response__c> completed_checklists() {
-       List<Checklist_Response__c> checklists = [SELECT Checklist__r.Name, Checklist__r.Description__c, 
+       List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
                                                 Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Complete'];
        return checklists;
     } 
 
     public static List<Checklist__c> getAllChecklists(){
-        return [SELECT Name, Description__c, Id FROM Checklist__c];
+        return [SELECT Id, Name, Description__c FROM Checklist__c];
     }
 
     public static List<Checklist_Item_Response__c> getAllChecklistItems(Id checklist){
-        List<Checklist_Item__c> to_return = [SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c, Attach_Photo__c 
+        List<Checklist_Item__c> to_return = [SELECT Id, Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c, Attach_Photo__c 
                 FROM Checklist_Item__c WHERE Checklist__c=:checklist AND isActive__c = True order by Order__c];
 
         List<Checklist_Item_Response__c> responses = new List<Checklist_Item_Response__c>();
@@ -52,7 +52,7 @@ global with sharing class ChecklistExtension {
                  }
             }
             upsert finalResponses;
-            List<Checklist_Response__c> response = [SELECT Status__c FROM Checklist_Response__c WHERE Id=:checkistResp];
+            List<Checklist_Response__c> response = [SELECT Id, Status__c FROM Checklist_Response__c WHERE Id=:checkistResp];
             update response;
             return response[0];
         } else { // new response created
@@ -122,7 +122,7 @@ global with sharing class ChecklistExtension {
             return new List<Checklist_Item_Response__c>();
         List<Checklist_Item_Response__c> responses = new List<Checklist_Item_Response__c>();
         
-        for (Checklist_Item__c item : [  SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c, Attach_Photo__c 
+        for (Checklist_Item__c item : [  SELECT Id, Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c, Attach_Photo__c 
                                           FROM Checklist_Item__c WHERE Checklist__c=:checklistId 
                                           AND isActive__c = True order by Order__c ]) {
             Checklist_Item_Response__c r = checklistItemId2Resp.get(item.Id);
@@ -150,9 +150,9 @@ global with sharing class ChecklistExtension {
        Checklist_Response__c r = [SELECT Id FROM Checklist_Response__c WHERE Id=:checklist_response_id];
        r.Status__c = 'Complete';
        update(r);
-       List<Checklist_Response__c> pending_checklists = [SELECT Checklist__r.Name, Checklist__r.Description__c, 
+       List<Checklist_Response__c> pending_checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
                                                          Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending'];
-       List<Checklist_Response__c> completed_checklists = [SELECT Checklist__r.Name, Checklist__r.Description__c, 
+       List<Checklist_Response__c> completed_checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
                                                           Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Complete'];
        String return_pending = JSON.serialize(pending_checklists);
        String return_completed = JSON.serialize(completed_checklists);       

@@ -86,7 +86,6 @@
                                 <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                                 <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
                                 <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
-
                                 <!-- Multiple Values from Database -->
                                 <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Checklist_Item__r.Values[0]}}" max="{{checklistitem.Checklist_Item__r.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                                 <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
@@ -95,7 +94,7 @@
                                 <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
                                 </select>
                                 <select ng-options="val for val in checklistitem.Checklist_Item__r.Values" ng-multiple="true" multiple="true" ng-switch-when="Multi-Select" ng-model="checklistitem.Answer__c"></select>
-                                <input type="file" id="photoFile" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
+                                <input type="file" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
                              </span>
                         </li>
                         <input id="submit_button" type="submit" value="Submit"> </input>
@@ -218,6 +217,8 @@ myApp.service('userService', function() {
                             checklistitems[i].Answer__c = parseInt(checklistitems[i].Answer__c);
                         }
                     }
+
+                    console.log(checklistitems);
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
@@ -353,10 +354,44 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             checklist_response = '';
         }
         */
+        var photoMap;
         for(var i = 0; i < $scope.checklistitems.length; i++) {
             var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
             if (type == "Multi-Select") {
                 if ($scope.checklistitems[i].Answer__c) $scope.checklistitems[i].Answer__c = $scope.checklistitems[i].Answer__c.join(" ");
+            }
+            // Handle photos here
+            if ($scope.checklistitems[i].Checklist_Item__r.Attach_Photo__c && $scope.checklistitems[i].Answer__c != null) {
+                // console.log($scope.checklistitems[i]);
+                // console.log($scope.checklistitems[i].Checklist_Item__c);
+                // console.log($('#photoFile_'+$scope.checklistitems[i].Checklist_Item__c));
+                var image = $('#photoFile_'+$scope.checklistitems[i].Checklist_Item__c).val();
+                console.log(image);
+                // must convert above to 64 bit image
+
+                function convertImgToBase64(url, callback, outputFormat){
+                    var canvas = document.createElement('CANVAS'),
+                        ctx = canvas.getContext('2d'),
+                        img = new Image;
+                    img.crossOrigin = 'Anonymous';
+                    img.onload = function(){
+                        canvas.height = img.height;
+                        canvas.width = img.width;
+                        ctx.drawImage(img,0,0);
+                        var dataURL = canvas.toDataURL(outputFormat || 'image/png');
+                        callback.call(this, dataURL);
+                        canvas = null; 
+                    };
+                    img.src = url;
+                }
+
+                convertImgToBase64(image, function(base64Img){
+                    // Base64DataURL
+                    console.log(base64Img);
+                });
+
+
+                photoMap[$scope.checklistitems[i].Checklist_Item__c] = $('#photoFile_'+$scope.checklistitems[i].Checklist_Item__c).val();
             }
         }
         var checklist_response = $('#checklist_id').val(); 
