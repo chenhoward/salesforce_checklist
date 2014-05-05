@@ -7,6 +7,8 @@ global with sharing class ChecklistAdminController {
 
     @RemoteAction
     global static Checklist_Item__c[] getChecklistItems(Checklist__c checklist) {
+        System.debug(5);
+        System.debug(checklist + '');
         return ChecklistUtilities.findChecklistItems(checklist);
     }
 
