@@ -36,10 +36,12 @@ id="todo"
     </div>
     <input type="button" value="+" ng-click="addQuestion()"></input>
     <input type="button" value="-" ng-click="removeQuestion()"></input>
-    <input type="submit" value="Submit " ng-click="newChecklist()"> </input>
+    <input type="submit" value="Submit" ng-click="newChecklist()"> </input>
   </form>
   </div>
   <div id="editChecklist" ng-show="!newPage" >
+    <div ng-repeat="checklist in checklists2">
+      </div>
     <form name="editPage">
       <h1>Edit Checklist</h1>
       <li ng-repeat="">
@@ -76,9 +78,10 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.checklist.name = 'Default Name';
     $scope.checklist.description = 'Default Description';
     $scope.checklists = {!CheckLists};
+    console.log('set');
+    $scope.checklists2 = $scope.checklists;
     $scope.item = $scope.checklists[0];
     $scope.types = ['Yes/No', 'Number', 'Text', 'Date','Long Text', 'Rating', 'Picklist', 'Multi-Select'];
-    $scope.ittypesem = $scope.checklists[3];
     $scope.inDB = function(item) {
         return item.Id != null;
     }
@@ -185,6 +188,8 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     }
     $scope.getChecklistItems = function() {
       delete $scope.item.attributes;
+      console.log($scope.item);
+      delete $scope.item.$$hashKey;
       console.log($scope.item);
       Visualforce.remoting.Manager.invokeAction(
           '{!$RemoteAction.ChecklistAdminController.getChecklistItems}',
