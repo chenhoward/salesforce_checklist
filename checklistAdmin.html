@@ -28,6 +28,8 @@ id="todo"
             <input type="number" ng-model="item.Order__c" name="O2" ng-required="true"></input>
             <input type="checkbox" ng-model="item.Required__c" name="O3"></input>
             <select ng-model="item.Type__c" ng-options="type for type in types" ng-required="true"></select>
+            <input type="text" ng-model="item.Values__c" name="Q1" ng-show="showValues(item)"></input>
+
             {{item.Question__c}}
         </div>
         <input type="button" value="+" ng-click="addQuestion()"></input>
@@ -38,10 +40,11 @@ id="todo"
     </form>
     <div id="checklistList" >
      <form name="EditChecklistForm">
+        <h1>Edit Checklist</h1>
         <li ng-repeat=""> 
             <p> Name: </p> <input type="text" ng-model="item.Name" ng-required="true"></input>
-            <p> Description: {{itemi5.Description__c}} </p>
-            <p> Id: {{itemi5.Id}} </p>
+            <p> Description: </p> <input type="text" ng-model="item.Description__c" ng-required="true"></input>
+            <p> Id: {{item.Id}} </p>
             <input type="submit" value="Submit" ng-click="editChecklist()"></input>
         </li>
     </form>
