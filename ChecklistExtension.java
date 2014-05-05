@@ -122,7 +122,7 @@ global with sharing class ChecklistExtension {
             return new List<Checklist_Item_Response__c>();
         List<Checklist_Item_Response__c> responses = new List<Checklist_Item_Response__c>();
         
-        for (Checklist_Item__c item : [  SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c, Attach_Photo__c 
+        for (Checklist_Item__c item : [  SELECT Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c, Attach_Photo__c 
                                           FROM Checklist_Item__c WHERE Checklist__c=:checklistId 
                                           AND isActive__c = True order by Order__c ]) {
             Checklist_Item_Response__c r = checklistItemId2Resp.get(item.Id);

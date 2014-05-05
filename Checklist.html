@@ -86,7 +86,6 @@
                                 <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                                 <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
                                 <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
-
                                 <!-- Multiple Values from Database -->
                                 <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Checklist_Item__r.Values[0]}}" max="{{checklistitem.Checklist_Item__r.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                                 <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
@@ -218,6 +217,8 @@ myApp.service('userService', function() {
                             checklistitems[i].Answer__c = parseInt(checklistitems[i].Answer__c);
                         }
                     }
+
+                    console.log(checklistitems);
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
