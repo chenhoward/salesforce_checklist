@@ -37,7 +37,7 @@
         <!-- End of homePage -->
 
         <div id="completedListPage" ng-controller="CompletedListCtrl" ng-show="completedListPageActive">
-            <li ng-repeat="checklist in completedchecklistresponses" ng-click="goToDetailPage(checklist.Id)"> 
+            <li ng-repeat="checklist in completedchecklistresponses" ng-click="goToEditDetailPage(checklist.Id)"> 
                 <p> Name: {{checklist.Name}} </p>
                 <p> Description: {{checklist.Description__c}} </p>
                 <p> Id: {{checklist.Id}} </p>
@@ -47,7 +47,7 @@
         <!-- End of newListPage -->
 
         <div id="newListPage" ng-controller="NewListCtrl" ng-show="newlistPageActive">
-            <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToDetailPage(checklist.Id)"> 
+            <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist.Id)"> 
                 <p> Name: {{checklist.Name}} </p>
                 <p> Description: {{checklist.Description__c}} </p>
                 <p> Id: {{checklist.Id}} </p>
@@ -57,7 +57,7 @@
         <!-- End of newListPage -->
 
         <div id="pendingListPage" ng-controller="PendingListCtrl" ng-show="pendinglistPageActive">
-            <li ng-repeat="checklist in pendingchecklistresponses" ng-click="goToDetailPage(checklist.Id)"> 
+            <li ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist.Id)"> 
                 <p> Name: {{checklist.Name}} </p>
                 <p> Description: {{checklist.Description__c}} </p>
                 <p> Id: {{checklist.Id}} </p>
@@ -87,10 +87,17 @@
                                 <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
 
                                 <!-- Multiple Values from Database -->
-                                <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="checklistitem.Values[0]" max="checklistitem.Values[1]" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+                                <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Checklist_Item__r.Values[0]}}" max="{{checklistitem.Checklist_Item__r.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+                                <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
+                                    {{checklistitem.Answer__c}}
+                                </div>
+
                                 <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
                                 </select>
-                                <select ng-model="checklistitem.Answer__c" ng-options="val for val in checklistitem.Checklist_Item__r.Values" ng-multiple="true" multiple="true" ng-switch-when="Multi-Select"></select>
+
+
+
+                                <select ng-options="val for val in checklistitem.Checklist_Item__r.Values" ng-multiple="true" multiple="true" ng-switch-when="Multi-Select" ng-model="checklistitem.Answer__c"></select>
                              </span>
                         </li>
                         <input id="submit_button" type="submit" value="Submit"> </input>
@@ -138,18 +145,11 @@ myApp.service('userService', function() {
                     checklistitems = result;
                     for (var i=0; i<checklistitems.length; i++) {
                         var type = checklistitems[i].Checklist_Item__r.Type__c;
-                        if (type == "Picklist") {
-                            var values = checklistitems[i].Checklist_Item__r.Values__c; 
-                            checklistitems[i].Checklist_Item__r.Values = values.split(', '); 
-                        } else if (type == "Rating") {
-                            var values = checklistitems[i].Checklist_Item__r.Values__c; 
-                            checklistitems[i].Checklist_Item__r.Values = values.split(', ');
-                        } else if (type == "Multi-Select") {
-                            var values = checklistitems[i].Checklist_Item__r.Values__c; 
+                        if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
+                            var values = checklistitems[i].Checklist_Item__r.Values__c;
                             checklistitems[i].Checklist_Item__r.Values = values.split(', ');
                         }
                     }
-                    // console.log(checklistitems);                            
                     that.notifyObservers();
                 } else if (event.type === 'exception') {
                     console.log('Exception: ' + event.message);
@@ -204,12 +204,17 @@ myApp.service('userService', function() {
                     if (result.length == 0) return;
                     checklistitems = result;
                     for (var i=0; i<result.length; i++) {
-                        if (result[i].Answer__c == "true") { 
-                            result[i].Answer__c = true;
-                        } else if (result[i].Answer__c == "false") {
-                            result[i].Answer__c = false;
-                        } else if (!isNaN(result[i].Answer__c)) {
-                            result[i].Answer__c = parseInt(result[i].Answer__c);
+                        var type = checklistitems[i].Checklist_Item__r.Type__c;
+                        if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
+                            var values = checklistitems[i].Checklist_Item__r.Values__c; 
+                            if (values) checklistitems[i].Checklist_Item__r.Values = values.split(', ');
+                        }
+                        if (checklistitems[i].Answer__c == "true") { 
+                            checklistitems[i].Answer__c = true;
+                        } else if (checklistitems[i].Answer__c == "false") {
+                            checklistitems[i].Answer__c = false;
+                        } else if (!isNaN(checklistitems[i].Answer__c)) {
+                            checklistitems[i].Answer__c = parseInt(checklistitems[i].Answer__c);
                         }
                     }
                     that.notifyObservers();
@@ -348,7 +353,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         }
         */
         var checklist_response = $('#checklist_id').val(); 
-        console.log($scope.checklistitems);
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.submit_responses}',
             checklist_response,
@@ -440,11 +444,23 @@ controllers.PagesController = function ($scope, userService) {
         $("#messages").text('');
         $scope.homePageActive = true; 
     };
-    $scope.goToDetailPage = function(checklist_id) {
+    $scope.goToCreateDetailPage = function(checklist_id) {
         $("#messages").text('');
         $scope.checklist_id = checklist_id;
         $('#checklist_id').val(checklist_id);
         userService.get_checklist_items(checklist_id);
+        $scope.newlistPageActive = false;
+        // $scope.homePageActive = false;        
+        $scope.pendinglistPageActive = false;           
+        $scope.completedListPageActive = false;
+        // userService.edit_checklist_items(checklist_id);
+        $scope.detailPageActive = true;
+    };
+    $scope.goToEditDetailPage = function(checklist_id) {
+        $("#messages").text('');
+        $scope.checklist_id = checklist_id;
+        $('#checklist_id').val(checklist_id);
+        // userService.get_checklist_items(checklist_id);
         $scope.newlistPageActive = false;
         // $scope.homePageActive = false;        
         $scope.pendinglistPageActive = false;           
