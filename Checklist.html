@@ -145,7 +145,7 @@ myApp.service('userService', function() {
                         var type = checklistitems[i].Checklist_Item__r.Type__c;
                         if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
                             var values = checklistitems[i].Checklist_Item__r.Values__c;
-                            checklistitems[i].Checklist_Item__r.Values = values.split(', ');
+                            if (values) checklistitems[i].Checklist_Item__r.Values = values.split(', ');
                         }
                     }
                     that.notifyObservers();
@@ -207,7 +207,7 @@ myApp.service('userService', function() {
                             var values = checklistitems[i].Checklist_Item__r.Values__c; 
                             if (values) checklistitems[i].Checklist_Item__r.Values = values.split(', ');
                             if (type == "Multi-Select") {
-                                checklistitems[i].Answer__c = checklistitems[i].Answer__c.split(' ');
+                                if (checklistitems[i].Answer__c) checklistitems[i].Answer__c = checklistitems[i].Answer__c.split(' ');
                             }
                         }
                         if (checklistitems[i].Answer__c == "true") { 
@@ -356,7 +356,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         for(var i = 0; i < $scope.checklistitems.length; i++) {
             var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
             if (type == "Multi-Select") {
-                $scope.checklistitems[i].Answer__c = $scope.checklistitems[i].Answer__c.join(" ");
+                if ($scope.checklistitems[i].Answer__c) $scope.checklistitems[i].Answer__c = $scope.checklistitems[i].Answer__c.join(" ");
             }
         }
         var checklist_response = $('#checklist_id').val(); 
