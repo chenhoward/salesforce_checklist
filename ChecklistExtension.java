@@ -49,11 +49,8 @@ global with sharing class ChecklistExtension {
         return responses;
     }
 
-    @RemoteAction
-    global static List<Checklist__c> save_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
+    public static Checklist_Response__c save_helper(String checkistResp, List<Checklist_Item_Response__c> responses) {
         List<Checklist_Response__c> res = [SELECT Id FROM Checklist_Response__c WHERE Id=:checkistResp];
-        if (responses == null || responses.size() == 0)
-            return new List<Checklist__c>();
         if (checkistResp != null && checkistResp != '' && res.size()>0) {
             List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
             for(Checklist_Item_Response__c resp : responses){
@@ -64,12 +61,11 @@ global with sharing class ChecklistExtension {
             }
             upsert finalResponses;
             List<Checklist_Response__c> response = [SELECT Status__c FROM Checklist_Response__c WHERE Id=:checkistResp];
-            response[0].Status__c = 'Pending'; 
             update response;
+            return response[0];
         } else { // new response created
             Checklist_Response__c new_response = new Checklist_Response__c();
             new_response.Checklist__c = responses[0].Checklist_Item__r.Checklist__c;
-            new_response.Status__c = 'Pending';
             insert(new_response);
             List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
             for(Checklist_Item_Response__c resp : responses){
@@ -80,46 +76,27 @@ global with sharing class ChecklistExtension {
                 }
             }
             insert finalResponses;
+            return new_response;
         }
+    }
+
+    @RemoteAction
+    global static List<Checklist__c> save_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
+        if (responses == null || responses.size() == 0)
+            return new List<Checklist__c>();
+        Checklist_Response__c r = save_helper(checkistResp, responses);
+        r.Status__c = 'Pending';
+        update r;
         return [SELECT Name, Description__c, Id FROM Checklist__c];
     }
 
     @RemoteAction
     global static List<Checklist__c> submit_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
-        System.debug(checkistResp);
-        // System.debug(responses);
-        List<Checklist_Response__c> res = [SELECT Id FROM Checklist_Response__c WHERE Id=:checkistResp];
         if (responses == null || responses.size() == 0)
             return new List<Checklist__c>();
-        if (checkistResp != null && checkistResp != '' && res.size()>0) {
-            System.debug('got here1');
-            List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
-            for(Checklist_Item_Response__c resp : responses){
-                if (resp.Answer__c != null){
-                    resp.Answer__c = String.valueOf(resp.Answer__c);
-                    finalResponses.add(resp);
-                 }
-            }
-            upsert finalResponses;
-            List<Checklist_Response__c> response = [SELECT Status__c FROM Checklist_Response__c WHERE Id=:checkistResp];
-            response[0].Status__c = 'Complete'; 
-            update response;
-        } else { // new response created
-            System.debug('got here2');
-            Checklist_Response__c new_response = new Checklist_Response__c();
-            new_response.Checklist__c = responses[0].Checklist_Item__r.Checklist__c;
-            new_response.Status__c = 'Complete';
-            insert(new_response);
-            List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
-            for(Checklist_Item_Response__c resp : responses){
-                resp.Checklist_Response__c = new_response.Id;
-                if (resp.Answer__c != null){
-                    resp.Answer__c = String.valueOf(resp.Answer__c);
-                    finalResponses.add(resp);
-                }
-            }
-            insert finalResponses;
-        }
+        Checklist_Response__c r = save_helper(checkistResp, responses);
+        r.Status__c = 'Complete';
+        update r;
         return [SELECT Name, Description__c, Id FROM Checklist__c];
     }
 
