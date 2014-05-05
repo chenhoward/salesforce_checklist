@@ -4,7 +4,7 @@ showheader="false"
 standardStylesheets="false"
 Controller="ChecklistAdminController"
 applyHtmlTag="false"
-applyBodyTag="false"   
+applyBodyTag="false"
 id="todo"
 >
 <html ng-app="checklistApp">
@@ -17,6 +17,9 @@ id="todo"
 
 <body>
 <div ng-controller="AdminCtrl">
+  <input type="button" value="New Checklist" ng-click="setNewPage(true)"></input>
+  <input type="button" value="Edit Checklist" ng-click="setNewPage(false)"></input>
+  <div name="newPage" ng-show="newPage">
   <form name="newChecklistForm">
     <h1>Checklist Name</h1>
     <input type="text" ng-model="checklist.name" name="formName" ng-required="true"></input>
@@ -35,8 +38,9 @@ id="todo"
     <input type="button" value="-" ng-click="removeQuestion()"></input>
     <input type="submit" value="Submit " ng-click="newChecklist()"> </input>
   </form>
-  <div id="checklistList" >
-    <form name="EditChecklistForm">
+  </div>
+  <div id="editChecklist" ng-show="!newPage" >
+    <form name="editPage">
       <h1>Edit Checklist</h1>
       <li ng-repeat="">
       <p> Name: </p> <input type="text" ng-model="item.Name" ng-required="true"></input>
@@ -63,11 +67,11 @@ id="todo"
 /* Angular */
 var checklistApp = angular.module('checklistApp', []);
 checklistApp.controller("AdminCtrl", function ($scope) {
+    $scope.newPage = true;
     $scope.numQuestions = 1;
     $scope.items = new Array();
     $scope.items[0] = new Object();
     $scope.items[0].Required__c = true;
-    $scope.checklist = new Object();
     $scope.checklist = new Object();
     $scope.checklist.name = 'Default Name';
     $scope.checklist.description = 'Default Description';
@@ -77,6 +81,9 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.ittypesem = $scope.checklists[3];
     $scope.inDB = function(item) {
         return item.Id != null;
+    }
+    $scope.setNewPage = function(bool) {
+        $scope.newPage = bool;
     }
     $scope.newChecklist = function() {
     if ($scope.newChecklistForm.$valid) {
@@ -198,7 +205,6 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     };
     $scope.getChecklistItems();
 });
-
 </script>
 
 </html>
