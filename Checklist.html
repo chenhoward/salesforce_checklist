@@ -79,6 +79,7 @@
                                 <p> Id: {{checklistitem.Checklist_Item__c}} </p> 
                                 <p> Checklist Id: {{checklistitem.Checklist_Item__r.Checklist__c}} </p> 
                                 <p> Order: {{checklistitem.Checklist_Item__r.Order__c}} </p> 
+                                <p> Photo: {{checklistitem.Checklist_Item__r.Attach_Photo__c}} </p> 
                                 <input id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                                 <input id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-switch-when="Number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                                 <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
@@ -91,13 +92,10 @@
                                 <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
                                     {{checklistitem.Answer__c}}
                                 </div>
-
                                 <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
                                 </select>
-
-
-
                                 <select ng-options="val for val in checklistitem.Checklist_Item__r.Values" ng-multiple="true" multiple="true" ng-switch-when="Multi-Select" ng-model="checklistitem.Answer__c"></select>
+                                <input type="file" id="photoFile" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
                              </span>
                         </li>
                         <input id="submit_button" type="submit" value="Submit"> </input>
@@ -208,6 +206,9 @@ myApp.service('userService', function() {
                         if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
                             var values = checklistitems[i].Checklist_Item__r.Values__c; 
                             if (values) checklistitems[i].Checklist_Item__r.Values = values.split(', ');
+                            if (type == "Multi-Select") {
+                                checklistitems[i].Answer__c = checklistitems[i].Answer__c.split(' ');
+                            }
                         }
                         if (checklistitems[i].Answer__c == "true") { 
                             checklistitems[i].Answer__c = true;
@@ -352,6 +353,12 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             checklist_response = '';
         }
         */
+        for(var i = 0; i < $scope.checklistitems.length; i++) {
+            var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
+            if (type == "Multi-Select") {
+                $scope.checklistitems[i].Answer__c = $scope.checklistitems[i].Answer__c.join(" ");
+            }
+        }
         var checklist_response = $('#checklist_id').val(); 
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.submit_responses}',
