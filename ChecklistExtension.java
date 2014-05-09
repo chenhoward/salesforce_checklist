@@ -169,13 +169,10 @@ global with sharing class ChecklistExtension {
         }
         Attachment attach = new Attachment();
         attach.Body = bitphoto;
-        attach.Name = 'Photo';
+        attach.Name = 'Photo for response: ' + id;
         // attach.ContentType = ;
         attach.ParentID = id;
         insert(attach);
-        System.debug(id);
-        System.debug(bitphoto);
-        // do other stuff to handle photoMap
     }
 
 }
