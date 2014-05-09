@@ -133,9 +133,14 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     }
     $scope.editChecklist = function() {
       delete $scope.item.attributes;
+      console.log($scope.item);
+      var copy = {};
+      copy.Id = $scope.item.Id;
+      copy.Name = $scope.item.Name;
+      copy.Description = $scope.item.Description;
       Visualforce.remoting.Manager.invokeAction(
           '{!$RemoteAction.ChecklistAdminController.updateChecklist}',
-          $scope.item,
+          copy,
           function(result, event) {
           if (event.status) {
           console.log('Updated everything');
