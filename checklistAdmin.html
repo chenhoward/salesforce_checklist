@@ -187,13 +187,11 @@ checklistApp.controller("AdminCtrl", function ($scope) {
         return count;
     }
     $scope.getChecklistItems = function() {
-      delete $scope.item.attributes;
-      console.log($scope.item);
-      delete $scope.item.$$hashKey;
-      console.log($scope.item);
+      var copy = {};
+      copy.Id = $scope.item.Id;
       Visualforce.remoting.Manager.invokeAction(
           '{!$RemoteAction.ChecklistAdminController.getChecklistItems}',
-          $scope.item,
+          copy,
           function(result, event) {
           if(event.status) {
           console.log(result);
