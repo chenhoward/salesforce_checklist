@@ -363,8 +363,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
         var checklist_response = $('#checklist_id').val(); 
 
         if (Object.keys($scope.photoMap).length > 0) {
-            console.log('THERE ARE ' + Object.keys($scope.photoMap).length + ' PICTURES');
-            console.log($scope.photoMap);
             for (var key in $scope.photoMap) {
                 Visualforce.remoting.Manager.invokeAction(
                     '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
@@ -372,7 +370,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
                     $scope.photoMap[key],
                         function(result, event){
                             if (event.status) {
-                                console.log('success!'); 
+                                // console.log('success!'); 
                             } else if (event.type === 'exception') {
                                 console.log('Exception: ' + event.message);
                             } else {
@@ -415,8 +413,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
         var checklist_response = $('#checklist_id').val(); // works for pending to completed
         
         if (Object.keys($scope.photoMap).length > 0) {
-            console.log('THERE ARE ' + Object.keys($scope.photoMap).length + ' PICTURES');
-            console.log($scope.photoMap);
             for (var key in $scope.photoMap) {
                 Visualforce.remoting.Manager.invokeAction(
                     '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
@@ -424,7 +420,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
                     $scope.photoMap[key],
                         function(result, event){
                             if (event.status) {
-                                console.log('success!'); 
+                                // console.log('success!'); 
                             } else if (event.type === 'exception') {
                                 console.log('Exception: ' + event.message);
                             } else {
@@ -626,10 +622,8 @@ function handlePhoto(evt){
             // Extract raw base64 data from data URL
             $(evt.target.id).attr('src',e.target.result);
             imageData = e.target.result.split(',')[1];
-            // console.log(.photoMap);
             var id = evt.target.id.substring(10, evt.target.id.length);
             photoMap[id] = imageData;
-            console.log(photoMap);
         };
     })(file);
     reader.readAsDataURL(file);
