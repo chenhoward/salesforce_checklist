@@ -75,10 +75,8 @@ id="todo"
 var checklistApp = angular.module('checklistApp', []);
 checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.newPage = true;
-    $scope.numQuestions = 1;
     $scope.items = new Array();
     $scope.items[0] = new Object();
-    $scope.items[0].Required__c = true;
     $scope.checklist = new Object();
     $scope.checklist.name = 'Default Name';
     $scope.checklist.description = 'Default Description';
@@ -95,12 +93,6 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     }
     $scope.newChecklist = function() {
       if ($scope.newChecklistForm.$valid) {
-        $scope.createChecklist();
-      } else {
-        console.log('invalid');
-      }
-    }
-    $scope.createChecklist = function() {
       for(var i = 0; i < $scope.items.length; i++) {
         delete $scope.items[i].$$hashKey;
         console.log($scope.items[i].Type__c);
@@ -121,14 +113,16 @@ checklistApp.controller("AdminCtrl", function ($scope) {
           },
           {escape: true}
           );
-    };
+      } else {
+        console.log('Invalid New Checklist');
+      }
+    }
     $scope.addQuestion = function() {
       $scope.items.push(new Object());
     }
     $scope.addQuestionEdit = function() {
       var item = {isActive__c : true, Order__c: $scope.questionCount() + 1, Question__c : "New Question"}
       $scope.questions.push(item);
-      console.log($scope.questions.length);
     }
     $scope.showValues = function(item) {
       return (item.Type__c == 'Rating') || (item.Type__c == 'Picklist') || (item.Type__c == 'Multi-Select');
@@ -139,7 +133,6 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.editChecklist = function() {
       if ($scope.editPage.$valid) {
         delete $scope.item.attributes;
-        console.log($scope.item);
         var copy = {};
         copy.Id = $scope.item.Id;
         copy.Name = $scope.item.Name;
@@ -177,7 +170,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             }, {escape: true}
             );
       } else {
-        console.log("Fix Form");
+        console.log("Fix EditForm");
       }};
     $scope.deleteChecklistItem = function(item) {
       console.log(item);
@@ -207,7 +200,6 @@ checklistApp.controller("AdminCtrl", function ($scope) {
           copy,
           function(result, event) {
           if(event.status) {
-          console.log(result);
           $scope.questions = result;
           $scope.$apply();
           } else if (event.type == 'exception') {
