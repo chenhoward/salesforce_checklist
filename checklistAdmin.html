@@ -21,28 +21,28 @@ id="todo"
   <input type="button" value="New Checklist" ng-click="setNewPage(true)"></input>
   <input type="button" value="Edit Checklist" ng-click="setNewPage(false)"></input>
   <div name="newPage" ng-show="newPage">
-  <form name="newChecklistForm">
-    <h1>Checklist Name</h1>
-    <input type="text" ng-model="checklist.name" name="formName" ng-required="true"></input>
-    <h1>Checklist Description</h1>
-    <input type="text" ng-model="checklist.description"></input>
-    <div ng-repeat="item in items">
-      <h1> Question {{$index + 1}}</h1>
-      <input type="text" ng-model="item.Question__c" name="Q1" ng-required="true"></input>
-      <input type="number" ng-model="item.Order__c" name="O2" ng-required="true"></input>
-      <input type="checkbox" ng-model="item.Required__c" name="O3"></input>
-      <select ng-model="item.Type__c" ng-options="type for type in types" ng-required="true"></select>
-      <input type="text" ng-model="item.Values__c" name="Q1" ng-show="showValues(item)"></input>
-      <p>{{item.Question__c}}</p>
-    </div>
-    <input type="button" value="+" ng-click="addQuestion()"></input>
-    <input type="button" value="-" ng-click="removeQuestion()"></input>
-    <input type="submit" value="Submit" ng-click="newChecklist()"> </input>
-  </form>
+    <form name="newChecklistForm">
+      <h1>Checklist Name</h1>
+      <input type="text" ng-model="checklist.name" name="formName" ng-required="true"></input>
+      <h1>Checklist Description</h1>
+      <input type="text" ng-model="checklist.description"></input>
+      <div ng-repeat="item in items">
+        <h1> Question {{$index + 1}}</h1>
+        <input type="text" ng-model="item.Question__c" name="Q1" ng-required="true"></input>
+        <input type="number" ng-model="item.Order__c" name="O2" ng-required="true"></input>
+        <input type="checkbox" ng-model="item.Required__c" name="O3"></input>
+        <select ng-model="item.Type__c" ng-options="type for type in types" ng-required="true"></select>
+        <input type="text" ng-model="item.Values__c" name="Q1" ng-show="showValues(item)"></input>
+        <p>{{item.Question__c}}</p>
+      </div>
+      <input type="button" value="+" ng-click="addQuestion()"></input>
+      <input type="button" value="-" ng-click="removeQuestion()"></input>
+      <input type="submit" value="Submit" ng-click="newChecklist()"> </input>
+    </form>
   </div>
   <div id="editChecklist" ng-show="!newPage" >
     <div ng-repeat="checklist in checklists2">
-      </div>
+    </div>
     <form name="editPage">
       <h1>Edit Checklist</h1>
       <li ng-repeat="">
@@ -51,16 +51,16 @@ id="todo"
       <p> Id: {{item.Id}} </p>
       <input type="submit" value="Submit" ng-click="editChecklist()"></input>
       </li>
+      <div ng-repeat="question in questions | filter:{isActive__c:'true'}">
+        <p ng-show="inDB(question)">{{question.Question__c}}</p>
+        <input ng-show="!inDB(question)" type="text" ng-model="question.Question__c" ng-required="true"></input>
+        Order:
+        <input type="number" ng-model="question.Order__c" ng-required="question.isActive__c"></input>
+        <input type="checkbox" ng-model="question.Required__c"></input>
+        Required? : {{question.Required__c}}
+        <input type="button" value="Delete" ng-click="deleteChecklistItem(question)"></input>
+      </div>
     </form>
-    <div ng-repeat="question in questions | filter:{isActive__c:'true'}">
-      <p ng-show="inDB(question)">{{question.Question__c}}</p>
-      <input ng-show="!inDB(question)" type="text" ng-model="question.Question__c" ng-required="true"></input>
-      Order:
-      <input type="number" ng-model="question.Order__c" ng-required="true"></input>
-      <input type="checkbox" ng-model="question.Required__c"></input>
-      Required? : {{question.Required__c}}
-      <input type="button" value="Delete" ng-click="deleteChecklistItem(question)"></input>
-    </div>
     <input type="button" value="+" ng-click="addQuestionEdit()"></input>
   </div>
 </div>
@@ -84,17 +84,17 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.item = $scope.checklists[0];
     $scope.types = ['Yes/No', 'Number', 'Text', 'Date','Long Text', 'Rating', 'Picklist', 'Multi-Select'];
     $scope.inDB = function(item) {
-        return item.Id != null;
+    return item.Id != null;
     }
     $scope.setNewPage = function(bool) {
-        $scope.newPage = bool;
+    $scope.newPage = bool;
     }
     $scope.newChecklist = function() {
-    if ($scope.newChecklistForm.$valid) {
-    $scope.createChecklist();
-    } else {
-    console.log('invalid');
-    }
+      if ($scope.newChecklistForm.$valid) {
+        $scope.createChecklist();
+      } else {
+        console.log('invalid');
+      }
     }
     $scope.createChecklist = function() {
       for(var i = 0; i < $scope.items.length; i++) {
@@ -122,7 +122,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
       $scope.items.push(new Object());
     }
     $scope.addQuestionEdit = function() {
-      var item = {isActive__c : true, Order__c: $scope.questionCount() + 1}
+      var item = {isActive__c : true, Order__c: $scope.questionCount() + 1, Question__c : "New Question"}
       $scope.questions.push(item);
       console.log($scope.questions.length);
     }
@@ -133,64 +133,67 @@ checklistApp.controller("AdminCtrl", function ($scope) {
       $scope.items.pop();
     }
     $scope.editChecklist = function() {
-      delete $scope.item.attributes;
-      console.log($scope.item);
-      var copy = {};
-      copy.Id = $scope.item.Id;
-      copy.Name = $scope.item.Name;
-      copy.Description__c = $scope.item.Description__c;
-      Visualforce.remoting.Manager.invokeAction(
-          '{!$RemoteAction.ChecklistAdminController.updateChecklist}',
-          copy,
-          function(result, event) {
-          if (event.status) {
-          console.log('Updated everything');
-          } else if (event.type == 'exeception') {
-          console.log('Exception');
-          } else {
-          console.log('Error!');
-          }
-          },
-          {escape: true}
-          );
-      for(var i = 0; i < $scope.questions.length; i++) {
-        delete $scope.questions[i].$$hashKey;
-        $scope.questions[i].Checklist__c = $scope.item.Id;
-      }
-      console.log($scope.questions);
-      Visualforce.remoting.Manager.invokeAction(
-          '{!$RemoteAction.ChecklistAdminController.updateChecklistItems}',
-          $scope.questions,
-          function(result, event) {
-          if (event.status) {
-          console.log('Updated everything items');
-          } else if (event.type == 'exeception') {
-          console.log('Exception');
-          } else {
-          console.log('Error!');
-          }
-          }, {escape: true}
-          );
-    };
+      if ($scope.editPage.$valid) {
+        delete $scope.item.attributes;
+        console.log($scope.item);
+        var copy = {};
+        copy.Id = $scope.item.Id;
+        copy.Name = $scope.item.Name;
+        copy.Description__c = $scope.item.Description__c;
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ChecklistAdminController.updateChecklist}',
+            copy,
+            function(result, event) {
+            if (event.status) {
+            console.log('Updated everything');
+            } else if (event.type == 'exeception') {
+            console.log('Exception');
+            } else {
+            console.log('Error!');
+            }
+            },
+            {escape: true}
+            );
+        for(var i = 0; i < $scope.questions.length; i++) {
+          delete $scope.questions[i].$$hashKey;
+          $scope.questions[i].Checklist__c = $scope.item.Id;
+        }
+        console.log($scope.questions);
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ChecklistAdminController.updateChecklistItems}',
+            $scope.questions,
+            function(result, event) {
+            if (event.status) {
+            console.log('Updated everything items');
+            } else if (event.type == 'exeception') {
+            console.log('Exception');
+            } else {
+            console.log('Error!');
+            }
+            }, {escape: true}
+            );
+      } else {
+        console.log("Fix Form");
+      }};
     $scope.deleteChecklistItem = function(item) {
       console.log(item);
       item.isActive__c = false;
       if(!$scope.inDB(item)) {
-          console.log("new");
-          var index = $scope.questions.indexOf(item);
-          if (index > -1) {
-              $scope.questions.splice(index, 1);
-          }
+        console.log("new");
+        var index = $scope.questions.indexOf(item);
+        if (index > -1) {
+          $scope.questions.splice(index, 1);
+        }
       }
     }
     $scope.questionCount = function() {
-        var count = 0;
-        for (var i = 0; i < $scope.questions.length; i++) {
-            if ($scope.questions[i].isActive__c) {
-                count++;
-            }
+      var count = 0;
+      for (var i = 0; i < $scope.questions.length; i++) {
+        if ($scope.questions[i].isActive__c) {
+          count++;
         }
-        return count;
+      }
+      return count;
     }
     $scope.getChecklistItems = function() {
       var copy = {};
