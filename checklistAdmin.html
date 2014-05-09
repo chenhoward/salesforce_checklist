@@ -31,6 +31,7 @@ id="todo"
         <input type="text" ng-model="item.Question__c" name="Q1" ng-required="true"></input>
         <input type="number" ng-model="item.Order__c" name="O2" ng-required="true"></input>
         <input type="checkbox" ng-model="item.Required__c" name="O3"></input>
+        <input type="checkbox" ng-model="item.Attach_Photo__c" name="O4"></input>
         <select ng-model="item.Type__c" ng-options="type for type in types" ng-required="true"></select>
         <input type="text" ng-model="item.Values__c" name="Q1" ng-show="showValues(item)"></input>
         <p>{{item.Question__c}}</p>
