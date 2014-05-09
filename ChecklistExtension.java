@@ -163,9 +163,18 @@ global with sharing class ChecklistExtension {
     }
 
     @RemoteAction
-    global static void photo_remotecall(Map<String, String> photoMap) {
-        if (photoMap == null || photoMap.size() == 0)
+    global static void photo_remotecall(Id id, Blob bitphoto) {
+        if (id == null || bitphoto == null) {
             return;
+        }
+        Attachment attach = new Attachment();
+        attach.Body = bitphoto;
+        attach.Name = 'Photo';
+        // attach.ContentType = ;
+        attach.ParentID = id;
+        insert(attach);
+        System.debug(id);
+        System.debug(bitphoto);
         // do other stuff to handle photoMap
     }
 

@@ -364,23 +364,25 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
 
         if (Object.keys($scope.photoMap).length > 0) {
             console.log('THERE ARE ' + Object.keys($scope.photoMap).length + ' PICTURES');
-            Visualforce.remoting.Manager.invokeAction(
-                '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
-                $scope.photoMap,
-                    function(result, event){
-                        if (event.status) {
-                            console.log('success!'); 
-                        } else if (event.type === 'exception') {
-                            console.log('Exception: ' + event.message);
-                        } else {
-                            console.log('Error!');
-                        }
-                    },
-                {escape: true}
-            );
+            console.log($scope.photoMap);
+            for (var key in $scope.photoMap) {
+                Visualforce.remoting.Manager.invokeAction(
+                    '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
+                    key,
+                    $scope.photoMap[key],
+                        function(result, event){
+                            if (event.status) {
+                                console.log('success!'); 
+                            } else if (event.type === 'exception') {
+                                console.log('Exception: ' + event.message);
+                            } else {
+                                console.log('Error!');
+                            }
+                        },
+                    {escape: true}
+                );
+            }
         }
-        return;
-
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.submit_responses}',
             checklist_response,
@@ -414,23 +416,25 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
         
         if (Object.keys($scope.photoMap).length > 0) {
             console.log('THERE ARE ' + Object.keys($scope.photoMap).length + ' PICTURES');
-            Visualforce.remoting.Manager.invokeAction(
-                '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
-                $scope.photoMap,
-                    function(result, event){
-                        if (event.status) {
-                            console.log('success!'); 
-                        } else if (event.type === 'exception') {
-                            console.log('Exception: ' + event.message);
-                        } else {
-                            console.log('Error!');
-                        }
-                    },
-                {escape: true}
-            );
+            console.log($scope.photoMap);
+            for (var key in $scope.photoMap) {
+                Visualforce.remoting.Manager.invokeAction(
+                    '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
+                    key,
+                    $scope.photoMap[key],
+                        function(result, event){
+                            if (event.status) {
+                                console.log('success!'); 
+                            } else if (event.type === 'exception') {
+                                console.log('Exception: ' + event.message);
+                            } else {
+                                console.log('Error!');
+                            }
+                        },
+                    {escape: true}
+                );
+            }
         }
-        return;
-
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.save_responses}',
             checklist_response,
