@@ -32,7 +32,7 @@ public class ChecklistAdminControllerTest {
         System.assertEquals(itemListCheck.get(0).Question__c, 'Size?');
         item1.Order__c = 1;
         item2.Order__c = 2;
-        ChecklistUtilities.updateChecklistItems(itemList);
+        ChecklistAdminController.updateChecklistItems(itemList);
         itemListCheck = ChecklistUtilities.findChecklistItems(checklist);
         System.assertEquals(itemListCheck.size(), 2);
         System.assertEquals(itemListCheck.get(0).Question__c, 'Age?');
