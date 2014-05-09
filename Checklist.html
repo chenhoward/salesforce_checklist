@@ -442,6 +442,7 @@ controllers.PagesController = function ($scope, userService) {
         $scope.checklist_id = response;
         $scope.mapActive = true;
         $scope.detailPageActive = true;
+        $scope.homePageActive = true;
     }
     // if (checklist == undefined && response == undefined) {
     //     $scope.detailPageActive = false;
@@ -486,6 +487,7 @@ controllers.PagesController = function ($scope, userService) {
         $scope.completedListPageActive = false;
         userService.edit_checklist_items(checklist_id);
         $scope.detailPageActive = true;
+        $scope.mapActive = true;
     };
     $scope.goToNewListpage = function() {
         $("#messages").text('');
