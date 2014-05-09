@@ -7,8 +7,6 @@ global with sharing class ChecklistAdminController {
 
     @RemoteAction
     global static Checklist_Item__c[] getChecklistItems(Checklist__c checklist) {
-        System.debug(5);
-        System.debug(checklist + '');
         return ChecklistUtilities.findChecklistItems(checklist);
     }
 
@@ -40,10 +38,4 @@ global with sharing class ChecklistAdminController {
         return items;
     }
 
-    /** Adds the ITEMS to the CHECKLIST. */
-    @RemoteAction
-    global static Checklist__c addChecklistItems(Checklist__c checklist, Checklist_Item__c[] items) {
-        ChecklistUtilities.addChecklistItems(checklist, items);
-        return checklist;
-    }
 }

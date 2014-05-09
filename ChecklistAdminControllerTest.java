@@ -15,7 +15,7 @@ public class ChecklistAdminControllerTest {
         System.assertNotEquals(test, null);
         System.assertEquals(test.Name, 'newName');
         System.assertEquals(test.Description__c, 'Description');
-        System,assertNotEquals(ChecklistAdminController.getCheckLists(), null);
+        System.assertNotEquals(ChecklistAdminController.getCheckLists(), null);
     }
 
 /** Tests the creation of a Checklist item. */
@@ -27,12 +27,12 @@ public class ChecklistAdminControllerTest {
         Checklist_Item__c[] itemList = new Checklist_Item__c[]{item1, item2};
         Checklist__c checklist= ChecklistAdminController.createChecklistWithQuestions('nom', 'desc', itemList);
         System.assertEquals(itemList.get(0).Question__c, 'Age?');
-        Checklist_Item__c[] itemListCheck = ChecklistUtilities.findChecklistItems(checklist);
+        Checklist_Item__c[] itemListCheck = ChecklistAdminController.getChecklistItems(checklist);
         System.assertEquals(itemListCheck.size(), 2);
         System.assertEquals(itemListCheck.get(0).Question__c, 'Size?');
         item1.Order__c = 1;
         item2.Order__c = 2;
-        ChecklistUtilities.updateChecklistItems(itemList);
+        ChecklistAdminController.updateChecklistItems(itemList);
         itemListCheck = ChecklistUtilities.findChecklistItems(checklist);
         System.assertEquals(itemListCheck.size(), 2);
         System.assertEquals(itemListCheck.get(0).Question__c, 'Age?');
