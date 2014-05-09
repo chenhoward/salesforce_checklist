@@ -94,7 +94,7 @@
                                 <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
                                 </select>
                                 <select ng-options="val for val in checklistitem.Checklist_Item__r.Values" ng-multiple="true" multiple="true" ng-switch-when="Multi-Select" ng-model="checklistitem.Answer__c"></select>
-                                <input type="file" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
+                                <input type="file" class="photo" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
                              </span>
                         </li>
                         <input id="submit_button" type="submit" value="Submit"> </input>
@@ -121,6 +121,7 @@ myApp.service('userService', function() {
     var completedchecklistresponses;
     var checklists;
     var checklist_id;
+    var photoMap;
 
     var observerCallbacks = [];
     // Register an Observer
@@ -341,7 +342,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             }
         }
         delete $scope.checklistitems.attributes;
-    }
+    };
     $scope.submitForm = function() {
         var that = this;
         formHelper();
@@ -352,7 +353,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             checklist_response = '';
         }
         */
-        var photoMap;
         for(var i = 0; i < $scope.checklistitems.length; i++) {
             var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
             if (type == "Multi-Select") {
@@ -363,8 +363,13 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
                 // console.log($scope.checklistitems[i]);
                 // console.log($scope.checklistitems[i].Checklist_Item__c);
                 // console.log($('#photoFile_'+$scope.checklistitems[i].Checklist_Item__c));
-                var image = $('#photoFile_'+$scope.checklistitems[i].Checklist_Item__c).val();
-                console.log(image);
+                var image = $('#photoFile_'+$scope.checklistitems[i].Checklist_Item__c);
+                // console.log('got here 1');
+                // console.log($("#photoFile_" + $scope.checklistitems[i].Checklist_Item__c));
+                // console.log(image);
+                $("#photoFile_" + $scope.checklistitems[i].Checklist_Item__c).change(handlePhoto(image, $scope.checklistitems[i]))
+                // console.log($("#photoFile_" + $scope.checklistitems[i].Checklist_Item__c));
+                // console.log(image);
                 // must convert above to 64 bit image
                 // photoMap[$scope.checklistitems[i].Checklist_Item__c] = $('#photoFile_'+$scope.checklistitems[i].Checklist_Item__c).val();
             }
@@ -452,6 +457,7 @@ controllers.PagesController = function ($scope, userService) {
         $scope.homePageActive = true;
     }
     $scope.goToCreateDetailPage = function(checklist_id) {
+        $scope.detailPageActive = true;
         $("#messages").text('');
         $scope.checklist_id = checklist_id;
         $('#checklist_id').val(checklist_id);
@@ -459,9 +465,12 @@ controllers.PagesController = function ($scope, userService) {
         $scope.newlistPageActive = false;
         $scope.pendinglistPageActive = false;           
         $scope.completedListPageActive = false;
-        $scope.detailPageActive = true;
+        setTimeout(function(){
+            setupPhoto();
+        },2000)
     };
     $scope.goToEditDetailPage = function(checklist_id) {
+        $scope.detailPageActive = true;
         $("#messages").text('');
         $scope.checklist_id = checklist_id;
         $('#checklist_id').val(checklist_id);
@@ -469,8 +478,10 @@ controllers.PagesController = function ($scope, userService) {
         $scope.pendinglistPageActive = false;           
         $scope.completedListPageActive = false;
         userService.edit_checklist_items(checklist_id);
-        $scope.detailPageActive = true;
         $scope.mapActive = true;
+        setTimeout(function(){
+            setupPhoto();
+        },2000)
     };
     $scope.goToNewListpage = function() {
         $("#messages").text('');
@@ -569,6 +580,32 @@ function getUrlVars() {
     }
     return vars;
 }
+var photoMap;
+
+function setupPhoto(){
+    // console.log(photoMap);
+    $(".photo").each(function(key,value) {
+        $("#" + value.id).change(handlePhoto);
+    })
+}
+
+function handlePhoto(evt){
+    var file = evt.target.files[0];
+    // replace above with actual file
+    var reader = new FileReader();
+    reader.onload = (function(theFile) {
+        return function(e) {
+            // Extract raw base64 data from data URL
+            $(evt.target.id).attr('src',e.target.result);
+            imageData = e.target.result.split(',')[1];
+            // console.log(.photoMap);
+            console.log(photoMap);
+            photoMap[evt.target.id] = imageData;
+        };
+    })(file);
+    reader.readAsDataURL(file);
+};
+
 </script>
 </html>
 </apex:page>
