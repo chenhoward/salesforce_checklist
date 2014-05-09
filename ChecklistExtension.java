@@ -162,4 +162,11 @@ global with sharing class ChecklistExtension {
        return to_return;
     }
 
+    @RemoteAction
+    global static void photo_remotecall(Map<String, String> photoMap) {
+        if (photoMap == null || photoMap.size() == 0)
+            return;
+        // do other stuff to handle photoMap
+    }
+
 }
