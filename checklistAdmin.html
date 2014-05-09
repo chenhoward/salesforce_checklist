@@ -59,6 +59,9 @@ id="todo"
         <input type="number" ng-model="question.Order__c" ng-required="question.isActive__c"></input>
         <input type="checkbox" ng-model="question.Required__c"></input>
         Required? : {{question.Required__c}}
+        <input type="checkbox" ng-model="question.Attach_Photo__c" name="O4"></input>
+        <select ng-model="question.Type__c" ng-options="type for type in types" ng-required="true"></select>
+        <input type="text" ng-model="question.Values__c" name="Q1" ng-show="showValues(question)"></input>
         <input type="button" value="Delete" ng-click="deleteChecklistItem(question)"></input>
       </div>
     </form>
