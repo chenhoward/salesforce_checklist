@@ -322,10 +322,11 @@ myApp.controller("PendingListCtrl", function ($scope, userService) {
     );
 });
 
-myApp.controller("ChecklistCtrl", function ($scope, userService) {
+myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
     init();
     function init() {
         $scope.checklistitems = userService.getCLIs();
+        $scope.photoMap = $window.photoMap;
         userService.registerObserverCallback(updateChecklistitems);
     }
     function updateChecklistitems() {
@@ -360,6 +361,26 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             }
         }
         var checklist_response = $('#checklist_id').val(); 
+
+        if (Object.keys($scope.photoMap).length > 0) {
+            console.log('THERE ARE ' + Object.keys($scope.photoMap).length + ' PICTURES');
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
+                $scope.photoMap,
+                    function(result, event){
+                        if (event.status) {
+                            console.log('success!'); 
+                        } else if (event.type === 'exception') {
+                            console.log('Exception: ' + event.message);
+                        } else {
+                            console.log('Error!');
+                        }
+                    },
+                {escape: true}
+            );
+        }
+        return;
+
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.submit_responses}',
             checklist_response,
@@ -390,6 +411,26 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
         }
         */
         var checklist_response = $('#checklist_id').val(); // works for pending to completed
+        
+        if (Object.keys($scope.photoMap).length > 0) {
+            console.log('THERE ARE ' + Object.keys($scope.photoMap).length + ' PICTURES');
+            Visualforce.remoting.Manager.invokeAction(
+                '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
+                $scope.photoMap,
+                    function(result, event){
+                        if (event.status) {
+                            console.log('success!'); 
+                        } else if (event.type === 'exception') {
+                            console.log('Exception: ' + event.message);
+                        } else {
+                            console.log('Error!');
+                        }
+                    },
+                {escape: true}
+            );
+        }
+        return;
+
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.save_responses}',
             checklist_response,
@@ -584,6 +625,7 @@ function handlePhoto(evt){
             // console.log(.photoMap);
             var id = evt.target.id.substring(10, evt.target.id.length);
             photoMap[id] = imageData;
+            console.log(photoMap);
         };
     })(file);
     reader.readAsDataURL(file);
