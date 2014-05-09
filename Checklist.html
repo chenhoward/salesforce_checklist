@@ -113,6 +113,7 @@
 <script>
  /* Angular */
 var myApp = angular.module('myApp', []);
+var photoMap = {};
 
 myApp.service('userService', function() {
 
@@ -121,7 +122,6 @@ myApp.service('userService', function() {
     var completedchecklistresponses;
     var checklists;
     var checklist_id;
-    var photoMap;
 
     var observerCallbacks = [];
     // Register an Observer
@@ -358,21 +358,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService) {
             if (type == "Multi-Select") {
                 if ($scope.checklistitems[i].Answer__c) $scope.checklistitems[i].Answer__c = $scope.checklistitems[i].Answer__c.join(" ");
             }
-            // Handle photos here
-            if ($scope.checklistitems[i].Checklist_Item__r.Attach_Photo__c && $scope.checklistitems[i].Answer__c != null) {
-                // console.log($scope.checklistitems[i]);
-                // console.log($scope.checklistitems[i].Checklist_Item__c);
-                // console.log($('#photoFile_'+$scope.checklistitems[i].Checklist_Item__c));
-                var image = $('#photoFile_'+$scope.checklistitems[i].Checklist_Item__c);
-                // console.log('got here 1');
-                // console.log($("#photoFile_" + $scope.checklistitems[i].Checklist_Item__c));
-                // console.log(image);
-                $("#photoFile_" + $scope.checklistitems[i].Checklist_Item__c).change(handlePhoto(image, $scope.checklistitems[i]))
-                // console.log($("#photoFile_" + $scope.checklistitems[i].Checklist_Item__c));
-                // console.log(image);
-                // must convert above to 64 bit image
-                // photoMap[$scope.checklistitems[i].Checklist_Item__c] = $('#photoFile_'+$scope.checklistitems[i].Checklist_Item__c).val();
-            }
         }
         var checklist_response = $('#checklist_id').val(); 
         Visualforce.remoting.Manager.invokeAction(
@@ -580,10 +565,8 @@ function getUrlVars() {
     }
     return vars;
 }
-var photoMap;
 
 function setupPhoto(){
-    // console.log(photoMap);
     $(".photo").each(function(key,value) {
         $("#" + value.id).change(handlePhoto);
     })
@@ -599,8 +582,8 @@ function handlePhoto(evt){
             $(evt.target.id).attr('src',e.target.result);
             imageData = e.target.result.split(',')[1];
             // console.log(.photoMap);
-            console.log(photoMap);
-            photoMap[evt.target.id] = imageData;
+            var id = evt.target.id.substring(10, evt.target.id.length);
+            photoMap[id] = imageData;
         };
     })(file);
     reader.readAsDataURL(file);
