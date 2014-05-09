@@ -7,6 +7,7 @@ applyHtmlTag="false"
 applyBodyTag="false"
 id="todo"
 >
+
 <html ng-app="checklistApp">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1, user-scalable=no"/>
@@ -137,7 +138,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
       var copy = {};
       copy.Id = $scope.item.Id;
       copy.Name = $scope.item.Name;
-      copy.Description = $scope.item.Description;
+      copy.Description__c = $scope.item.Description__c;
       Visualforce.remoting.Manager.invokeAction(
           '{!$RemoteAction.ChecklistAdminController.updateChecklist}',
           copy,
