@@ -73,23 +73,23 @@ global with sharing class ChecklistExtension {
     }
 
     @RemoteAction
-    global static List<Checklist__c> save_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
+    global static Id save_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
         if (responses == null || responses.size() == 0)
-            return new List<Checklist__c>();
+            return null;
         Checklist_Response__c r = save_helper(checkistResp, responses);
         r.Status__c = 'Pending';
         update r;
-        return [SELECT Name, Description__c, Id FROM Checklist__c];
+        return r.Id;
     }
 
     @RemoteAction
-    global static List<Checklist__c> submit_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
+    global static Id submit_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
         if (responses == null || responses.size() == 0)
-            return new List<Checklist__c>();
+            return null;
         Checklist_Response__c r = save_helper(checkistResp, responses);
         r.Status__c = 'Complete';
         update r;
-        return [SELECT Name, Description__c, Id FROM Checklist__c];
+        return r.Id;
     }
 
     // Creates Checklist Response Item Objects
@@ -163,11 +163,12 @@ global with sharing class ChecklistExtension {
     }
 
     @RemoteAction
-    global static Id photo_remotecall(Id id, Blob bitphoto) {
-        if (id == null || bitphoto == null) {
+    global static Id photo_remotecall(Id checklist_item_id, Id response_id, Blob bitphoto) {
+        if (checklist_item_id == null || response_id == null || bitphoto == null) {
             return null;
         }
-        List<Attachment> a = [SELECT Id FROM Attachment WHERE ParentId=:id];
+        Checklist_Item_Response__c resp = [SELECT Id FROM Checklist_Item_Response__c WHERE Checklist_Item__c=:checklist_item_id AND Checklist_Response__c=:response_id];
+        List<Attachment> a = [SELECT Id FROM Attachment WHERE ParentId=:resp.Id];
         if (a.size() != 0) {
             for (Integer i=0; i<a.size(); i++) {
                 delete a[i];
@@ -175,9 +176,9 @@ global with sharing class ChecklistExtension {
         }
         Attachment attach = new Attachment();
         attach.Body = bitphoto;
-        attach.Name = 'Photo for response: ' + id;
+        attach.Name = 'Photo for response: ' + resp.Id;
         // attach.ContentType = ;
-        attach.ParentID = id;
+        attach.ParentID = resp.Id;
         insert attach;
         return attach.Id;
     }

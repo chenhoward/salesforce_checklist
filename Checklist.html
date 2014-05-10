@@ -344,6 +344,30 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
         }
         delete $scope.checklistitems.attributes;
     };
+    function photoHelper(checklist_response_id) {
+        if (Object.keys($scope.photoMap).length > 0) {
+            for (var key in $scope.photoMap) {
+                Visualforce.remoting.Manager.invokeAction(
+                    '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
+                    key,
+                    checklist_response_id,
+                    $scope.photoMap[key],
+                        function(result, event){
+                            if (event.status) {
+                                // console.log('success!');
+                                var attachment_id = result;
+                                console.log('attachment: https://c.na15.visual.force.com/' + attachment_id);
+                            } else if (event.type === 'exception') {
+                                console.log('Exception: ' + event.message);
+                            } else {
+                                console.log('Error!');
+                            }
+                        },
+                    {escape: true}
+                );
+            }
+        }
+    };
     $scope.submitForm = function() {
         var that = this;
         formHelper();
@@ -362,34 +386,13 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
         }
         var checklist_response = $('#checklist_id').val(); 
 
-        if (Object.keys($scope.photoMap).length > 0) {
-            for (var key in $scope.photoMap) {
-                Visualforce.remoting.Manager.invokeAction(
-                    '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
-                    key,
-                    $scope.photoMap[key],
-                        function(result, event){
-                            if (event.status) {
-                                // console.log('success!');
-                                var attachment_id = result;
-                                console.log('attachment: https://c.na15.visual.force.com/' + attachment_id);
-                            } else if (event.type === 'exception') {
-                                console.log('Exception: ' + event.message);
-                            } else {
-                                console.log('Error!');
-                            }
-                        },
-                    {escape: true}
-                );
-            }
-        }
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.submit_responses}',
             checklist_response,
             $scope.checklistitems,
                 function(result, event){
                     if (event.status) {
-                        $scope.checklistitems = result; 
+                        photoHelper(result);
                         userService.edit_checklist_items(checklist_response);
                     } else if (event.type === 'exception') {
                         console.log('Exception: ' + event.message);
@@ -413,35 +416,13 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
         }
         */
         var checklist_response = $('#checklist_id').val(); // works for pending to completed
-        
-        if (Object.keys($scope.photoMap).length > 0) {
-            for (var key in $scope.photoMap) {
-                Visualforce.remoting.Manager.invokeAction(
-                    '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
-                    key,
-                    $scope.photoMap[key],
-                        function(result, event){
-                            if (event.status) {
-                                // console.log('success!');
-                                var attachment_id = result;
-                                console.log('attachment: https://c.na15.visual.force.com/' + attachment_id);
-                            } else if (event.type === 'exception') {
-                                console.log('Exception: ' + event.message);
-                            } else {
-                                console.log('Error!');
-                            }
-                        },
-                    {escape: true}
-                );
-            }
-        }
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.save_responses}',
             checklist_response,
             $scope.checklistitems,
                 function(result, event){
                     if (event.status) {
-                        $scope.checklistitems = result; 
+                        photoHelper(result);
                         userService.edit_checklist_items(checklist_response);
                     } else if (event.type === 'exception') {
                         console.log('Exception: ' + event.message);
