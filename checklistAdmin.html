@@ -52,7 +52,7 @@ id="todo"
       <p> Id: {{item.Id}} </p>
       <input type="submit" value="Submit" ng-click="editChecklist()"></input>
       </li>
-      <div ng-repeat="question in questions | filter:{isActive__c:'true'}" draggable="true">
+      <div ng-repeat="question in questions | filter:{isActive__c:'true'}" draggable="true" class="question">
         <p ng-show="inDB(question)">{{question.Question__c}}</p>
         <input ng-show="!inDB(question)" type="text" ng-model="question.Question__c" ng-required="true"></input>
         Order:
@@ -213,7 +213,39 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     };
     $scope.getChecklistItems();
 });
+checklistApp.directive('draggable', function() {
+    return function(scope, element) {
+        var el = element[0];
+        el.draggable = true;
+        el.addEventListener(
+          'dragstart',
+          function(e) {
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('Text', this.Id);
+          this.classList.add('drag');
+          return false;
+          },
+          false;
+          );
+        e1.addEventListener(
+            'dragend',
+            function(e) {
+                this.classList.remove('drag');
+                return false;
+            },
+            false;
+          );
+    }
+    })
 </script>
 
+<script>
+//Drag and drop
+function handleDragStart(e) {
+    this.style.opacity = '0.4';
+}
+
+var 
+</script>
 </html>
 </apex:page>
