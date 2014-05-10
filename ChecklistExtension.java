@@ -163,10 +163,23 @@ global with sharing class ChecklistExtension {
     }
 
     @RemoteAction
-    global static void photo_remotecall(Map<String, String> photoMap) {
-        if (photoMap == null || photoMap.size() == 0)
-            return;
-        // do other stuff to handle photoMap
+    global static Id photo_remotecall(Id id, Blob bitphoto) {
+        if (id == null || bitphoto == null) {
+            return null;
+        }
+        List<Attachment> a = [SELECT Id FROM Attachment WHERE ParentId=:id];
+        if (a.size() != 0) {
+            for (Integer i=0; i<a.size(); i++) {
+                delete a[i];
+            }
+        }
+        Attachment attach = new Attachment();
+        attach.Body = bitphoto;
+        attach.Name = 'Photo for response: ' + id;
+        // attach.ContentType = ;
+        attach.ParentID = id;
+        insert attach;
+        return attach.Id;
     }
 
 }
