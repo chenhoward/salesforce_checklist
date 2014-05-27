@@ -81,7 +81,8 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.checklist.name = 'Default Name';
     $scope.checklist.description = 'Default Description';
     $scope.checklists = {!CheckLists};
-    console.log('set');
+    console.log($scope.checklists);
+    var emptyDB = $scope.checklists.length == 0;
     $scope.checklists2 = $scope.checklists;
     $scope.item = $scope.checklists[0];
     $scope.types = ['Yes/No', 'Number', 'Text', 'Date','Long Text', 'Rating', 'Picklist', 'Multi-Select'];
@@ -211,41 +212,10 @@ checklistApp.controller("AdminCtrl", function ($scope) {
           {escape:true}
           );
     };
-    $scope.getChecklistItems();
-});
-checklistApp.directive('draggable', function() {
-    return function(scope, element) {
-        var el = element[0];
-        el.draggable = true;
-        el.addEventListener(
-          'dragstart',
-          function(e) {
-          e.dataTransfer.effectAllowed = 'move';
-          e.dataTransfer.setData('Text', this.Id);
-          this.classList.add('drag');
-          return false;
-          },
-          false;
-          );
-        e1.addEventListener(
-            'dragend',
-            function(e) {
-                this.classList.remove('drag');
-                return false;
-            },
-            false;
-          );
+    if (!emptyDB) {
+        $scope.getChecklistItems();
     }
-    })
-</script>
-
-<script>
-//Drag and drop
-function handleDragStart(e) {
-    this.style.opacity = '0.4';
-}
-
-var 
+});
 </script>
 </html>
 </apex:page>
