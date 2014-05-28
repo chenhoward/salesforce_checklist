@@ -141,6 +141,7 @@ myApp.service('userService', function() {
       function(result, event){
       if (event.status) {
       checklistitems = result;
+
       for (var i=0; i<checklistitems.length; i++) {
       var type = checklistitems[i].Checklist_Item__r.Type__c;
       if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
@@ -439,6 +440,7 @@ var controllers = {};
 controllers.PagesController = function ($scope, userService) {
   // var checklist = getUrlVars()['checklist_id']; 
   var response = getUrlVars()['id']; 
+
   function basePageState() {
     $scope.newlistPageActive = false;
     $scope.detailPageActive = false;
@@ -446,7 +448,19 @@ controllers.PagesController = function ($scope, userService) {
     $scope.newlistPageActive = false;
     $scope.completedListPageActive = false;
     $scope.pendinglistPageActive = false;
+  };
+
+  function setupDetail(checklist_id) {
+    $scope.detailPageActive = true;
+    $scope.mapActive = true;
+    setTimeout(function(){
+        setupPhoto();
+        },2000);
+    $("#messages").text('');
+    $scope.checklist_id = checklist_id;
+    $('#checklist_id').val(checklist_id);
   }
+
   // Specific checklist
   // if (checklist != null ) {
   //     userService.get_checklist_items(checklist);
@@ -472,30 +486,15 @@ controllers.PagesController = function ($scope, userService) {
   $scope.homePageActive = true;
 
   $scope.goToCreateDetailPage = function(checklist_id) {
-    $scope.detailPageActive = true;
-    $("#messages").text('');
-    $scope.checklist_id = checklist_id;
-    $('#checklist_id').val(checklist_id);
+    setupDetail(checklist_id);
     userService.get_checklist_items(checklist_id);
-    $scope.newlistPageActive = false;
-    $scope.pendinglistPageActive = false;
-    $scope.completedListPageActive = false;
-    setTimeout(function(){
-        setupPhoto();
-        },2000)
-  };
+  }
+
   $scope.goToEditDetailPage = function(checklist_id) {
-    basePageState();
-    $scope.mapActive = true;
-    $scope.detailPageActive = true;
-    $("#messages").text('');
-    $scope.checklist_id = checklist_id;
-    $('#checklist_id').val(checklist_id);
+    setupDetail(checklist_id);
     userService.edit_checklist_items(checklist_id);
-    setTimeout(function(){
-        setupPhoto();
-        },2000)
-  };
+  }
+
   $scope.goToNewListpage = function() {
     $("#messages").text('');
     $('#submit_button').show();
@@ -503,7 +502,8 @@ controllers.PagesController = function ($scope, userService) {
     $('#checklist_id').val('');
     basePageState();
     $scope.newlistPageActive = true;
-  };
+  }
+
   $scope.goToPendingListpage = function() {
     $("#messages").text('');
     $('#submit_button').show();
