@@ -439,7 +439,14 @@ var controllers = {};
 controllers.PagesController = function ($scope, userService) {
   // var checklist = getUrlVars()['checklist_id']; 
   var response = getUrlVars()['id']; 
-
+  function basePageState() {
+    $scope.newlistPageActive = false;
+    $scope.detailPageActive = false;
+    $scope.mapActive = false;
+    $scope.newlistPageActive = false;
+    $scope.completedListPageActive = false;
+    $scope.pendinglistPageActive = false;
+  }
   // Specific checklist
   // if (checklist != null ) {
   //     userService.get_checklist_items(checklist);
@@ -455,7 +462,6 @@ controllers.PagesController = function ($scope, userService) {
     $scope.checklist_id = response;
     $scope.mapActive = true;
     $scope.detailPageActive = true;
-    $scope.homePageActive = true;
   }
   // if (checklist == undefined && response == undefined) {
   //     $scope.detailPageActive = false;
@@ -463,9 +469,8 @@ controllers.PagesController = function ($scope, userService) {
   //     $scope.newlistPageActive = false;
   //     $scope.homePageActive = true;
   // }
-  else {
-    $scope.homePageActive = true;
-  }
+  $scope.homePageActive = true;
+
   $scope.goToCreateDetailPage = function(checklist_id) {
     $scope.detailPageActive = true;
     $("#messages").text('');
@@ -480,15 +485,13 @@ controllers.PagesController = function ($scope, userService) {
         },2000)
   };
   $scope.goToEditDetailPage = function(checklist_id) {
+    basePageState();
+    $scope.mapActive = true;
     $scope.detailPageActive = true;
     $("#messages").text('');
     $scope.checklist_id = checklist_id;
     $('#checklist_id').val(checklist_id);
-    $scope.newlistPageActive = false;
-    $scope.pendinglistPageActive = false;
-    $scope.completedListPageActive = false;
     userService.edit_checklist_items(checklist_id);
-    $scope.mapActive = true;
     setTimeout(function(){
         setupPhoto();
         },2000)
@@ -498,10 +501,7 @@ controllers.PagesController = function ($scope, userService) {
     $('#submit_button').show();
     $('#save_button').show();
     $('#checklist_id').val('');
-    $scope.detailPageActive = false;
-    $scope.mapActive = false;
-    $scope.pendinglistPageActive = false;
-    $scope.completedListPageActive = false;
+    basePageState();
     $scope.newlistPageActive = true;
   };
   $scope.goToPendingListpage = function() {
@@ -509,20 +509,13 @@ controllers.PagesController = function ($scope, userService) {
     $('#submit_button').show();
     $('#save_button').show();
     userService.get_pending_CLRI();
-    $scope.newlistPageActive = false;
-    $scope.detailPageActive = false;
-    $scope.mapActive = false;
-    $scope.newlistPageActive = false;
-    $scope.completedListPageActive = false;
+    basePageState();
     $scope.pendinglistPageActive = true;
   };
   $scope.goTocompletedListPage = function() {
     $("#messages").text('');
     userService.get_completed_CLRI();
-    $scope.newlistPageActive = false;
-    $scope.detailPageActive = false;
-    $scope.mapActive = false;
-    $scope.pendinglistPageActive = false;
+    basePageState();
     $scope.completedListPageActive = true;
     $('#submit_button').hide();
     $('#save_button').hide();
