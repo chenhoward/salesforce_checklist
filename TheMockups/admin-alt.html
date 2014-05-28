@@ -12,48 +12,42 @@
   #cart { width: 800px; float: left; }
   /* style the list to maximize the droppable hitarea */
   #cart .ui-widget-header {
-      padding-left: 70px;
+    padding-left: 70px;
   }
   #cart ol { margin: 0; padding-left: 100px; padding-right: 100px; }
   .ui-widget-header {
-      margin: 25px;
-      font-size: 35px;
-      font-family: Source Sans Pro, sans-serif;
-      font-weight: 400;
-      color: #333333;
+    margin: 25px;
+    font-size: 35px;
+    font-family: Source Sans Pro, sans-serif;
+    font-weight: 400;
+    color: #333333;
   }
   li {
-      list-style-type: none;
-      margin: 10px;
-      margin-left: -10px;
-      padding: 30px;
-      font-family: Source Sans Pro, sans-serif;
-      font-weight: 400;
-      color: #FFFFFF;
-      background: #FF6600;
+    list-style-type: none;
+    margin: 10px;
+    margin-left: -10px;
+    padding: 30px;
+    font-family: Source Sans Pro, sans-serif;
+    font-weight: 400;
+    color: #FFFFFF;
+    background: #FF6600;
   }
   #placeholder {
-      background: #FFFFFF !important;
-      border: 2px dashed #CCCCCC;
-      color: #CCCCCC !important;
+    background: #FFFFFF !important;
+    border: 2px dashed #CCCCCC;
+    color: #CCCCCC !important;
+  }
+  #placeholder:hover {
+    cursor: pointer;
+    background: #EBEBEB !important;
+  }
+  label {
+    margin-right: 15px;
   }
   </style>
   <script>
   $(function() {
-    $( "#catalog" ).accordion();
-    $( "#catalog li" ).draggable({
-      appendTo: "body",
-      helper: "clone"
-    });
-    $( "#cart ol" ).droppable({
-      activeClass: "ui-state-default",
-      hoverClass: "ui-state-hover",
-      accept: ":not(.ui-sortable-helper)",
-      drop: function( event, ui ) {
-        $( "<li></li>" ).text(ui.draggable.text()).appendTo(this);
-        $(this).find( ".placeholder" ).appendTo(this);
-      }
-    }).sortable({
+    $( "#cart ol" ).sortable({
       items: "li:not(.placeholder)",
       sort: function() {
         // gets added unintentionally by droppable interacting with sortable
@@ -63,36 +57,38 @@
     });
   });
   </script>
+  <script>
+  function addQuestion(form)
+  {
+    $( "<li> \
+        <label for='type'> Question Type </label> \
+        <select id='type'> \
+          <option value='text'> Text </option> \
+          <option value='message'> Message </option> \
+          <option value='number'> Number </option> \
+          <option value='date'> Date </option> \
+        </select> \
+        <br><br> \
+        <label for='question'> Question Text </label> \
+        <input type='text' id='question'> </input> \
+        <br><br> \
+        <label for='photo'> Need photo? </label> \
+        <input type='checkbox' id='photo'> </input> \
+      </li>" ).appendTo(form);
+    $(form).find( ".placeholder" ).appendTo(form);
+  }
+  </script>
 </head>
 <body>
- 
-<div id="products">
-<h1 class="ui-widget-header">Questions</h1>
-  <div id="catalog">
-    <ul>
-        <li>Text</li>
-        <li>Yes/No</li>
-        <li>Pass/Fail</li>
-        <li>Message</li>
-        <li>Number</li>
-        <li>Date</li>
-        <li>Picklist</li>
-        <li>Checklist</li>
-        <li>Rating</li>
-        <li>Radio</li>
-    </ul>
+  <div id="cart">
+    <h1 class="ui-widget-header"> Checklist </h1>
+    <div class="ui-widget-content">
+      <ol id="sortable">
+        <li class="placeholder" id="placeholder" onclick="addQuestion( '#cart ol' )"> + Click here to add a question </li>
+      </ol>
+    </div>
   </div>
-</div>
- 
-<div id="cart">
-  <h1 class="ui-widget-header">Checklist</h1>
-  <div class="ui-widget-content">
-    <ol id="sortable">
-      <li class="placeholder" id="placeholder">Drag and drop your questions on this form</li>
-    </ol>
-  </div>
-</div>
- 
- 
+
+
 </body>
 </html>
