@@ -46,13 +46,20 @@ global class ChecklistUtilities {
         return checklistItems;
     }
 
+    /** Updates the CHECKLIST. */
     global static Checklist__c updateChecklist(Checklist__c checklist) {
         update checklist;
         return checklist;
     }
 
+    /** Update the CHECKLISTITEMS */
     global static Checklist_Item__c[] updateChecklistItems(Checklist_Item__c[] checklistItems) {
         update checklistItems;
         return checklistItems;
+    }
+
+    /** Returns all the checklists in the database. */
+    global static List<Checklist__c> getAllChecklists(){
+        return [SELECT Id, Name, Description__c FROM Checklist__c];
     }
 }

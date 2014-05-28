@@ -4,8 +4,8 @@ global with sharing class ChecklistExtension {
 
     // public static final String[] QUESTION_Types = new String[]{"Yes_No", "Number", "Text", "Date", "Long_Text", "Rating", "Picklist", "Multi_Select", "Photo"};
 
-    public static String getCheckLists() {
-       List<Checklist__c> checklists = getAllChecklists(); 
+    public static String getChecklists() {
+       List<Checklist__c> checklists = ChecklistUtilities.getAllChecklists(); 
        return JSON.serialize(checklists);
     } 
 
@@ -22,10 +22,6 @@ global with sharing class ChecklistExtension {
                                                 Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Complete'];
        return checklists;
     } 
-
-    public static List<Checklist__c> getAllChecklists(){
-        return [SELECT Id, Name, Description__c FROM Checklist__c];
-    }
 
     public static List<Checklist_Item_Response__c> getAllChecklistItems(Id checklist){
         List<Checklist_Item__c> to_return = [SELECT Id, Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c, Attach_Photo__c 
