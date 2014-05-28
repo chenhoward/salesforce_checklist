@@ -4,9 +4,9 @@ global with sharing class ChecklistExtension {
 
     // public static final String[] QUESTION_Types = new String[]{"Yes_No", "Number", "Text", "Date", "Long_Text", "Rating", "Picklist", "Multi_Select", "Photo"};
 
+    /** Returns the JSON form of all checklists. */
     public static String getChecklists() {
-       List<Checklist__c> checklists = ChecklistUtilities.getAllChecklists(); 
-       return JSON.serialize(checklists);
+       return JSON.serialize(ChecklistUtilities.getAllChecklists());
     } 
 
     @RemoteAction
