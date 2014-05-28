@@ -141,6 +141,7 @@ myApp.service('userService', function() {
       function(result, event){
       if (event.status) {
       checklistitems = result;
+
       for (var i=0; i<checklistitems.length; i++) {
       var type = checklistitems[i].Checklist_Item__r.Type__c;
       if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
@@ -440,6 +441,36 @@ controllers.PagesController = function ($scope, userService) {
   // var checklist = getUrlVars()['checklist_id']; 
   var response = getUrlVars()['id']; 
 
+  function basePageState() {
+    $scope.newlistPageActive = false;
+    $scope.detailPageActive = false;
+    $scope.mapActive = false;
+    $scope.newlistPageActive = false;
+    $scope.completedListPageActive = false;
+    $scope.pendinglistPageActive = false;
+  };
+
+  function setupDetail(checklist_id) {
+    $scope.detailPageActive = true;
+    $scope.mapActive = true;
+    setTimeout(function(){
+        setupPhoto();
+        },2000);
+    $("#messages").text('');
+    $scope.checklist_id = checklist_id;
+    $('#checklist_id').val(checklist_id);
+  }
+
+  function buttonShow(show) {
+    $("#messages").text('');
+    if (show) {
+      $('#submit_button').show();
+      $('#save_button').show();
+    } else {
+      $('#submit_button').hide();
+      $('#save_button').hide();
+    }
+  }
   // Specific checklist
   // if (checklist != null ) {
   //     userService.get_checklist_items(checklist);
@@ -455,7 +486,6 @@ controllers.PagesController = function ($scope, userService) {
     $scope.checklist_id = response;
     $scope.mapActive = true;
     $scope.detailPageActive = true;
-    $scope.homePageActive = true;
   }
   // if (checklist == undefined && response == undefined) {
   //     $scope.detailPageActive = false;
@@ -463,69 +493,36 @@ controllers.PagesController = function ($scope, userService) {
   //     $scope.newlistPageActive = false;
   //     $scope.homePageActive = true;
   // }
-  else {
-    $scope.homePageActive = true;
-  }
+  $scope.homePageActive = true;
+
   $scope.goToCreateDetailPage = function(checklist_id) {
-    $scope.detailPageActive = true;
-    $("#messages").text('');
-    $scope.checklist_id = checklist_id;
-    $('#checklist_id').val(checklist_id);
+    setupDetail(checklist_id);
     userService.get_checklist_items(checklist_id);
-    $scope.newlistPageActive = false;
-    $scope.pendinglistPageActive = false;
-    $scope.completedListPageActive = false;
-    setTimeout(function(){
-        setupPhoto();
-        },2000)
-  };
+  }
+
   $scope.goToEditDetailPage = function(checklist_id) {
-    $scope.detailPageActive = true;
-    $("#messages").text('');
-    $scope.checklist_id = checklist_id;
-    $('#checklist_id').val(checklist_id);
-    $scope.newlistPageActive = false;
-    $scope.pendinglistPageActive = false;
-    $scope.completedListPageActive = false;
+    setupDetail(checklist_id);
     userService.edit_checklist_items(checklist_id);
-    $scope.mapActive = true;
-    setTimeout(function(){
-        setupPhoto();
-        },2000)
-  };
+  }
+
   $scope.goToNewListpage = function() {
-    $("#messages").text('');
-    $('#submit_button').show();
-    $('#save_button').show();
+    buttonShow(true);
     $('#checklist_id').val('');
-    $scope.detailPageActive = false;
-    $scope.mapActive = false;
-    $scope.pendinglistPageActive = false;
-    $scope.completedListPageActive = false;
+    basePageState();
     $scope.newlistPageActive = true;
-  };
+  }
+
   $scope.goToPendingListpage = function() {
-    $("#messages").text('');
-    $('#submit_button').show();
-    $('#save_button').show();
+    buttonShow(true);
     userService.get_pending_CLRI();
-    $scope.newlistPageActive = false;
-    $scope.detailPageActive = false;
-    $scope.mapActive = false;
-    $scope.newlistPageActive = false;
-    $scope.completedListPageActive = false;
+    basePageState();
     $scope.pendinglistPageActive = true;
   };
   $scope.goTocompletedListPage = function() {
-    $("#messages").text('');
+    buttonShow(false);
     userService.get_completed_CLRI();
-    $scope.newlistPageActive = false;
-    $scope.detailPageActive = false;
-    $scope.mapActive = false;
-    $scope.pendinglistPageActive = false;
+    basePageState();
     $scope.completedListPageActive = true;
-    $('#submit_button').hide();
-    $('#save_button').hide();
   };
 }
 
