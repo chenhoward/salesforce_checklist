@@ -2,6 +2,7 @@
 <html>
 <head>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script type="text/javascript" src="raty/raty.js"></script>
 <script type="text/javascript" src="scroll.js"></script>
 <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:200' rel='stylesheet' type='text/css'>
 <title> Checker </title>
@@ -363,6 +364,11 @@ input[type="checkbox"]:checked {
                     </select>
                     <div class="arrow-bottom">
                     </div>
+                </div>
+                <div class="question">
+                    <p> This is a rating question? </p>
+                    <div class="rating1"></div>
+                    <script> $('.rating1').raty(); </script>
                 </div>
                 <div class="question">
                     <p> This is a check list question? </p>

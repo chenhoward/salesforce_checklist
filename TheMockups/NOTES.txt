@@ -1,20 +1,18 @@
-NOTES
+Floating toolbar:
 
-Search bar could cause complications, since you will be modifying the form.
-Unless search bar was more of a CTRL+F where you jump to the given place.
+* Question/questions (try to)
+* Progress bar? (otherwise)
+* Overall maps view of all checklists with map icon
 
-white background behind the checklists
+Miscellaneous:
 
-hover over counting question / total questions.
+* PASS/FAIL question
+* Camera icon question
+* Ellipses
 
-Custom branding ideas?
+Salesforce1 Garage:
 
-fix toggle so one click changes (DONE)
-
-Value for rating slider + min + max
-
-Star rating
-
-Rating using radio buttons, Excellent to okay to bad
-
-Mainpage_link and ulti-select ellipses
+* Salesforce1 play on logo
+* Garage image
+* Remove top navigation circles?
+* General update
