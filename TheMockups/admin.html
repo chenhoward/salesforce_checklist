@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin Panel</title>
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300' rel='stylesheet' type='text/css'/>
+  <style>
+  h1 { padding: .2em; margin: 0; }
+  #products { float:left; width: 300px; }
+  #cart { width: 800px; float: left; }
+  /* style the list to maximize the droppable hitarea */
+  #cart .ui-widget-header {
+      padding-left: 70px;
+  }
+  #cart ol { margin: 0; padding-left: 100px; padding-right: 100px; }
+  .ui-widget-header {
+      margin: 25px;
+      font-size: 35px;
+      font-family: Source Sans Pro, sans-serif;
+      font-weight: 400;
+      color: #333333;
+  }
+  li {
+      list-style-type: none;
+      margin: 10px;
+      margin-left: -10px;
+      padding: 30px;
+      font-family: Source Sans Pro, sans-serif;
+      font-weight: 400;
+      color: #FFFFFF;
+      background: #FF6600;
+  }
+  #placeholder {
+      background: #FFFFFF !important;
+      border: 2px dashed #CCCCCC;
+      color: #CCCCCC !important;
+  }
+  </style>
+  <script>
+  $(function() {
+    $( "#catalog" ).accordion();
+    $( "#catalog li" ).draggable({
+      appendTo: "body",
+      helper: "clone"
+    });
+    $( "#cart ol" ).droppable({
+      activeClass: "ui-state-default",
+      hoverClass: "ui-state-hover",
+      accept: ":not(.ui-sortable-helper)",
+      drop: function( event, ui ) {
+        $( "<li></li>" ).text(ui.draggable.text()).appendTo(this);
+        $(this).find( ".placeholder" ).appendTo(this);
+      }
+    }).sortable({
+      items: "li:not(.placeholder)",
+      sort: function() {
+        // gets added unintentionally by droppable interacting with sortable
+        // using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
+        $( this ).removeClass( "ui-state-default" );
+      }
+    });
+  });
+  </script>
+</head>
+<body>
+ 
+<div id="products">
+<h1 class="ui-widget-header">Questions</h1>
+  <div id="catalog">
+    <ul>
+        <li>Text</li>
+        <li>Yes/No</li>
+        <li>Pass/Fail</li>
+        <li>Message</li>
+        <li>Number</li>
+        <li>Date</li>
+        <li>Picklist</li>
+        <li>Checklist</li>
+        <li>Rating</li>
+        <li>Radio</li>
+    </ul>
+  </div>
+</div>
+ 
+<div id="cart">
+  <h1 class="ui-widget-header">Checklist</h1>
+  <div class="ui-widget-content">
+    <ol id="sortable">
+      <li class="placeholder" id="placeholder">Drag and drop your questions here</li>
+    </ol>
+  </div>
+</div>
+ 
+ 
+</body>
+</html>
