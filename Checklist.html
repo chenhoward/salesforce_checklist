@@ -461,6 +461,16 @@ controllers.PagesController = function ($scope, userService) {
     $('#checklist_id').val(checklist_id);
   }
 
+  function buttonShow(show) {
+    $("#messages").text('');
+    if (show) {
+      $('#submit_button').show();
+      $('#save_button').show();
+    } else {
+      $('#submit_button').hide();
+      $('#save_button').hide();
+    }
+  }
   // Specific checklist
   // if (checklist != null ) {
   //     userService.get_checklist_items(checklist);
@@ -496,29 +506,23 @@ controllers.PagesController = function ($scope, userService) {
   }
 
   $scope.goToNewListpage = function() {
-    $("#messages").text('');
-    $('#submit_button').show();
-    $('#save_button').show();
+    buttonShow(true);
     $('#checklist_id').val('');
     basePageState();
     $scope.newlistPageActive = true;
   }
 
   $scope.goToPendingListpage = function() {
-    $("#messages").text('');
-    $('#submit_button').show();
-    $('#save_button').show();
+    buttonShow(true);
     userService.get_pending_CLRI();
     basePageState();
     $scope.pendinglistPageActive = true;
   };
   $scope.goTocompletedListPage = function() {
-    $("#messages").text('');
+    buttonShow(false);
     userService.get_completed_CLRI();
     basePageState();
     $scope.completedListPageActive = true;
-    $('#submit_button').hide();
-    $('#save_button').hide();
   };
 }
 
