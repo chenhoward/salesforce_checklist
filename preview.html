@@ -84,6 +84,30 @@ id="todo"
         });
     });
     </script>
+    <script>
+    $("#checklist-form input").keyup(function() {
+        var numValid = 0,
+            total = 0;
+        $("#checklist-form input[required]").each(function() {
+            if (this.validity.valid) {
+                numValid++;
+            }
+            total++;
+        });
+        // "Cached" somewhere once
+        var progress = $("#progress"),
+            progressMessage = $("#progressMessage");
+
+        if (numValid == 0) {
+            progress.attr("value", "0");
+            progressMessage.text("The form, it wants you.");
+        }
+        if (numValid == 1) {
+            progress.attr("value", "20");
+            progressMessage.text("There you go, great start!");
+        }
+    });
+    </script>
     <apex:includeScript value="{!URLFOR($Resource.RollCallAssets, 'fastclick/fastclick.js')}"/>
     <title> Checker </title>
     <style type="text/css">
@@ -655,6 +679,16 @@ id="todo"
         height: 100%;
         border: none;
     }
+
+    .progress-wrap {
+        box-styling: border-box;
+        padding: 15px;
+        background: #333333;
+    }
+
+    .progress-message {
+        color: #FFFFFF;
+    }
     </style>
 </head>
 <body>
@@ -743,16 +777,20 @@ id="todo"
                 </a>-->
             </section>
             <section id="two">
-                <form>
+                <form id="checklist-form">
+                    <!--<div class="progress-wrap">
+                        <progress max="100" value="0" id="progress"></progress>
+                        <div class="progress-message" id="progress-message">Does this even show up?</div>
+                    </div>-->
                     <img class="x" id="hide-checklist" src="{!$Resource.checklist_x}"></img>
                     <div class="title"> Checklist With A Long Name Like This  </div>
                     <div class="question">
                         <p> This is a text question? </p>
-                        <input type="text" name="text"></input>
+                        <input type="text" name="text" required="required"></input>
                     </div>
                     <div class="question">
                         <p> This is a text question that involves picture input? </p>
-                        <input type="text" name="text"></input>
+                        <input type="text" name="text" required="required"></input>
                         <p> 
                             <img class="camera" src="{!$Resource.checklist_camera}"></img>
                             <span class="camera-blurb"> + Photo </span>
@@ -760,7 +798,7 @@ id="todo"
                     </div>
                     <div class="question">
                         <p> This is a text question that is slightly longer? </p>
-                        <input type="text" name="text"></input>
+                        <input type="text" name="text" required="required"></input>
                     </div>
                     <div class="question">
                         <p> This is a text question that is moderately longer for fun? </p>
