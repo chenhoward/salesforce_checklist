@@ -752,271 +752,136 @@ id="todo"
 
                     </span>
                   </div>
-                  <div class="question">
-                    <p> This is a text question? </p>
-                    <input type="text" name="text"></input>
-                  </div>
-                  <div class="question">
-                    <p> This is a text question that involves picture input? </p>
-                    <input type="text" name="text"></input>
-                    <p> 
-                      <img class="camera" src="{!$Resource.checklist_camera}"></img>
-                      <span class="camera-blurb"> + Photo </span>
-                    </p>
-                  </div>
-                  <div class="question">
-                    <p> This is a text question that is slightly longer? </p>
-                    <input type="text" name="text"></input>
-                  </div>
-                  <div class="question">
-                    <p> This is a text question that is moderately longer for fun? </p>
-                    <input type="text" name="text"></input>
-                  </div>
-                  <div class="question">
-                    <p> This is a text question that is much longer because I need to test how my design handles length? </p>
-                    <input type="text" name="text"></input>
-                  </div>
-                  <div class="question">
-                    <p> This is a yes or no question? </p>
-                    <p class="toggle-spacer"></p>
-                    <input type="checkbox" id="yesno" name="yesno"></input>
-                    <label class="switch repaint" for="yesno" id="yes-button"> Yes </label>
-                    <label class="switch repaint" for="yesno" id="no-button"> No </label>
-                  </div>
-                  <div class="question">
-                    <p> This is a pass or fail question? </p>
-                    <p class="toggle-spacer"></p>
-                    <input type="checkbox" id="passfail" name="passfail"></input>
-                    <label class="switch repaint" for="passfail" id="pass-button"> Pass </label>
-                    <label class="switch repaint" for="passfail" id="fail-button"> Fail </label>
-                  </div>
-                  <div class="question">
-                    <p> This is a long text question? </p>
-                    <textarea></textarea>
-                  </div>
-                  <div class="question">
-                    <p> This is a number question? </p>
-                    <input type="number" name="number"></input>
-                  </div>
-                    <!--
-                    <div class="question">
-                        <p> This is a slider rating question? </p>
-                        <div id="serialization" class="noUi-target noUi-ltr noUi-horizontal noUi-background"><div class="noUi-base"><div class="noUi-origin" style="left: 16.6666667%;"><div class="noUi-handle noUi-handle-lower"></div></div></div><input id="input"/></div>
-                        <span class="example-val" id="span">30,000</span>
-                        <script>
-                            $("#serialization").noUiSlider({
-                                start: [ 20 ],
-                                step: 10,
-                                range: {
-                                    'min': [ 20 ],
-                                    'max': [ 80 ]
-                                },
-                                serialization: {
-                                    lower: [
-                                      $.Link({
-                                        target: $('#span')
-                                      }),
-                                      $.Link({
-                                        target: $('#input')
-                                      })
-                                    ],
-                                    format: {
-                                        decimals: 3,
-                                        mark: ','
-                                    }
-                                }
-                            });
-                        </script>
-                      </div>-->
-                      <div class="question">
-                        <p> This is a date question? </p>
-                        <input type="date" name="date"></input>
-                      </div>
-                      <div class="question">
-                        <p> This is a pick list question? </p>
-                        <select>
-                          <option value="vincent"> Vincent </option>
-                          <option value="howard"> Howard </option>
-                          <option value="kevin"> Kevin </option>
-                          <option value="sandeep"> Sandeep </option>
-                        </select>
-                        <div class="arrow-bottom">
-                        </div>
-                      </div>
-                      <div class="question">
-                        <p> This is a check list question? </p>
-                        <p class="check-spacer"></p>
-                        <input type="checkbox" name="Vincent"></input>
-                        <label class="check-label" for="Vincent"> Vincent </label>
-                        <p class="check-spacer"></p>
-                        <input type="checkbox" name="Howard"></input>
-                        <label class="check-label" for="Howard"> Howard </label>
-                        <p class="check-spacer"></p>
-                        <input type="checkbox" name="Kevin"></input>
-                        <label class="check-label" for="Kevin"> Kevin </label>
-                        <p class="check-spacer"></p>
-                        <input type="checkbox" name="Sandeep"></input>
-                        <label class="check-label" for="Sandeep"> Sandeep </label>
-                      </div>
-                      <div class="question">
-                        <p> This is a star rating question? </p>
-                        <p class="check-spacer"></p>
-                        <div class="rating repaint">
-                          <input type="radio" name="rating" value="0" checked="true" /><span id="hide"></span>
-                          <input type="radio" name="rating" value="1" /><span></span>
-                          <input type="radio" name="rating" value="2" /><span></span>
-                          <input type="radio" name="rating" value="3" /><span></span>
-                          <input type="radio" name="rating" value="4" /><span></span>
-                          <input type="radio" name="rating" value="5" /><span></span>
-                        </div>
-                      </div>
-                      <div class="question">
-                        <p> This is a radio button question? </p>
-                        <p class="check-spacer"></p>
-                        <input type="radio" name="experience"></input>
-                        <label class="check-label"> Very unsatisfied </label>
-                        <p class="check-spacer"></p>
-                        <input type="radio" name="experience"></input>
-                        <label class="check-label"> Unsatisfied </label>
-                        <p class="check-spacer"></p>
-                        <input type="radio" name="experience"></input>
-                        <label class="check-label"> Neutral </label>
-                        <p class="check-spacer"></p>
-                        <input type="radio" name="experience"></input>
-                        <label class="check-label"> Satisfied </label>
-                        <p class="check-spacer"></p>
-                        <input type="radio" name="experience"></input>
-                        <label class="check-label"> Very Satisfied </label>
-                      </div>
-                      <input class="submit last" type="button" name="submit" value="Submit" ng-click="submitForm()"></input>
-                    </form>
-                  </section>
-                  <section id="three">
-                    <div class="title"> Checklist With A Long Name Like This </div>
-                    <div class="question">
-                      <p id="conclusion"> You've just submitted a review of <span class="green_text"> Item 1</span>. </p>
-                    </div>
-                    <a class="link last" id="return" data-section="one" href="#"> Return </a>
-                  </section>
-                  <section id="four" ng-controller="CompletedListCtrl">
-                    <div class="spacer"> </div>
-                    <div class="link maplink" onclick="showMap()">
-                      <img class="map" src="{!$Resource.checklist_map}"></img>
-                      <p> View Map </p>
-                      <p class="blurb"> 2 Completed Locations </p>
-                    </div>
-                    <div class="link maplink" ng-repeat="checklist in completedchecklistresponses" ng-click="goToEditDetailPage(checklist.Id)"> 
-                      <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
-                      <p> {{checklist.Checklist__r.Name}} </p>
-                      <p class="blurb"> {{checklist.Checklist__r.Description__c}} </p>
-                    </div>
-                    <div class="spacer"> </div>
-                  </section>
+                  
+                  <input class="submit last" type="button" name="submit" value="Submit" ng-click="submitForm()"></input>
+                </form>
+              </section>
+              <section id="three">
+                <div class="title"> Checklist With A Long Name Like This </div>
+                <div class="question">
+                  <p id="conclusion"> You've just submitted a review of <span class="green_text"> Item 1</span>. </p>
                 </div>
-              </div>
-            </div>
-
-
-
-            <div ng-controller="PagesController">
-              <input class='normal' id='checklist_id' type='hidden' value='{!$CurrentPage.parameters.checklist_id}'/>
-              <div id="messages"></div>
-
-              <div id="homePage" ng-controller="homeCtrl" ng-show="homePageActive">
-                <div ng-click="goToNewListpage()"> Start a New Checklist </div>
-                <div ng-click="goToPendingListpage()">Work on a Pending Checklist</div>
-                <div ng-click="goTocompletedListPage()">Look at Completed Checklists</div>
-              </div>
-              <!-- End of homePage -->
-
-              <div id="completedListPage" ng-controller="CompletedListCtrl" ng-show="completedListPageActive">
-                <li ng-repeat="checklist in completedchecklistresponses" ng-click="goToEditDetailPage(checklist.Id)"> 
-                  <p> Name: {{checklist.Name}} </p>
-                  <p> Description: {{checklist.Description__c}} </p>
-                  <p> Id: {{checklist.Id}} </p>
-                </li>
-                <!-- <div ng-click="goHome()">Go Home</div> -->
-              </div>
-              <!-- End of newListPage -->
-
-              <div id="newListPage" ng-controller="NewListCtrl" ng-show="newlistPageActive">
-                <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist.Id)"> 
-                  <p> Name: {{checklist.Name}} </p>
-                  <p> Description: {{checklist.Description__c}} </p>
-                  <p> Id: {{checklist.Id}} </p>
-                </li>
-                <!-- <div ng-click="goHome()">Go Home</div> -->
-              </div>
-              <!-- End of newListPage -->
-
-              <div id="pendingListPage" ng-controller="PendingListCtrl" ng-show="pendinglistPageActive">
-                <li ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist.Id)"> 
-                  <p> Name: {{checklist.Name}} </p>
-                  <p> Description: {{checklist.Description__c}} </p>
-                  <p> Id: {{checklist.Id}} </p>
-                </li>
-                <!-- <div ng-click="goHome()">Go Home</div> -->
-              </div>
-              <!-- End of pendingListPage -->
-
-              <div id="checklistDetailPage" ng-controller="ChecklistCtrl" ng-show="detailPageActive">
-                <div id="checklist">
-                  <ul>
-                    <li ng-show="!checklistitems.length">No checklistitems</li>
-                    <form ng-submit="submitForm()">
-                      <li ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'"> 
-                        <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
-                          <p> Question: {{checklistitem.Checklist_Item__r.Question__c}} </p> 
-                          <p> Required: {{checklistitem.Checklist_Item__r.Required__c}} </p> 
-                          <p> Type: {{checklistitem.Checklist_Item__r.Type__c}} </p> 
-                          <p> Id: {{checklistitem.Checklist_Item__c}} </p> 
-                          <p> Checklist Id: {{checklistitem.Checklist_Item__r.Checklist__c}} </p> 
-                          <p> Order: {{checklistitem.Checklist_Item__r.Order__c}} </p> 
-                          <p> Photo: {{checklistitem.Checklist_Item__r.Attach_Photo__c}} </p> 
-                          <input id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                          <input id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-switch-when="Number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                          <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                          <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                          <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
-                          <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
-                          <!-- Multiple Values from Database -->
-                          <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Checklist_Item__r.Values[0]}}" max="{{checklistitem.Checklist_Item__r.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                          <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
-                            {{checklistitem.Answer__c}}
-                          </div>
-                          <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
-                          </select>
-                          <select ng-options="val for val in checklistitem.Checklist_Item__r.Values" ng-multiple="true" multiple="true" ng-switch-when="Multi-Select" ng-model="checklistitem.Answer__c"></select>
-                          <input type="file" class="photo" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
-                        </span>
-                      </li>
-                      <input id="submit_button" type="submit" value="Submit"> </input>
-                    </form>
-                    <button id="save_button" ng-click="saveResponse()"> Save Response </button>
-                  </ul>
-                  <!-- <div ng-click="goHome()">Back to Home</div> -->
-                  <div id="map" ng-show="mapActive"></div>
+                <a class="link last" id="return" data-section="one" href="#"> Return </a>
+              </section>
+              <section id="four" ng-controller="CompletedListCtrl">
+                <div class="spacer"> </div>
+                <div class="link maplink" onclick="showMap()">
+                  <img class="map" src="{!$Resource.checklist_map}"></img>
+                  <p> View Map </p>
+                  <p class="blurb"> 2 Completed Locations </p>
                 </div>
-              </div>
-              <!-- End of checklistDetailPage -->
-
+                <div class="link maplink" ng-repeat="checklist in completedchecklistresponses" ng-click="goToEditDetailPage(checklist.Id)"> 
+                  <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
+                  <p> {{checklist.Checklist__r.Name}} </p>
+                  <p class="blurb"> {{checklist.Checklist__r.Description__c}} </p>
+                </div>
+                <div class="spacer"> </div>
+              </section>
             </div>
-          </body>
+          </div>
+        </div>
 
-          <script>
-          /* Angular */
-          var myApp = angular.module('myApp', []);
-          var photoMap = {};
 
-          myApp.service('userService', function() {
 
-            var checklistitems;
-            var pendingchecklistresponses;
-            var completedchecklistresponses;
-            var checklists;
-            var checklist_id;
+        <div ng-controller="PagesController">
+          <input class='normal' id='checklist_id' type='hidden' value='{!$CurrentPage.parameters.checklist_id}'/>
+          <div id="messages"></div>
 
-            var observerCallbacks = [];
+          <div id="homePage" ng-controller="homeCtrl" ng-show="homePageActive">
+            <div ng-click="goToNewListpage()"> Start a New Checklist </div>
+            <div ng-click="goToPendingListpage()">Work on a Pending Checklist</div>
+            <div ng-click="goTocompletedListPage()">Look at Completed Checklists</div>
+          </div>
+          <!-- End of homePage -->
+
+          <div id="completedListPage" ng-controller="CompletedListCtrl" ng-show="completedListPageActive">
+            <li ng-repeat="checklist in completedchecklistresponses" ng-click="goToEditDetailPage(checklist.Id)"> 
+              <p> Name: {{checklist.Name}} </p>
+              <p> Description: {{checklist.Description__c}} </p>
+              <p> Id: {{checklist.Id}} </p>
+            </li>
+            <!-- <div ng-click="goHome()">Go Home</div> -->
+          </div>
+          <!-- End of newListPage -->
+
+          <div id="newListPage" ng-controller="NewListCtrl" ng-show="newlistPageActive">
+            <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist.Id)"> 
+              <p> Name: {{checklist.Name}} </p>
+              <p> Description: {{checklist.Description__c}} </p>
+              <p> Id: {{checklist.Id}} </p>
+            </li>
+            <!-- <div ng-click="goHome()">Go Home</div> -->
+          </div>
+          <!-- End of newListPage -->
+
+          <div id="pendingListPage" ng-controller="PendingListCtrl" ng-show="pendinglistPageActive">
+            <li ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist.Id)"> 
+              <p> Name: {{checklist.Name}} </p>
+              <p> Description: {{checklist.Description__c}} </p>
+              <p> Id: {{checklist.Id}} </p>
+            </li>
+            <!-- <div ng-click="goHome()">Go Home</div> -->
+          </div>
+          <!-- End of pendingListPage -->
+
+          <div id="checklistDetailPage" ng-controller="ChecklistCtrl" ng-show="detailPageActive">
+            <div id="checklist">
+              <ul>
+                <li ng-show="!checklistitems.length">No checklistitems</li>
+                <form ng-submit="submitForm()">
+                  <li ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'"> 
+                    <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
+                      <p> Question: {{checklistitem.Checklist_Item__r.Question__c}} </p> 
+                      <p> Required: {{checklistitem.Checklist_Item__r.Required__c}} </p> 
+                      <p> Type: {{checklistitem.Checklist_Item__r.Type__c}} </p> 
+                      <p> Id: {{checklistitem.Checklist_Item__c}} </p> 
+                      <p> Checklist Id: {{checklistitem.Checklist_Item__r.Checklist__c}} </p> 
+                      <p> Order: {{checklistitem.Checklist_Item__r.Order__c}} </p> 
+                      <p> Photo: {{checklistitem.Checklist_Item__r.Attach_Photo__c}} </p> 
+                      <input id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+                      <input id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-switch-when="Number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+                      <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+                      <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+                      <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
+                      <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
+                      <!-- Multiple Values from Database -->
+                      <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Checklist_Item__r.Values[0]}}" max="{{checklistitem.Checklist_Item__r.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+                      <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
+                        {{checklistitem.Answer__c}}
+                      </div>
+                      <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
+                      </select>
+                      <select ng-options="val for val in checklistitem.Checklist_Item__r.Values" ng-multiple="true" multiple="true" ng-switch-when="Multi-Select" ng-model="checklistitem.Answer__c"></select>
+                      <input type="file" class="photo" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
+                    </span>
+                  </li>
+                  <input id="submit_button" type="submit" value="Submit"> </input>
+                </form>
+                <button id="save_button" ng-click="saveResponse()"> Save Response </button>
+              </ul>
+              <!-- <div ng-click="goHome()">Back to Home</div> -->
+              <div id="map" ng-show="mapActive"></div>
+            </div>
+          </div>
+          <!-- End of checklistDetailPage -->
+
+        </div>
+      </body>
+
+      <script>
+      /* Angular */
+      var myApp = angular.module('myApp', []);
+      var photoMap = {};
+
+      myApp.service('userService', function() {
+
+        var checklistitems;
+        var pendingchecklistresponses;
+        var completedchecklistresponses;
+        var checklists;
+        var checklist_id;
+
+        var observerCallbacks = [];
     // Register an Observer
     this.registerObserverCallback = function(callback){
       observerCallbacks.push(callback);
@@ -1143,36 +1008,36 @@ this.edit_checklist_items = function(checklist_response_id) {
     },
     {escape: true}
     );
-                }
-                this.finish_checklist_response = function(checklist_response_id) {
-                  var that = this;
-                  Visualforce.remoting.Manager.invokeAction(
-                    '{!$RemoteAction.ChecklistExtension.finish_checklist_items}',
-                    checklist_response_id,
-                    function(result, event){
-                      if (event.status) {
-                        pendingchecklistresponses = result[0];
-                        completedchecklistresponses = result[1];
-                        that.notifyObservers();
-                      } else if (event.type === 'exception') {
-                        console.log('Exception: ' + event.message);
-                      } else {
-                        console.log('Error!');
-                      }
-                    },
-                    {escape: true}
-                    );
-                }
-                this.getCLIs = function () {
-                  return checklistitems;
-                };
-                this.getPendingCLRs = function() {
-                  return pendingchecklistresponses;
-                }
-                this.getCompletedCLRs = function() {
-                  return completedchecklistresponses;
-                }
-              })
+}
+this.finish_checklist_response = function(checklist_response_id) {
+  var that = this;
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ChecklistExtension.finish_checklist_items}',
+    checklist_response_id,
+    function(result, event){
+      if (event.status) {
+        pendingchecklistresponses = result[0];
+        completedchecklistresponses = result[1];
+        that.notifyObservers();
+      } else if (event.type === 'exception') {
+        console.log('Exception: ' + event.message);
+      } else {
+        console.log('Error!');
+      }
+    },
+    {escape: true}
+    );
+}
+this.getCLIs = function () {
+  return checklistitems;
+};
+this.getPendingCLRs = function() {
+  return pendingchecklistresponses;
+}
+this.getCompletedCLRs = function() {
+  return completedchecklistresponses;
+}
+})
 
 myApp.controller("homeCtrl", function ($scope, userService) {
 });
