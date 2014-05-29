@@ -739,7 +739,8 @@ id="todo"
                       <div  ng-switch-when="Multi-Select">
                         <div ng-repeat="val in checklistitem.Checklist_Item__r.Values">
                           <p class="check-spacer"></p>
-                          <input type="checkbox" name="{{val}}"></input>
+                          {{checklistitem.Checklist_Item__r.Values2[$index]}}
+                          <input type="checkbox" name="{{val}}" ng-model="checklistitem.Checklist_Item__r.Values2[$index]"></input>
                           <label class="check-label" value="{{val}}" > {{val}} </label>
                         </div>
                       </div>
@@ -887,7 +888,7 @@ id="todo"
                         <input type="radio" name="experience"></input>
                         <label class="check-label"> Very Satisfied </label>
                       </div>
-                      <input class="submit last" type="button" name="submit" value="Submit" ng-click="submitForm();"></input>
+                      <input class="submit last" type="button" name="submit" value="Submit" ng-click="submitForm()"></input>
                     </form>
                   </section>
                   <section id="three">
@@ -1038,7 +1039,10 @@ id="todo"
               var type = checklistitems[i].Checklist_Item__r.Type__c;
               if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
                 var values = checklistitems[i].Checklist_Item__r.Values__c;
-                if (values) checklistitems[i].Checklist_Item__r.Values = values.split(', ');
+                if (values) {
+                  checklistitems[i].Checklist_Item__r.Values = values.split(', ');
+                  checklistitems[i].Checklist_Item__r.Values2 = [];
+                }
                 console.log("Values");
                 console.log(checklistitems[i].Checklist_Item__r.Values);
               }
@@ -1052,89 +1056,14 @@ id="todo"
         },
         {escape: true}
         );
-    }
-    this.get_completed_CLRI = function() {
-      var that = this;
-      Visualforce.remoting.Manager.invokeAction(
-        '{!$RemoteAction.ChecklistExtension.completed_checklists}',
-        function(result, event){
-          if (event.status) {
-            completedchecklistresponses = result;
-            that.notifyObservers();
-          } else if (event.type === 'exception') {
-            console.log('Exception: ' + event.message);
-          } else {
-            console.log('Error!');
-          }
-        },
-        {escape: true}
-        );
-    }
-    this.get_pending_CLRI = function() {
-      var that = this;
-      Visualforce.remoting.Manager.invokeAction(
-        '{!$RemoteAction.ChecklistExtension.pending_checklists}',
-        function(result, event){
-          if (event.status) {
-            pendingchecklistresponses = result;
-            that.notifyObservers();
-          } else if (event.type === 'exception') {
-            console.log('Exception: ' + event.message);
-          } else {
-            console.log('Error!');
-          }
-        },
-        {escape: true}
-        );
-    }
-    this.edit_checklist_items = function(checklist_response_id) {
-      var that = this;
-      console.log(checklist_response_id);
-      Visualforce.remoting.Manager.invokeAction(
-        '{!$RemoteAction.ChecklistExtension.edit_checklist_items}',
-        checklist_response_id,
-        function(result, event){
-          if (event.status) {
-            console.log('items');
-            console.log(result);
-            if (result.length == 0) return;
-            checklistitems = result;
-            for (var i = 0; i < result.length; i++) {
-              var type = checklistitems[i].Checklist_Item__r.Type__c;
-              if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
-                var values = checklistitems[i].Checklist_Item__r.Values__c; 
-                if (values) checklistitems[i].Checklist_Item__r.Values = values.split(', ');
-                if (type == "Multi-Select") {
-                  if (checklistitems[i].Answer__c) checklistitems[i].Answer__c = checklistitems[i].Answer__c.split(' ');
-                }
-              }
-              if (checklistitems[i].Answer__c == "true") { 
-                checklistitems[i].Answer__c = true;
-              } else if (checklistitems[i].Answer__c == "false") {
-                checklistitems[i].Answer__c = false;
-              } else if (!isNaN(checklistitems[i].Answer__c)) {
-                checklistitems[i].Answer__c = parseInt(checklistitems[i].Answer__c);
-              }
-            }
-            that.notifyObservers();
-          } else if (event.type === 'exception') {
-            console.log('Exception: ' + event.message);
-          } else {
-            console.log('Error!');
-          }
-        },
-        {escape: true}
-        );
 }
-this.finish_checklist_response = function(checklist_response_id) {
+this.get_completed_CLRI = function() {
   var that = this;
   Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.finish_checklist_items}',
-    checklist_response_id,
+    '{!$RemoteAction.ChecklistExtension.completed_checklists}',
     function(result, event){
       if (event.status) {
-        pendingchecklistresponses = result[0];
-        completedchecklistresponses = result[1];
+        completedchecklistresponses = result;
         that.notifyObservers();
       } else if (event.type === 'exception') {
         console.log('Exception: ' + event.message);
@@ -1145,16 +1074,105 @@ this.finish_checklist_response = function(checklist_response_id) {
     {escape: true}
     );
 }
-this.getCLIs = function () {
-  return checklistitems;
-};
-this.getPendingCLRs = function() {
-  return pendingchecklistresponses;
+this.get_pending_CLRI = function() {
+  var that = this;
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ChecklistExtension.pending_checklists}',
+    function(result, event){
+      if (event.status) {
+        pendingchecklistresponses = result;
+        that.notifyObservers();
+      } else if (event.type === 'exception') {
+        console.log('Exception: ' + event.message);
+      } else {
+        console.log('Error!');
+      }
+    },
+    {escape: true}
+    );
 }
-this.getCompletedCLRs = function() {
-  return completedchecklistresponses;
-}
-})
+this.edit_checklist_items = function(checklist_response_id) {
+  var that = this;
+  console.log(checklist_response_id);
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ChecklistExtension.edit_checklist_items}',
+    checklist_response_id,
+    function(result, event){
+      if (event.status) {
+        console.log('items');
+        console.log(result);
+        if (result.length == 0) return;
+        checklistitems = result;
+        for (var i = 0; i < result.length; i++) {
+          var type = checklistitems[i].Checklist_Item__r.Type__c;
+          if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
+            var values = checklistitems[i].Checklist_Item__r.Values__c; 
+            if (values) {
+              checklistitems[i].Checklist_Item__r.Values = values.split(', ');
+              checklistitems[i].Checklist_Item__r.Values2 = [];
+            }
+            if (type == "Multi-Select") {
+              if (checklistitems[i].Answer__c) {
+                var ansArr = checklistitems[i].Answer__c.split(',');
+                var boolArr = [];
+                for (var j = 0; j < checklistitems[i].Checklist_Item__r.Values.length; j++) {
+                  if (ansArr.indexOf(checklistitems[i].Checklist_Item__r.Values[j]) > -1) {
+                    boolArr[j] = true;
+                  } else {
+                    boolArr[j] = false;
+                  }
+                }
+                checklistitems[i].Checklist_Item__r.Values2 = boolArr;
+              }
+            }
+          }
+          if (checklistitems[i].Answer__c == "true") { 
+            checklistitems[i].Answer__c = true;
+          } else if (checklistitems[i].Answer__c == "false") {
+            checklistitems[i].Answer__c = false;
+          } else if (!isNaN(checklistitems[i].Answer__c)) {
+            checklistitems[i].Answer__c = parseInt(checklistitems[i].Answer__c);
+          }
+        }
+        that.notifyObservers();
+      } else if (event.type === 'exception') {
+        console.log('Exception: ' + event.message);
+      } else {
+        console.log('Error!');
+      }
+    },
+    {escape: true}
+    );
+                }
+                this.finish_checklist_response = function(checklist_response_id) {
+                  var that = this;
+                  Visualforce.remoting.Manager.invokeAction(
+                    '{!$RemoteAction.ChecklistExtension.finish_checklist_items}',
+                    checklist_response_id,
+                    function(result, event){
+                      if (event.status) {
+                        pendingchecklistresponses = result[0];
+                        completedchecklistresponses = result[1];
+                        that.notifyObservers();
+                      } else if (event.type === 'exception') {
+                        console.log('Exception: ' + event.message);
+                      } else {
+                        console.log('Error!');
+                      }
+                    },
+                    {escape: true}
+                    );
+                }
+                this.getCLIs = function () {
+                  return checklistitems;
+                };
+                this.getPendingCLRs = function() {
+                  return pendingchecklistresponses;
+                }
+                this.getCompletedCLRs = function() {
+                  return completedchecklistresponses;
+                }
+              })
 
 myApp.controller("homeCtrl", function ($scope, userService) {
 });
@@ -1235,12 +1253,26 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
     for(var i = 0; i < $scope.checklistitems.length; i++) {
       delete $scope.checklistitems[i].$$hashKey;
       var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
+      if (type == "Multi-Select") {
+        if ($scope.checklistitems[i].Checklist_Item__r.Values2.length != 0) {
+          var answer = [];
+          for (var j = 0; j < $scope.checklistitems[i].Checklist_Item__r.Values.length; j++) {
+            if ($scope.checklistitems[i].Checklist_Item__r.Values2[j]) {
+              answer.push($scope.checklistitems[i].Checklist_Item__r.Values[j]);
+            }
+          }
+          $scope.checklistitems[i].Answer__c = answer.join();
+          $scope.checklistitems[i].Checklist_Item__r.Values2;
+        }
+      }
       if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
         delete $scope.checklistitems[i].Checklist_Item__r.Values;
+        delete $scope.checklistitems[i].Checklist_Item__r.Values2;
+
       }
     }
     delete $scope.checklistitems.attributes;
-  };
+  }
   function photoHelper(checklist_response_id) {
     if (Object.keys($scope.photoMap).length > 0) {
       for (var key in $scope.photoMap) {
@@ -1277,9 +1309,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
          */
          for(var i = 0; i < $scope.checklistitems.length; i++) {
           var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
-          if (type == "Multi-Select") {
-            if ($scope.checklistitems[i].Answer__c) $scope.checklistitems[i].Answer__c = $scope.checklistitems[i].Answer__c.join(" ");
-          }
+
         }
         var checklist_response = $('#checklist_id').val(); 
 
