@@ -718,7 +718,7 @@ id="todo"
                     <div class="question" ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'">
                       <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
                        <p> {{checklistitem.Checklist_Item__r.Question__c}} </p>
-                                           <p ng-switch-when="Yes/No" class="toggle-spacer"></p>
+                       <p ng-switch-when="Yes/No" class="toggle-spacer"></p>
 
                        <input class="yes-no" id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                        <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="yes-button"> Yes </label>
@@ -736,11 +736,17 @@ id="todo"
                       </div>
                       <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
                       </select>
-                      <select ng-options="val for val in checklistitem.Checklist_Item__r.Values" ng-multiple="true" multiple="true" ng-switch-when="Multi-Select" ng-model="checklistitem.Answer__c"></select>
+                      <div  ng-switch-when="Multi-Select">
+                        <div ng-repeat="val in checklistitem.Checklist_Item__r.Values">
+                          <p class="check-spacer"></p>
+                          <input type="checkbox" name="{{val}}"></input>
+                          <label class="check-label" value="{{val}}" > {{val}} </label>
+                        </div>
+                      </div>
                       <p ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c">
-                      <img class="camera" src="{!$Resource.checklist_camera}"></img>
-                      <span class="camera-blurb"> + Photo </span>
-                    </p>
+                        <img class="camera" src="{!$Resource.checklist_camera}"></img>
+                        <span class="camera-blurb"> + Photo </span>
+                      </p>
                       <input type="file" class="photo" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
 
                     </span>
@@ -881,7 +887,7 @@ id="todo"
                         <input type="radio" name="experience"></input>
                         <label class="check-label"> Very Satisfied </label>
                       </div>
-                      <input class="submit last" type="button" name="submit" value="Submit" onclick="setSection($('#container section#three'), $('.active'));"></input>
+                      <input class="submit last" type="button" name="submit" value="Submit" ng-click="submitForm();"></input>
                     </form>
                   </section>
                   <section id="three">
@@ -1033,6 +1039,8 @@ id="todo"
               if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
                 var values = checklistitems[i].Checklist_Item__r.Values__c;
                 if (values) checklistitems[i].Checklist_Item__r.Values = values.split(', ');
+                console.log("Values");
+                console.log(checklistitems[i].Checklist_Item__r.Values);
               }
             }
             that.notifyObservers();
@@ -1087,9 +1095,9 @@ id="todo"
         checklist_response_id,
         function(result, event){
           if (event.status) {
+            console.log('items');
             console.log(result);
             if (result.length == 0) return;
-            console.log(checklistitems);
             checklistitems = result;
             for (var i = 0; i < result.length; i++) {
               var type = checklistitems[i].Checklist_Item__r.Type__c;
@@ -1243,7 +1251,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
           $scope.photoMap[key],
           function(result, event){
             if (event.status) {
-              // console.log('success!');
+              console.log('success!');
               var attachment_id = result;
               console.log('attachment: https://c.na15.visual.force.com/' + attachment_id);
             } else if (event.type === 'exception') {
@@ -1292,6 +1300,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
           {escape: true}
           );
         $("#messages").text('Success!');
+        setSection($('#container section#three'), $('.active'));
       }
 
       $scope.saveResponse = function() {
