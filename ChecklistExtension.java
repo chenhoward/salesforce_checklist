@@ -114,8 +114,7 @@ global with sharing class ChecklistExtension {
         } else {
             checklistId = to_return[0].Checklist_Item__r.Checklist__c;
         }
-        if (to_return.size() == 0)
-            return new List<Checklist_Item_Response__c>();
+
         List<Checklist_Item_Response__c> responses = new List<Checklist_Item_Response__c>();
         
         for (Checklist_Item__c item : [  SELECT Id, Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c, Attach_Photo__c 
