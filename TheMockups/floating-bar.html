@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Progress Bar</title>
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script>
+  $(document).ready(function(){
+    var total = 0;
+    var progress = $("#progress"),
+      progressMessage = $("#progress-message");
+    $("#pro-form input[required]").each(function() {
+      total++;
+    });
+    progressMessage.text("You have completed 0/" + total + " questions");
+    $("#pro-form input").click(function() {
+      var numValid = 0;
+      $("#pro-form input[required]").each(function() {
+        if (this.validity.valid) {
+          numValid++;
+        }
+      });
+      progress.attr("value", Math.min(99, 100 * numValid / total));
+      progressMessage.text("You have completed " + numValid + "/" + total + " questions");
+    });
+  });
+  </script>
+  <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300' rel='stylesheet' type='text/css'/>
+  <style>
+  body {
+    font-family: Source Sans Pro, sans-serif;
+    font-weight: 400;
+    margin: 50px;
+  }
+  h1 {
+    margin: 15px;
+  }
+  .progress-wrap {
+    margin: 15px;
+  }
+  .field {
+    margin: 15px;
+  }
+  .button {
+    margin: 15px;
+    padding: 15px;
+    font-size: 25px;
+    color: #FFFFFF;
+    background: #FF6600;
+    border-radius: 10px;
+    border: none;
+    font-family: Source Sans Pro, sans-serif;
+    font-weight: 400;
+  }
+  .button:hover {
+    cursor: pointer;
+  }
+  </style>
+</head>
+<form accept-charset="UTF-8" action="#" class="pro-form" id="pro-form" method="post">
+
+  <h1>Progress Form</h1>
+
+  <div class="progress-wrap" style="margin-bottom: 50px;">
+    <progress max="100" value="0" id="progress" style="margin-bottom:15px;"></progress>
+    <div class="progress-message" id="progress-message">you have completed 0/X questions</div>
+  </div>
+
+  <div class="field">
+    <label for="card_name">Name on Card</label>
+    <br>
+    <input id="card_name" required="required" type="text">
+  </div>
+
+  <div class="field">
+    <label for="card_address_1">Street Address</label>
+    <br>
+    <input id="card_address_1" required="required" type="text">
+  </div>
+
+  <div class="field">
+    <label for="card_zip">Zip Code</label>
+    <br>
+    <input id="card_zip" required="required" type="text">
+  </div>
+
+  <div class="field">
+    <label for="card_number">Credit Card Number</label>
+    <br>
+    <input id="card_number" required="required" type="number">
+  </div>
+
+  <div class="field">
+    <label for="card_code">Security Code on Card (CVV)</label>
+    <br>
+    <input id="card_code" required="required" type="text">
+  </div>
+
+  <div class="field">
+    <label for="card_date">Expiration Date</label>
+    <br>
+    <input id="card_date" required="required" type="number">
+  </div>
+
+  <div class="field">
+    <label for="card_check">Check Me For NO REASON</label>
+    <br>
+    <input id="card_check" required="required" type="checkbox">
+  </div>
+
+  <div class="actions">
+
+    <input name="commit" type="submit" value="Subscribe" class="button">
+  </div>
+
+</form>

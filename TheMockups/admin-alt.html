@@ -29,20 +29,28 @@
     padding: 30px;
     font-family: Source Sans Pro, sans-serif;
     font-weight: 400;
-    color: #FFFFFF;
-    background: #FF6600;
+    color: #333333;
+    background: #EBEBEB;
+    border: 1px solid #CCCCCC;
+    border-radius: 10px;
   }
   #placeholder {
     background: #FFFFFF !important;
-    border: 2px dashed #CCCCCC;
-    color: #CCCCCC !important;
-  }
-  #placeholder:hover {
-    cursor: pointer;
-    background: #EBEBEB !important;
+    color: #333333 !important;
+    border: none;
+    padding: 0px;
   }
   label {
     margin-right: 15px;
+  }
+  .question {
+    width: 400px;
+  }
+  #sortable {
+    padding-bottom: 50px;
+  }
+  .removeQ {
+    float: right;
   }
   </style>
   <script>
@@ -52,30 +60,104 @@
       sort: function() {
         // gets added unintentionally by droppable interacting with sortable
         // using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
-        $( this ).removeClass( "ui-state-default" );
+        $(this).removeClass( "ui-state-default" );
       }
     });
   });
   </script>
   <script>
-  function addQuestion(form)
-  {
-    $( "<li> \
-        <label for='type'> Question Type </label> \
-        <select id='type'> \
-          <option value='text'> Text </option> \
-          <option value='message'> Message </option> \
-          <option value='number'> Number </option> \
-          <option value='date'> Date </option> \
-        </select> \
+  function addQuestion(ol) {
+    if ($( "#type option:selected").val() == "text") {
+      $( "<li> \
+        <label> Question Type: Text </label> \
+        <input type='hidden' value='text'/> \
         <br><br> \
-        <label for='question'> Question Text </label> \
-        <input type='text' id='question'> </input> \
+        <label> Question </label> \
+        <input class='question' type='text'/> \
         <br><br> \
-        <label for='photo'> Need photo? </label> \
-        <input type='checkbox' id='photo'> </input> \
-      </li>" ).appendTo(form);
-    $(form).find( ".placeholder" ).appendTo(form);
+        <label> Use Photo? </label> \
+        <input type='checkbox'/> \
+        <input type='submit' class='removeQ' value='Remove' onclick='removeQuestion(this)'/> \
+        </li>" ).appendTo(ol).hide().show(200);
+    } else if ($( "#type option:selected").val() == "message") {
+      $( "<li> \
+        <label> Question Type: Message </label> \
+        <input type='hidden' value='message'/> \
+        <br><br> \
+        <label> Question </label> \
+        <input class='question' type='text'/> \
+        <br><br> \
+        <label> Use Photo? </label> \
+        <input type='checkbox'/> \
+        <input type='submit' class='removeQ' value='Remove' onclick='removeQuestion(this)'/> \
+        </li>" ).appendTo(ol).hide().show(200);
+    } else if ($( "#type option:selected").val() == "number") {
+      $( "<li> \
+        <label> Question Type: Number </label> \
+        <input type='hidden' value='number'/> \
+        <br><br> \
+        <label> Question </label> \
+        <input class='question' type='text'/> \
+        <br><br> \
+        <label> Use Photo? </label> \
+        <input type='checkbox'/> \
+        <input type='submit' class='removeQ' value='Remove' onclick='removeQuestion(this)'/> \
+        </li>" ).appendTo(ol).hide().show(200);
+    } else if ($( "#type option:selected").val() == "date") {
+      $( "<li> \
+        <label> Question Type: Date </label> \
+        <input type='hidden' value='date'/> \
+        <br><br> \
+        <label> Question </label> \
+        <input class='question' type='text'/> \
+        <br><br> \
+        <label> Use Photo? </label> \
+        <input type='checkbox'/> \
+        <input type='submit' class='removeQ' value='Remove' onclick='removeQuestion(this)'/> \
+        </li>" ).appendTo(ol).hide().show(200);
+    } else {
+      $( "<li> \
+        <label> Question Type: Picklist </label> \
+        <input type='hidden' value='picklist'/> \
+        <br><br> \
+        <label> Question </label> \
+        <input class='question' type='text'/> \
+        <br><br> \
+        <div id='choice-wrapper'> \
+          <label> Choice </label> \
+          <input type='text'/> \
+          <input type='submit' onclick='removeChoice(this)' value='Remove'/> \
+          <br><br> \
+        </div> \
+        <div id='choice-wrapper'> \
+          <label> Choice </label> \
+          <input type='text'/> \
+          <input type='submit' onclick='removeChoice(this)' value='Remove'/> \
+          <br><br> \
+        </div> \
+        <input type='submit' onclick='addChoice(this)' value='Add Choice'/> \
+        <br><br> \
+        <label> Use Photo? </label> \
+        <input type='checkbox'/> \
+        <input type='submit' class='removeQ' value='Remove' onclick='removeQuestion(this)'/> \
+        </li>" ).appendTo(ol).hide().show(200);
+    }
+  }
+  function removeQuestion(button) {
+    $(button).parent().remove();
+  }
+  </script>
+  <script>
+  function addChoice(button) {
+    $( "<div id='choice-wrapper'> \
+          <label> Choice </label> \
+          <input type='text'/> \
+          <input type='submit' onclick='removeChoice(this)' value='Remove'/> \
+          <br><br> \
+        </div>" ).insertBefore(button);
+  }
+  function removeChoice(button) {
+    $(button).parent().remove();
   }
   </script>
 </head>
@@ -84,7 +166,18 @@
     <h1 class="ui-widget-header"> Checklist </h1>
     <div class="ui-widget-content">
       <ol id="sortable">
-        <li class="placeholder" id="placeholder" onclick="addQuestion( '#cart ol' )"> + Click here to add a question </li>
+        <li class="placeholder" id="placeholder"> 
+          <label for='type'> Question Type </label>
+          <select id='type'>
+            <option value='text'> Text </option>
+            <option value='message'> Message </option>
+            <option value='number'> Number </option>
+            <option value='date'> Date </option>
+            <option value='picklist'> Picklist </option>
+          </select>
+          <input id="add-question" type='submit' value='Add Question' onclick="addQuestion( '#cart ol' )">
+          <p> Re-Order Using Drag and Drop </p>
+        </li>
       </ol>
     </div>
   </div>
