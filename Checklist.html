@@ -933,7 +933,7 @@ id="todo"
         callback();
       });
     };
-    this.get_checklist_items = function(checklist_id) {
+    this.getChecklistItems = function(checklist_id) {
       var that = this;
       Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.checklist_items}',
@@ -964,7 +964,7 @@ id="todo"
         {escape: true}
         );
 }
-this.get_completed_CLRI = function() {
+this.getCompletedChecklistResponses = function() {
   var that = this;
   Visualforce.remoting.Manager.invokeAction(
     '{!$RemoteAction.ChecklistExtension.completed_checklists}',
@@ -981,7 +981,7 @@ this.get_completed_CLRI = function() {
     {escape: true}
     );
 }
-this.get_pending_CLRI = function() {
+this.getPendingChecklistResponses = function() {
   var that = this;
   Visualforce.remoting.Manager.invokeAction(
     '{!$RemoteAction.ChecklistExtension.pending_checklists}',
@@ -1006,8 +1006,6 @@ this.edit_checklist_items = function(checklist_response_id) {
     checklist_response_id,
     function(result, event){
       if (event.status) {
-        console.log('items');
-        console.log(result);
         if (result.length == 0) return;
         checklistitems = result;
         for (var i = 0; i < result.length; i++) {
@@ -1207,45 +1205,37 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
   $scope.submitForm = function() {
     var that = this;
     formHelper();
-         for(var i = 0; i < $scope.checklistitems.length; i++) {
-          var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
+    for(var i = 0; i < $scope.checklistitems.length; i++) {
+      var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
 
+    }
+    var checklist_response = $('#checklist_id').val(); 
+
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ChecklistExtension.submit_responses}',
+      checklist_response,
+      $scope.checklistitems,
+      function(result, event){
+        if (event.status) {
+          photoHelper(result);
+          userService.edit_checklist_items(checklist_response);
+        } else if (event.type === 'exception') {
+          console.log('Exception: ' + event.message);
+        } else {
+          console.log('Error!');
         }
-        var checklist_response = $('#checklist_id').val(); 
+      },
+      {escape: true}
+      );
+    userService.getPendingChecklistResponses();
+    userService.getCompletedChecklistResponses();
+    $("#messages").text('Success!');
+    setSection($('#container section#three'), $('.active'));
+  }
 
-        Visualforce.remoting.Manager.invokeAction(
-          '{!$RemoteAction.ChecklistExtension.submit_responses}',
-          checklist_response,
-          $scope.checklistitems,
-          function(result, event){
-            if (event.status) {
-              photoHelper(result);
-              userService.edit_checklist_items(checklist_response);
-            } else if (event.type === 'exception') {
-              console.log('Exception: ' + event.message);
-            } else {
-              console.log('Error!');
-            }
-          },
-          {escape: true}
-          );
-         userService.get_pending_CLRI();
-         userService.get_completed_CLRI();
-
-        $("#messages").text('Success!');
-        setSection($('#container section#three'), $('.active'));
-      }
-
-      $scope.saveResponse = function() {
-        var that = this;
-        formHelper();
-      /*
-         var checklist_response;
-         checklist_response = getUrlVars()['id'];
-         if (checklist_response == null) {
-         checklist_response = '';
-         }
-         */
+  $scope.saveResponse = function() {
+    var that = this;
+    formHelper();
       var checklist_response = $('#checklist_id').val(); // works for pending to completed
       Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.save_responses}',
@@ -1255,7 +1245,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
           if (event.status) {
             photoHelper(result);
             userService.edit_checklist_items(checklist_response);
-            userService.get_pending_CLRI();
+            userService.getPendingChecklistResponses();
           } else if (event.type === 'exception') {
             console.log('Exception: ' + event.message);
           } else {
@@ -1264,8 +1254,8 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
         },
         {escape: true}
         );
-      userService.get_completed_CLRI();
-      userService.get_pending_CLRI();
+      userService.getCompletedChecklistResponses();
+      userService.getPendingChecklistResponses();
       $("#messages").text('Success!');
       setSection($('#container section#three'), $('.active'));
 
@@ -1329,16 +1319,14 @@ controllers.PagesController = function ($scope, userService) {
   //     $scope.newlistPageActive = false;
   //     $scope.homePageActive = true;
   // }
-  userService.get_pending_CLRI();
-  userService.get_completed_CLRI();
+  userService.getPendingChecklistResponses();
+  userService.getCompletedChecklistResponses();
 
   $scope.pendinglistPageActive = true;
   $scope.goToCreateDetailPage = function(checklist) {
     $scope.checklistName = checklist.Name;
-    console.log(checklist.Name);
-    console.log($scope.checklistName);
     setupDetail(checklist.Id);
-    userService.get_checklist_items(checklist.Id);
+    userService.getChecklistItems(checklist.Id);
   }
 
   $scope.goToEditDetailPage = function(checklist) {
@@ -1357,13 +1345,13 @@ controllers.PagesController = function ($scope, userService) {
 
   $scope.goToPendingListpage = function() {
     buttonShow(true);
-    userService.get_pending_CLRI();
+    userService.getPendingChecklistResponses();
     basePageState();
     $scope.pendinglistPageActive = true;
   };
   $scope.goTocompletedListPage = function() {
     buttonShow(false);
-    userService.get_completed_CLRI();
+    userService.getCompletedChecklistResponses();
     basePageState();
     $scope.completedListPageActive = true;
   };
