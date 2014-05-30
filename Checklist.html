@@ -793,7 +793,7 @@ id="todo"
                     </span>
                   </div>
                   <div class="form-buttons">
-                    <input class="save last" type="button" name="save" value="Save"></input>
+                    <input class="save last" type="button" name="save" value="Save" ng-click="saveResponse()"></input>
                     <input class="submit last" type="button" name="submit" value="Submit" ng-click="submitForm()"></input>
                   </div>
                 </form>
@@ -1207,13 +1207,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
   $scope.submitForm = function() {
     var that = this;
     formHelper();
-      /*
-         var checklist_response;
-         checklist_response = getUrlVars()['id'];
-         if (checklist_response == null) {
-         checklist_response = '';
-         }
-         */
          for(var i = 0; i < $scope.checklistitems.length; i++) {
           var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
 
@@ -1259,6 +1252,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
           if (event.status) {
             photoHelper(result);
             userService.edit_checklist_items(checklist_response);
+            userService.get_pending_CLRI();
           } else if (event.type === 'exception') {
             console.log('Exception: ' + event.message);
           } else {
@@ -1268,6 +1262,8 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
         {escape: true}
         );
       $("#messages").text('Success!');
+      setSection($('#container section#three'), $('.active'));
+
     }
   });
 
