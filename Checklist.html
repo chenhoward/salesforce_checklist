@@ -825,6 +825,11 @@ id="todo"
 
       <script>
       /* Angular */
+        window.onkeydown = function(e){
+        var $focused = $(':focus');
+        window.focus();
+        $focused.focus();
+      }
       var myApp = angular.module('myApp', []);
       var photoMap = {};
 
