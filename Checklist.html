@@ -1229,6 +1229,9 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
           },
           {escape: true}
           );
+         userService.get_pending_CLRI();
+         userService.get_completed_CLRI();
+
         $("#messages").text('Success!');
         setSection($('#container section#three'), $('.active'));
       }
@@ -1261,6 +1264,8 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
         },
         {escape: true}
         );
+      userService.get_completed_CLRI();
+      userService.get_pending_CLRI();
       $("#messages").text('Success!');
       setSection($('#container section#three'), $('.active'));
 
