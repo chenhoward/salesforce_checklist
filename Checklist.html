@@ -686,7 +686,7 @@ id="todo"
         <div id="new-div" ng-controller="NewListCtrl">
           <img class="x" id="hide-new" src="{!$Resource.checklist_x}"></img>
           <div class="title"> New Checklist </div>
-          <a class="link" data-section="two" href="#" ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist.Id)">
+          <a class="link" data-section="two" href="#" ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist)">
             <p> {{checklist.Name}} </p>
             <p class="blurb"> {{checklist.Description__c}} </p>
             <div class="arrow-right"></div>
@@ -695,7 +695,7 @@ id="todo"
         <div id="container">
           <section id="one" class="active" ng-controller="PendingListCtrl" ng-show="pendinglistPageActive">
             <div class="spacer"> </div>
-            <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist.Id)"> 
+            <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
               <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
               <p> {{checklist.Checklist__r.Name}}</p>
               <p class="blurb"> {{checklist.Checklist__r.Description__c}} </p>
@@ -713,7 +713,7 @@ id="todo"
                 <section id="two" ng-controller="ChecklistCtrl">
                   <form ng-submit="submitForm()">
                     <img class="x" id="hide-checklist" src="{!$Resource.checklist_x}"></img>
-                    <div class="title"> Checklist With A Long Name Like This  </div>
+                    <div class="title"> {{checklistName}}  </div>
                     <li ng-show="!checklistitems.length">No checklistitems</li>
                     <div class="question" ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'">
                       <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
@@ -770,7 +770,7 @@ id="todo"
                   <p> View Map </p>
                   <p class="blurb"> 2 Completed Locations </p>
                 </div>
-                <div class="link maplink" ng-repeat="checklist in completedchecklistresponses" ng-click="goToEditDetailPage(checklist.Id)"> 
+                <div class="link maplink" ng-repeat="checklist in completedchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
                   <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
                   <p> {{checklist.Checklist__r.Name}} </p>
                   <p class="blurb"> {{checklist.Checklist__r.Description__c}} </p>
@@ -795,7 +795,7 @@ id="todo"
           <!-- End of homePage -->
 
           <div id="completedListPage" ng-controller="CompletedListCtrl" ng-show="completedListPageActive">
-            <li ng-repeat="checklist in completedchecklistresponses" ng-click="goToEditDetailPage(checklist.Id)"> 
+            <li ng-repeat="checklist in completedchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
               <p> Name: {{checklist.Name}} </p>
               <p> Description: {{checklist.Description__c}} </p>
               <p> Id: {{checklist.Id}} </p>
@@ -805,7 +805,7 @@ id="todo"
           <!-- End of newListPage -->
 
           <div id="newListPage" ng-controller="NewListCtrl" ng-show="newlistPageActive">
-            <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist.Id)"> 
+            <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist)"> 
               <p> Name: {{checklist.Name}} </p>
               <p> Description: {{checklist.Description__c}} </p>
               <p> Id: {{checklist.Id}} </p>
@@ -815,7 +815,7 @@ id="todo"
           <!-- End of newListPage -->
 
           <div id="pendingListPage" ng-controller="PendingListCtrl" ng-show="pendinglistPageActive">
-            <li ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist.Id)"> 
+            <li ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
               <p> Name: {{checklist.Name}} </p>
               <p> Description: {{checklist.Description__c}} </p>
               <p> Id: {{checklist.Id}} </p>
@@ -1290,15 +1290,19 @@ controllers.PagesController = function ($scope, userService) {
   userService.get_completed_CLRI();
 
   $scope.pendinglistPageActive = true;
-  $scope.goToCreateDetailPage = function(checklist_id) {
-    setupDetail(checklist_id);
-    userService.get_checklist_items(checklist_id);
+  $scope.goToCreateDetailPage = function(checklist) {
+    $scope.checklistName = checklist.Name;
+    console.log(checklist.Name);
+    console.log($scope.checklistName);
+    setupDetail(checklist.Id);
+    userService.get_checklist_items(checklist.Id);
   }
 
-  $scope.goToEditDetailPage = function(checklist_id) {
+  $scope.goToEditDetailPage = function(checklist) {
+    $scope.checklistName = checklist.Checklist__r.Name;
     setSection($('#two'), $('#one'));
-    setupDetail(checklist_id);
-    userService.edit_checklist_items(checklist_id);
+    setupDetail(checklist.Id);
+    userService.edit_checklist_items(checklist.Id);
   }
 
   $scope.goToNewListpage = function() {
