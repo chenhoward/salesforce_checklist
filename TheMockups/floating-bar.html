@@ -11,13 +11,15 @@
     var progress = $("#progress"),
       progressMessage = $("#progress-message");
     $("#pro-form input[required]").each(function() {
-      total++;
+      if (this.type != "submit" && this.type != "button") {
+        total++;
+      }
     });
-    progressMessage.text("You have completed 0/" + total + " questions");
+    progressMessage.text("You have completed 0/" + total + " required questions");
     $("#pro-form input").click(function() {
       var numValid = 0;
       $("#pro-form input[required]").each(function() {
-        if (this.validity.valid) {
+        if (this.validity.valid && this.type != "submit" && this.type != "button") {
           numValid++;
         }
       });
@@ -100,13 +102,13 @@
   <div class="field">
     <label for="card_date">Expiration Date</label>
     <br>
-    <input id="card_date" required="required" type="number">
+    <input id="card_date" required="required" type="date">
   </div>
 
   <div class="field">
     <label for="card_check">Check Me For NO REASON</label>
     <br>
-    <input id="card_check" required="required" type="checkbox">
+    <input id="card_check" type="checkbox">
   </div>
 
   <div class="actions">

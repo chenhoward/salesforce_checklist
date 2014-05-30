@@ -552,6 +552,48 @@ id="todo"
     }
 
     .submit {
+      float: left;
+      font-family: Source Sans Pro, sans-serif;
+      font-weight: 400;
+      max-width: 50%;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      display: block;
+      color: #FFF;
+      text-decoration: none;
+      text-align: center;
+      font-size: 24px;
+      padding: 25px;
+      padding-bottom: 24px;
+      border-radius: 0px;
+      border: none;
+      margin: 0px;
+      background: #8cd250;
+      width: 100%;
+    }
+
+    .save {
+      float: left;
+      font-family: Source Sans Pro, sans-serif;
+      font-weight: 400;
+      max-width: 50%;
+      box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      display: block;
+      color: #FFF;
+      text-decoration: none;
+      text-align: center;
+      font-size: 24px;
+      padding: 25px;
+      padding-bottom: 24px;
+      border-radius: 0px;
+      border: none;
+      margin: 0px;
+      background: #32aad2;
+      width: 50%;
+    }
+
+    .form-buttons {
       font-family: Source Sans Pro, sans-serif;
       font-weight: 400;
       max-width: 100%;
@@ -562,8 +604,7 @@ id="todo"
       text-decoration: none;
       text-align: center;
       font-size: 24px;
-      padding: 25px;
-      padding-bottom: 24px;
+      padding: 0pc;
       border: none;
       margin: 0px;
       box-shadow: 0px -1px 0px #cccccc;
@@ -752,8 +793,10 @@ id="todo"
 
                     </span>
                   </div>
-                  
-                  <input class="submit last" type="button" name="submit" value="Submit" ng-click="submitForm()"></input>
+                  <div class="form-buttons">
+                    <input class="save last" type="button" name="save" value="Save"></input>
+                    <input class="submit last" type="button" name="submit" value="Submit" ng-click="submitForm()"></input>
+                  </div>
                 </form>
               </section>
               <section id="three">
