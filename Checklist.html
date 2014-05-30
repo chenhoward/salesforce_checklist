@@ -811,7 +811,7 @@ id="todo"
                   <p> View Map </p>
                   <p class="blurb"> 2 Completed Locations </p>
                 </div>
-                <div class="link maplink" ng-repeat="checklist in completedchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
+                <div class="link maplink" ng-repeat="checklist in completedchecklistresponses">
                   <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
                   <p> {{checklist.Checklist__r.Name}} </p>
                   <p class="blurb"> {{checklist.Checklist__r.Description__c}} </p>
