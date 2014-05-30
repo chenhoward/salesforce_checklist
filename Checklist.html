@@ -780,7 +780,6 @@ id="todo"
                       <div  ng-switch-when="Multi-Select">
                         <div ng-repeat="val in checklistitem.Checklist_Item__r.Values">
                           <p class="check-spacer"></p>
-                          {{checklistitem.Checklist_Item__r.Values2[$index]}}
                           <input type="checkbox" name="{{val}}" ng-model="checklistitem.Checklist_Item__r.Values2[$index]"></input>
                           <label class="check-label" value="{{val}}" > {{val}} </label>
                         </div>
