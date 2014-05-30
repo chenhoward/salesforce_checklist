@@ -760,7 +760,7 @@ id="todo"
                        <p> {{checklistitem.Checklist_Item__r.Question__c}} </p>
                        <p ng-switch-when="Yes/No" class="toggle-spacer"></p>
 
-                       <input class="yes-no" id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+                       <input class="yes-no" id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c"> </input>
                        <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="yes-button"> Yes </label>
                        <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="no-button"> No </label>
                        <input id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-switch-when="Number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
@@ -793,7 +793,7 @@ id="todo"
                   </div>
                   <div class="form-buttons">
                     <input class="save last" type="button" name="save" value="Save" ng-click="saveResponse()"></input>
-                    <input class="submit last" type="button" name="submit" value="Submit" ng-click="submitForm()"></input>
+                    <input class="submit last" type="submit" name="submit" value="Submit"></input>
                   </div>
                 </form>
               </section>
