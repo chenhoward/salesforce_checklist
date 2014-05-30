@@ -774,7 +774,7 @@ id="todo"
                        <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
                         {{checklistitem.Answer__c}}
                       </div>
-                      <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
+                      <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c"    ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
                       </select>
                       <div  ng-switch-when="Multi-Select">
                         <div ng-repeat="val in checklistitem.Checklist_Item__r.Values">
@@ -820,92 +820,6 @@ id="todo"
               </section>
             </div>
           </div>
-        </div>
-
-
-
-        <div ng-controller="PagesController">
-          <input class='normal' id='checklist_id' type='hidden' value='{!$CurrentPage.parameters.checklist_id}'/>
-          <div id="messages"></div>
-
-          <div id="homePage" ng-controller="homeCtrl" ng-show="homePageActive">
-            <div ng-click="goToNewListpage()"> Start a New Checklist </div>
-            <div ng-click="goToPendingListpage()">Work on a Pending Checklist</div>
-            <div ng-click="goTocompletedListPage()">Look at Completed Checklists</div>
-          </div>
-          <!-- End of homePage -->
-
-          <div id="completedListPage" ng-controller="CompletedListCtrl" ng-show="completedListPageActive">
-            <li ng-repeat="checklist in completedchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
-              <p> Name: {{checklist.Name}} </p>
-              <p> Description: {{checklist.Description__c}} </p>
-              <p> Id: {{checklist.Id}} </p>
-            </li>
-            <!-- <div ng-click="goHome()">Go Home</div> -->
-          </div>
-          <!-- End of newListPage -->
-
-          <div id="newListPage" ng-controller="NewListCtrl" ng-show="newlistPageActive">
-            <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist)"> 
-              <p> Name: {{checklist.Name}} </p>
-              <p> Description: {{checklist.Description__c}} </p>
-              <p> Id: {{checklist.Id}} </p>
-            </li>
-            <!-- <div ng-click="goHome()">Go Home</div> -->
-          </div>
-          <!-- End of newListPage -->
-
-          <div id="pendingListPage" ng-controller="PendingListCtrl" ng-show="pendinglistPageActive">
-            <li ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
-              <p> Name: {{checklist.Name}} </p>
-              <p> Description: {{checklist.Description__c}} </p>
-              <p> Id: {{checklist.Id}} </p>
-            </li>
-            <!-- <div ng-click="goHome()">Go Home</div> -->
-          </div>
-          <!-- End of pendingListPage -->
-
-          <div id="checklistDetailPage" ng-controller="ChecklistCtrl" ng-show="detailPageActive">
-            <div id="checklist">
-              <ul>
-                <li ng-show="!checklistitems.length">No checklistitems</li>
-                <form ng-submit="submitForm()">
-                  <li ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'"> 
-                    <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
-                      <p> Question: {{checklistitem.Checklist_Item__r.Question__c}} </p> 
-                      <p> Required: {{checklistitem.Checklist_Item__r.Required__c}} </p> 
-                      <p> Type: {{checklistitem.Checklist_Item__r.Type__c}} </p> 
-                      <p> Id: {{checklistitem.Checklist_Item__c}} </p> 
-                      <p> Checklist Id: {{checklistitem.Checklist_Item__r.Checklist__c}} </p> 
-                      <p> Order: {{checklistitem.Checklist_Item__r.Order__c}} </p> 
-                      <p> Photo: {{checklistitem.Checklist_Item__r.Attach_Photo__c}} </p> 
-                      <input id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                      <input id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-switch-when="Number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                      <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                      <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                      <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
-                      <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
-                      <!-- Multiple Values from Database -->
-                      <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Checklist_Item__r.Values[0]}}" max="{{checklistitem.Checklist_Item__r.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                      <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
-                        {{checklistitem.Answer__c}}
-                      </div>
-                      <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
-                      </select>
-                      <select ng-options="val for val in checklistitem.Checklist_Item__r.Values" ng-multiple="true" multiple="true" ng-switch-when="Multi-Select" ng-model="checklistitem.Answer__c"></select>
-                      <input type="file" class="photo" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
-                    </span>
-                  </li>
-                  <input id="submit_button" type="submit" value="Submit"> </input>
-                </form>
-                <button id="save_button" ng-click="saveResponse()"> Save Response </button>
-              </ul>
-              <!-- <div ng-click="goHome()">Back to Home</div> -->
-              <div id="map" ng-show="mapActive"></div>
-            </div>
-          </div>
-          <!-- End of checklistDetailPage -->
-
         </div>
       </body>
 
