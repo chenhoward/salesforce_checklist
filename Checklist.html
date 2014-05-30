@@ -755,7 +755,6 @@ id="todo"
                   <form ng-submit="submitForm()">
                     <img class="x" id="hide-checklist" src="{!$Resource.checklist_x}"></img>
                     <div class="title"> {{checklistName}}  </div>
-                    <li ng-show="!checklistitems.length">No checklistitems</li>
                     <div class="question" ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'">
                       <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
                        <p> {{checklistitem.Checklist_Item__r.Question__c}} </p>
@@ -925,14 +924,17 @@ id="todo"
 
         var observerCallbacks = [];
     // Register an Observer
+
     this.registerObserverCallback = function(callback){
       observerCallbacks.push(callback);
-    };
+    }
+
     this.notifyObservers = function() {
       angular.forEach(observerCallbacks, function(callback){
         callback();
       });
     };
+
     this.getChecklistItems = function(checklist_id) {
       var that = this;
       Visualforce.remoting.Manager.invokeAction(
@@ -941,8 +943,7 @@ id="todo"
         function(result, event){
           if (event.status) {
             checklistitems = result;
-
-            for (var i=0; i<checklistitems.length; i++) {
+            for (var i = 0; i < checklistitems.length; i++) {
               var type = checklistitems[i].Checklist_Item__r.Type__c;
               if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
                 var values = checklistitems[i].Checklist_Item__r.Values__c;
@@ -950,8 +951,6 @@ id="todo"
                   checklistitems[i].Checklist_Item__r.Values = values.split(', ');
                   checklistitems[i].Checklist_Item__r.Values2 = [];
                 }
-                console.log("Values");
-                console.log(checklistitems[i].Checklist_Item__r.Values);
               }
             }
             that.notifyObservers();
@@ -964,6 +963,7 @@ id="todo"
         {escape: true}
         );
 }
+
 this.getCompletedChecklistResponses = function() {
   var that = this;
   Visualforce.remoting.Manager.invokeAction(
@@ -981,6 +981,7 @@ this.getCompletedChecklistResponses = function() {
     {escape: true}
     );
 }
+
 this.getPendingChecklistResponses = function() {
   var that = this;
   Visualforce.remoting.Manager.invokeAction(
@@ -998,9 +999,9 @@ this.getPendingChecklistResponses = function() {
     {escape: true}
     );
 }
+
 this.edit_checklist_items = function(checklist_response_id) {
   var that = this;
-  console.log(checklist_response_id);
   Visualforce.remoting.Manager.invokeAction(
     '{!$RemoteAction.ChecklistExtension.edit_checklist_items}',
     checklist_response_id,
@@ -1245,7 +1246,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
           if (event.status) {
             photoHelper(result);
             userService.edit_checklist_items(checklist_response);
-            userService.getPendingChecklistResponses();
           } else if (event.type === 'exception') {
             console.log('Exception: ' + event.message);
           } else {
