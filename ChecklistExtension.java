@@ -2,13 +2,12 @@ global with sharing class ChecklistExtension {
 
     public ChecklistExtension(ApexPages.StandardController stdController) {}
 
-    // public static final String[] QUESTION_Types = new String[]{"Yes_No", "Number", "Text", "Date", "Long_Text", "Rating", "Picklist", "Multi_Select", "Photo"};
-
     /** Returns the JSON form of all checklists. */
     public static String getChecklists() {
        return JSON.serialize(ChecklistUtilities.getAllChecklists());
     } 
 
+    /** Returns all pending Checklists. */
     @RemoteAction
     global static List<Checklist_Response__c> pending_checklists() {
        List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
@@ -16,6 +15,7 @@ global with sharing class ChecklistExtension {
        return checklists;
     } 
 
+    /** Returns all completed Checklists. */
     @RemoteAction
     global static List<Checklist_Response__c> completed_checklists() {
        List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
@@ -23,6 +23,7 @@ global with sharing class ChecklistExtension {
        return checklists;
     } 
 
+    /** Returns Checklist Responses to a CHECKLIST. */
     public static List<Checklist_Item_Response__c> getAllChecklistItems(Id checklist){
         List<Checklist_Item__c> to_return = [SELECT Id, Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c, Attach_Photo__c 
                 FROM Checklist_Item__c WHERE Checklist__c=:checklist AND isActive__c = True order by Order__c];
@@ -37,6 +38,7 @@ global with sharing class ChecklistExtension {
         return responses;
     }
 
+    /** Updates the RESPONSES to CHECKLISTRESP and returns the response. */
     public static Checklist_Response__c save_helper(String checkistResp, List<Checklist_Item_Response__c> responses) {
         List<Checklist_Response__c> res = [SELECT Id FROM Checklist_Response__c WHERE Id=:checkistResp];
         if (checkistResp != null && checkistResp != '' && res.size()>0) {
@@ -68,6 +70,8 @@ global with sharing class ChecklistExtension {
         }
     }
 
+    
+    /** Saves a pending Checklist Response whose ID is CHECKLISTRESPONSE containing RESPONSES. */
     @RemoteAction
     global static Id save_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
         if (responses == null || responses.size() == 0)
@@ -78,6 +82,7 @@ global with sharing class ChecklistExtension {
         return r.Id;
     }
 
+    /** Completes a Checklist Response whose ID is CHECCKLISTRESP containing RESPONSES. */
     @RemoteAction
     global static Id submit_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
         if (responses == null || responses.size() == 0)
