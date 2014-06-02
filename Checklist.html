@@ -728,7 +728,7 @@ id="todo"
           <div class="title"> New Checklist </div>
           <a class="link" data-section="two" href="#" ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist)">
             <p> {{checklist.Name}} </p>
-            <p class="blurb"> {{checklist.Description__c}} </p>
+            <p class="blurb"> {{checklist.Description__c}} &nbsp; </p>
             <div class="arrow-right"></div>
           </a>
         </div>
@@ -738,7 +738,7 @@ id="todo"
             <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
               <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
               <p> {{checklist.Checklist__r.Name}}</p>
-              <p class="blurb"> {{checklist.Checklist__r.Description__c}} </p>
+              <p class="blurb"> {{checklist.Checklist__r.Description__c}} &nbsp;</p>
               <div class="arrow-right"></div>
             </a>
 
