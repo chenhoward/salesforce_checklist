@@ -67,7 +67,7 @@ global with sharing class ChecklistExtension {
     
     /** Saves a pending Checklist Response whose ID is CHECKLISTRESPONSEID containing RESPONSES. */
     @RemoteAction
-    global static Id save_responses(String checklistRespId, List<Checklist_Item_Response__c> responses) {
+    global static Id saveResponses(String checklistRespId, List<Checklist_Item_Response__c> responses) {
         if (responses == null || responses.size() == 0)
             return null;
         Checklist_Response__c r = save_helper(checklistRespId, responses);
@@ -78,7 +78,7 @@ global with sharing class ChecklistExtension {
 
     /** Completes a Checklist Response whose ID is CHECCKLISTRESPID containing RESPONSES. */
     @RemoteAction
-    global static Id submit_responses(String checklistRespId, List<Checklist_Item_Response__c> responses) {
+    global static Id submitResponses(String checklistRespId, List<Checklist_Item_Response__c> responses) {
         if (responses == null || responses.size() == 0)
             return null;
         Checklist_Response__c r = save_helper(checklistRespId, responses);
