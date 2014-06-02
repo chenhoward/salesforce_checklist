@@ -40,36 +40,30 @@ global with sharing class ChecklistExtension {
 
     /** Updates the RESPONSES to CHECKLISTRESP and returns the response. */
     public static Checklist_Response__c save_helper(String checkistResp, List<Checklist_Item_Response__c> responses) {
-        List<Checklist_Response__c> res = [SELECT Id FROM Checklist_Response__c WHERE Id=:checkistResp];
-        if (checkistResp != null && checkistResp != '' && res.size()>0) {
-            List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
-            for(Checklist_Item_Response__c resp : responses){
-                if (resp.Answer__c != null){
+        List<Checklist_Response__c> responseDB = [SELECT Id FROM Checklist_Response__c WHERE Id=:checkistResp];
+        Checklist_Response__c  response;
+        Boolean newResponse = false;
+        if (!(checkistResp != null && checkistResp != '' && responseDB.size()>0)) {
+            response = new Checklist_Response__c();
+            response.Checklist__c = responses[0].Checklist_Item__r.Checklist__c;
+            insert(response);
+            newResponse = true;
+        } else {
+            response = responseDB[0];
+        }
+        List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
+        for(Checklist_Item_Response__c resp : responses){
+            if (resp.Answer__c != null){
+                if (newResponse) {
+                        resp.Checklist_Response__c = response.Id;
+                }
                     resp.Answer__c = String.valueOf(resp.Answer__c);
                     finalResponses.add(resp);
                  }
             }
             upsert finalResponses;
-            List<Checklist_Response__c> response = [SELECT Id, Status__c FROM Checklist_Response__c WHERE Id=:checkistResp];
-            update response;
-            return response[0];
-        } else { // new response created
-            Checklist_Response__c new_response = new Checklist_Response__c();
-            new_response.Checklist__c = responses[0].Checklist_Item__r.Checklist__c;
-            insert(new_response);
-            List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
-            for(Checklist_Item_Response__c resp : responses){
-                resp.Checklist_Response__c = new_response.Id;
-                if (resp.Answer__c != null){
-                    resp.Answer__c = String.valueOf(resp.Answer__c);
-                    finalResponses.add(resp);
-                }
-            }
-            insert finalResponses;
-            return new_response;
-        }
+            return response;
     }
-
     
     /** Saves a pending Checklist Response whose ID is CHECKLISTRESPONSE containing RESPONSES. */
     @RemoteAction
