@@ -968,25 +968,6 @@ this.edit_checklist_items = function(checklist_response_id) {
     {escape: true}
     );
 }
-this.finish_checklist_response = function(checklist_response_id) {
-  var that = this;
-  Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.finish_checklist_items}',
-    checklist_response_id,
-    function(result, event){
-      if (event.status) {
-        pendingchecklistresponses = result[0];
-        completedchecklistresponses = result[1];
-        that.notifyObservers();
-      } else if (event.type === 'exception') {
-        console.log('Exception: ' + event.message);
-      } else {
-        console.log('Error!');
-      }
-    },
-    {escape: true}
-    );
-}
 this.getCLIs = function () {
   return checklistitems;
 };

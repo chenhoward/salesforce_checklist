@@ -38,12 +38,12 @@ global with sharing class ChecklistExtension {
         return responses;
     }
 
-    /** Updates the RESPONSES to CHECKLISTRESP and returns the response. */
-    public static Checklist_Response__c save_helper(String checkistResp, List<Checklist_Item_Response__c> responses) {
-        List<Checklist_Response__c> responseDB = [SELECT Id FROM Checklist_Response__c WHERE Id=:checkistResp];
+    /** Updates the RESPONSES to CHECKLISTRESPID and returns the response. */
+    public static Checklist_Response__c save_helper(String checklistRespId, List<Checklist_Item_Response__c> responses) {
+        List<Checklist_Response__c> responseDB = [SELECT Id FROM Checklist_Response__c WHERE Id=:checklistRespId];
         Checklist_Response__c  response;
         Boolean newResponse = false;
-        if (!(checkistResp != null && checkistResp != '' && responseDB.size()>0)) {
+        if (!(checklistRespId != null && checklistRespId != '' && responseDB.size()>0)) {
             response = new Checklist_Response__c();
             response.Checklist__c = responses[0].Checklist_Item__r.Checklist__c;
             insert(response);
@@ -65,23 +65,23 @@ global with sharing class ChecklistExtension {
             return response;
     }
     
-    /** Saves a pending Checklist Response whose ID is CHECKLISTRESPONSE containing RESPONSES. */
+    /** Saves a pending Checklist Response whose ID is CHECKLISTRESPONSEID containing RESPONSES. */
     @RemoteAction
-    global static Id save_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
+    global static Id save_responses(String checklistRespId, List<Checklist_Item_Response__c> responses) {
         if (responses == null || responses.size() == 0)
             return null;
-        Checklist_Response__c r = save_helper(checkistResp, responses);
+        Checklist_Response__c r = save_helper(checklistRespId, responses);
         r.Status__c = 'Pending';
         update r;
         return r.Id;
     }
 
-    /** Completes a Checklist Response whose ID is CHECCKLISTRESP containing RESPONSES. */
+    /** Completes a Checklist Response whose ID is CHECCKLISTRESPID containing RESPONSES. */
     @RemoteAction
-    global static Id submit_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
+    global static Id submit_responses(String checklistRespId, List<Checklist_Item_Response__c> responses) {
         if (responses == null || responses.size() == 0)
             return null;
-        Checklist_Response__c r = save_helper(checkistResp, responses);
+        Checklist_Response__c r = save_helper(checklistRespId, responses);
         r.Status__c = 'Complete';
         update r;
         return r.Id;
