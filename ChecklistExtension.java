@@ -2,27 +2,28 @@ global with sharing class ChecklistExtension {
 
     public ChecklistExtension(ApexPages.StandardController stdController) {}
 
-    // public static final String[] QUESTION_Types = new String[]{"Yes_No", "Number", "Text", "Date", "Long_Text", "Rating", "Picklist", "Multi_Select", "Photo"};
-
     /** Returns the JSON form of all checklists. */
     public static String getChecklists() {
        return JSON.serialize(ChecklistUtilities.getAllChecklists());
     } 
 
+    /** Returns all pending Checklists. */
     @RemoteAction
-    global static List<Checklist_Response__c> pending_checklists() {
+    global static List<Checklist_Response__c> pendingChecklists() {
        List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
                                                 Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending'];
        return checklists;
     } 
 
+    /** Returns all completed Checklists. */
     @RemoteAction
-    global static List<Checklist_Response__c> completed_checklists() {
+    global static List<Checklist_Response__c> completedChecklists() {
        List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
                                                 Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Complete'];
        return checklists;
     } 
 
+    /** Returns Checklist Responses to a CHECKLIST. */
     public static List<Checklist_Item_Response__c> getAllChecklistItems(Id checklist){
         List<Checklist_Item__c> to_return = [SELECT Id, Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c, Attach_Photo__c 
                 FROM Checklist_Item__c WHERE Checklist__c=:checklist AND isActive__c = True order by Order__c];
@@ -37,52 +38,50 @@ global with sharing class ChecklistExtension {
         return responses;
     }
 
-    public static Checklist_Response__c save_helper(String checkistResp, List<Checklist_Item_Response__c> responses) {
-        List<Checklist_Response__c> res = [SELECT Id FROM Checklist_Response__c WHERE Id=:checkistResp];
-        if (checkistResp != null && checkistResp != '' && res.size()>0) {
-            List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
-            for(Checklist_Item_Response__c resp : responses){
-                if (resp.Answer__c != null){
+    /** Updates the RESPONSES to CHECKLISTRESPID and returns the response. */
+    public static Checklist_Response__c save_helper(String checklistRespId, List<Checklist_Item_Response__c> responses) {
+        List<Checklist_Response__c> responseDB = [SELECT Id FROM Checklist_Response__c WHERE Id=:checklistRespId];
+        Checklist_Response__c  response;
+        Boolean newResponse = false;
+        if (!(checklistRespId != null && checklistRespId != '' && responseDB.size()>0)) {
+            response = new Checklist_Response__c();
+            response.Checklist__c = responses[0].Checklist_Item__r.Checklist__c;
+            insert(response);
+            newResponse = true;
+        } else {
+            response = responseDB[0];
+        }
+        List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
+        for(Checklist_Item_Response__c resp : responses){
+            if (resp.Answer__c != null || resp.Checklist_Item__r.Attach_Photo__c){
+                if (newResponse) {
+                        resp.Checklist_Response__c = response.Id;
+                }
                     resp.Answer__c = String.valueOf(resp.Answer__c);
                     finalResponses.add(resp);
                  }
             }
             upsert finalResponses;
-            List<Checklist_Response__c> response = [SELECT Id, Status__c FROM Checklist_Response__c WHERE Id=:checkistResp];
-            update response;
-            return response[0];
-        } else { // new response created
-            Checklist_Response__c new_response = new Checklist_Response__c();
-            new_response.Checklist__c = responses[0].Checklist_Item__r.Checklist__c;
-            insert(new_response);
-            List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
-            for(Checklist_Item_Response__c resp : responses){
-                resp.Checklist_Response__c = new_response.Id;
-                if (resp.Answer__c != null){
-                    resp.Answer__c = String.valueOf(resp.Answer__c);
-                    finalResponses.add(resp);
-                }
-            }
-            insert finalResponses;
-            return new_response;
-        }
+            return response;
     }
-
+    
+    /** Saves a pending Checklist Response whose ID is CHECKLISTRESPONSEID containing RESPONSES. */
     @RemoteAction
-    global static Id save_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
+    global static Id saveResponses(String checklistRespId, List<Checklist_Item_Response__c> responses) {
         if (responses == null || responses.size() == 0)
             return null;
-        Checklist_Response__c r = save_helper(checkistResp, responses);
+        Checklist_Response__c r = save_helper(checklistRespId, responses);
         r.Status__c = 'Pending';
         update r;
         return r.Id;
     }
 
+    /** Completes a Checklist Response whose ID is CHECCKLISTRESPID containing RESPONSES. */
     @RemoteAction
-    global static Id submit_responses(String checkistResp, List<Checklist_Item_Response__c> responses) {
+    global static Id submitResponses(String checklistRespId, List<Checklist_Item_Response__c> responses) {
         if (responses == null || responses.size() == 0)
             return null;
-        Checklist_Response__c r = save_helper(checkistResp, responses);
+        Checklist_Response__c r = save_helper(checklistRespId, responses);
         r.Status__c = 'Complete';
         update r;
         return r.Id;
@@ -159,6 +158,8 @@ global with sharing class ChecklistExtension {
 
     @RemoteAction
     global static Id photo_remotecall(Id checklist_item_id, Id response_id, Blob bitphoto) {
+        System.debug('swag');
+        System.debug(bitphoto);
         if (checklist_item_id == null || response_id == null || bitphoto == null) {
             return null;
         }

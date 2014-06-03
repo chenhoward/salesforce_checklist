@@ -34,13 +34,13 @@ id="todo"
     function setSection(to, from)
     {
       if (!(to.hasClass("active")))
-      {  
+      {
         from.animate({"left":"-100%"},100,'linear')
         to.animate({"left":"0%"},100,'linear',function()
-        {    
+        {
           from.css("left","100%");
-          from.removeClass("active");    
-          to.addClass("active");    
+          from.removeClass("active");
+          to.addClass("active");
         });
         if (to.is("#one")) {
           $("#pending-tab").addClass("active-tab");
@@ -66,22 +66,22 @@ id="todo"
       }
     }
     $(document).ready(function(){
-      $('a').on('click', function(event) 
+      $('a').on('click', function(event)
       {
         var sectionId = $(this).attr("data-section"),
         $toSlide= $("#container section#"+sectionId),
         $fromSlide= $('.active');
         setSection($toSlide, $fromSlide);
       });
-      $('#newbut').on('click', function(event) 
+      $('#newbut').on('click', function(event)
       {
         $('#new-div').animate({"top":"0%"},100,'linear');
       });
-      $('#hide-new').on('click', function(event) 
+      $('#hide-new').on('click', function(event)
       {
         $('#new-div').animate({"top":"100%"},100,'linear');
       });
-      $('#hide-checklist').on('click', function(event) 
+      $('#hide-checklist').on('click', function(event)
       {
         setSection($('#one'), $('#two'));
       });
@@ -106,11 +106,11 @@ id="todo"
       overflow: hidden;
       background: #FFF;
     }
-    
+
     *:focus {
       outline: none;
     }
-    
+
     p {
       padding: 0px;
       margin: 0px;
@@ -125,7 +125,7 @@ id="todo"
       overflow: hidden;
       background: transparent;
     }
-    
+
     #container section {
       position: absolute;
       width: 100%;
@@ -249,7 +249,7 @@ id="todo"
     #newbut:hover {
       cursor: pointer;
     }
-    
+
     .link {
       box-sizing: border-box;
       -moz-box-sizing: border-box;
@@ -267,7 +267,7 @@ id="todo"
     .link:hover {
       cursor: pointer;
     }
-    
+
     .x {
       position: absolute;
       top: 0px;
@@ -309,7 +309,7 @@ id="todo"
     .last {
       border-bottom: 1px solid #cccccc;
     }
-    
+
     .arrow-right {
       float: right;
       margin-top: -25px;
@@ -319,7 +319,7 @@ id="todo"
       border-top: 3px solid #cccccc;
       border-right: 3px solid #cccccc;
     }
-    
+
     .title {
       box-sizing: border-box;
       -moz-box-sizing: border-box;
@@ -334,7 +334,7 @@ id="todo"
       background: #333333;
       width: 100%;
     }
-    
+
     .question {
       box-sizing: border-box;
       -moz-box-sizing: border-box;
@@ -367,11 +367,10 @@ id="todo"
       border-radius: 5px;
       -webkit-appearance: none;
     }
-    
     textarea {
       height: 150px;
     }
-    
+
     select {
       background: url({!$Resource.checklist_arrow}) no-repeat right;
       background-size: 60px 60px;
@@ -390,7 +389,7 @@ id="todo"
       left: 5px;
       top: -12px;
     }
-    
+
     .toggle-spacer {
       height: 20px;
       width: 1px;
@@ -400,7 +399,7 @@ id="todo"
       height: 16px;
       width: 1px;
     }
-    
+
     .check-label {
       position: relative;
       top: -10px;
@@ -420,7 +419,7 @@ id="todo"
       border-top-left-radius: 5px;
       border-bottom-left-radius: 5px;
     }
-    
+
     #no-button {
       font-weight: 400;
       padding: 5px;
@@ -432,7 +431,7 @@ id="todo"
       border-top-right-radius: 5px;
       border-bottom-right-radius: 5px;
     }
-    
+
     .yes-no {
       display: none;
     }
@@ -441,7 +440,7 @@ id="todo"
       color: #FFF;
       background: #8cd250;
     }
-    
+
     .yes-no:checked ~ #no-button {
       color: #b3b3b3;
       background: #b3b3b3;
@@ -460,7 +459,7 @@ id="todo"
       border-top-left-radius: 5px;
       border-bottom-left-radius: 5px;
     }
-    
+
     #fail-button {
       font-weight: 400;
       padding: 5px;
@@ -472,7 +471,7 @@ id="todo"
       border-top-right-radius: 5px;
       border-bottom-right-radius: 5px;
     }
-    
+
     #passfail {
       display: none;
     }
@@ -481,12 +480,12 @@ id="todo"
       color: #FFF;
       background: #8cd250;
     }
-    
+
     #passfail:checked ~ #fail-button {
       color: #b3b3b3;
       background: #b3b3b3;
     }
-    
+
     input[type="number"] {
       width: 80px;
     }
@@ -502,7 +501,7 @@ id="todo"
       border-radius: 5px;
       border: 1px solid #999999;
     }
-    
+
     input[type="range"]::-webkit-slider-thumb {
       box-sizing: border-box;
       -moz-box-sizing: border-box;
@@ -520,14 +519,14 @@ id="todo"
       -moz-box-sizing: border-box;
       height: 48px;
     }
-    
+
     input[type="checkbox"] {
       width: 30px;
       height: 30px;
       margin: 0px;
       background: #FFF;
     }
-    
+
     input[type="checkbox"]:checked {
       background: url({!$Resource.checklist_check}) no-repeat center;
       background-size: cover;
@@ -611,7 +610,7 @@ id="todo"
       background: #8cd250;
       width: 100%;
     }
-    
+
     #conclusion {
       text-align: center;
     }
@@ -664,7 +663,7 @@ id="todo"
     .rating input:checked + span ~ span {
       background-position:0 0;
     }
-    
+
     .green_text {
       color: #8cd250;
     }
@@ -681,7 +680,7 @@ id="todo"
       left: 0;
       right: 0;
     }
-    
+
     #back {
       position: absolute;
       top: 0;
@@ -707,20 +706,20 @@ id="todo"
       <input class='normal' id='checklist_id' type='hidden' value='{!$CurrentPage.parameters.checklist_id}'/>
 
       <div class="flipbox">
-        <div id="navbar"> 
+        <div id="navbar">
           <!-- Currently no icons -->
-          <a class="navbut active-tab" id="pending-tab" data-section="one" href="#"> 
+          <a class="navbut active-tab" id="pending-tab" data-section="one" href="#">
             <p> <img id="pending" src="{!$Resource.checklist_pending}"></img> </p>
             <p> <img id="pending-alt" src="{!$Resource.checklist_pending_alt}"></img> </p>
             <p id="pendingtag"> Pending </p>
           </a>
-          <a class="navbut" id="complete-tab" data-section="four" href="#"> 
+          <a class="navbut" id="complete-tab" data-section="four" href="#">
             <p> <img id="complete" src="{!$Resource.checklist_completed}"></img> </p>
             <p> <img id="complete-alt" src="{!$Resource.checklist_completed_alt}"></img> </p>
             <p id="completetag"> Complete </p>
           </a>
         </div>
-        <div id="newbut" href="#"> 
+        <div id="newbut" href="#">
           <p> <img id="new" src="{!$Resource.checklist_new}"></img> </p>
           <p id="newtag"> New </p>
         </div>
@@ -729,7 +728,7 @@ id="todo"
           <div class="title"> New Checklist </div>
           <a class="link" data-section="two" href="#" ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist)">
             <p> {{checklist.Name}} </p>
-            <p class="blurb"> {{checklist.Description__c}} </p>
+            <p class="blurb"> {{checklist.Description__c}} &nbsp; </p>
             <div class="arrow-right"></div>
           </a>
         </div>
@@ -739,10 +738,10 @@ id="todo"
             <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
               <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
               <p> {{checklist.Checklist__r.Name}}</p>
-              <p class="blurb"> {{checklist.Checklist__r.Description__c}} </p>
+              <p class="blurb"> {{checklist.Checklist__r.Description__c}} &nbsp;</p>
               <div class="arrow-right"></div>
             </a>
-            
+
             <div class="spacer"> </div>
                 <!--
                 <a class="link blue" data-section="two" href="#">
@@ -752,30 +751,29 @@ id="todo"
                   </a>-->
                 </section>
                 <section id="two" ng-controller="ChecklistCtrl">
-                  <form ng-submit="submitForm()">
+                  <form name="checklistForm" ng-submit="checklistForm.$valid  && submitForm()">
                     <img class="x" id="hide-checklist" src="{!$Resource.checklist_x}"></img>
                     <div class="title"> {{checklistName}}  </div>
-                    <li ng-show="!checklistitems.length">No checklistitems</li>
                     <div class="question" ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'">
                       <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
                        <p> {{checklistitem.Checklist_Item__r.Question__c}} </p>
                        <p ng-switch-when="Yes/No" class="toggle-spacer"></p>
 
-                       <input class="yes-no" id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+                       <input class="yes-no" id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c"> </input>
                        <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="yes-button"> Yes </label>
                        <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="no-button"> No </label>
                        <input id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-switch-when="Number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                        <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                        <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                        <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
-                       
+
                        <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
                        <!-- Multiple Values from Database -->
                        <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Checklist_Item__r.Values[0]}}" max="{{checklistitem.Checklist_Item__r.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                        <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
                         {{checklistitem.Answer__c}}
                       </div>
-                      <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
+                      <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c"    ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
                       </select>
                       <div  ng-switch-when="Multi-Select">
                         <div ng-repeat="val in checklistitem.Checklist_Item__r.Values">
@@ -793,8 +791,8 @@ id="todo"
                     </span>
                   </div>
                   <div class="form-buttons">
-                    <input class="save last" type="button" name="save" value="Save"></input>
-                    <input class="submit last" type="button" name="submit" value="Submit" ng-click="submitForm()"></input>
+                    <input class="save last" type="button" name="save" value="Save" ng-click="saveResponse()"></input>
+                    <input class="submit last" type="submit" name="submit" value="Submit"></input>
                   </div>
                 </form>
               </section>
@@ -812,7 +810,7 @@ id="todo"
                   <p> View Map </p>
                   <p class="blurb"> 2 Completed Locations </p>
                 </div>
-                <div class="link maplink" ng-repeat="checklist in completedchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
+                <div class="link maplink" ng-repeat="checklist in completedchecklistresponses">
                   <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
                   <p> {{checklist.Checklist__r.Name}} </p>
                   <p class="blurb"> {{checklist.Checklist__r.Description__c}} </p>
@@ -822,96 +820,15 @@ id="todo"
             </div>
           </div>
         </div>
-
-
-
-        <div ng-controller="PagesController">
-          <input class='normal' id='checklist_id' type='hidden' value='{!$CurrentPage.parameters.checklist_id}'/>
-          <div id="messages"></div>
-
-          <div id="homePage" ng-controller="homeCtrl" ng-show="homePageActive">
-            <div ng-click="goToNewListpage()"> Start a New Checklist </div>
-            <div ng-click="goToPendingListpage()">Work on a Pending Checklist</div>
-            <div ng-click="goTocompletedListPage()">Look at Completed Checklists</div>
-          </div>
-          <!-- End of homePage -->
-
-          <div id="completedListPage" ng-controller="CompletedListCtrl" ng-show="completedListPageActive">
-            <li ng-repeat="checklist in completedchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
-              <p> Name: {{checklist.Name}} </p>
-              <p> Description: {{checklist.Description__c}} </p>
-              <p> Id: {{checklist.Id}} </p>
-            </li>
-            <!-- <div ng-click="goHome()">Go Home</div> -->
-          </div>
-          <!-- End of newListPage -->
-
-          <div id="newListPage" ng-controller="NewListCtrl" ng-show="newlistPageActive">
-            <li ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist)"> 
-              <p> Name: {{checklist.Name}} </p>
-              <p> Description: {{checklist.Description__c}} </p>
-              <p> Id: {{checklist.Id}} </p>
-            </li>
-            <!-- <div ng-click="goHome()">Go Home</div> -->
-          </div>
-          <!-- End of newListPage -->
-
-          <div id="pendingListPage" ng-controller="PendingListCtrl" ng-show="pendinglistPageActive">
-            <li ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
-              <p> Name: {{checklist.Name}} </p>
-              <p> Description: {{checklist.Description__c}} </p>
-              <p> Id: {{checklist.Id}} </p>
-            </li>
-            <!-- <div ng-click="goHome()">Go Home</div> -->
-          </div>
-          <!-- End of pendingListPage -->
-
-          <div id="checklistDetailPage" ng-controller="ChecklistCtrl" ng-show="detailPageActive">
-            <div id="checklist">
-              <ul>
-                <li ng-show="!checklistitems.length">No checklistitems</li>
-                <form ng-submit="submitForm()">
-                  <li ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'"> 
-                    <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
-                      <p> Question: {{checklistitem.Checklist_Item__r.Question__c}} </p> 
-                      <p> Required: {{checklistitem.Checklist_Item__r.Required__c}} </p> 
-                      <p> Type: {{checklistitem.Checklist_Item__r.Type__c}} </p> 
-                      <p> Id: {{checklistitem.Checklist_Item__c}} </p> 
-                      <p> Checklist Id: {{checklistitem.Checklist_Item__r.Checklist__c}} </p> 
-                      <p> Order: {{checklistitem.Checklist_Item__r.Order__c}} </p> 
-                      <p> Photo: {{checklistitem.Checklist_Item__r.Attach_Photo__c}} </p> 
-                      <input id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                      <input id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-switch-when="Number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                      <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                      <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                      <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
-                      <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
-                      <!-- Multiple Values from Database -->
-                      <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Checklist_Item__r.Values[0]}}" max="{{checklistitem.Checklist_Item__r.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                      <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
-                        {{checklistitem.Answer__c}}
-                      </div>
-                      <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
-                      </select>
-                      <select ng-options="val for val in checklistitem.Checklist_Item__r.Values" ng-multiple="true" multiple="true" ng-switch-when="Multi-Select" ng-model="checklistitem.Answer__c"></select>
-                      <input type="file" class="photo" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
-                    </span>
-                  </li>
-                  <input id="submit_button" type="submit" value="Submit"> </input>
-                </form>
-                <button id="save_button" ng-click="saveResponse()"> Save Response </button>
-              </ul>
-              <!-- <div ng-click="goHome()">Back to Home</div> -->
-              <div id="map" ng-show="mapActive"></div>
-            </div>
-          </div>
-          <!-- End of checklistDetailPage -->
-
-        </div>
       </body>
 
       <script>
       /* Angular */
+        window.onkeydown = function(e){
+        var $focused = $(':focus');
+        window.focus();
+        $focused.focus();
+      }
       var myApp = angular.module('myApp', []);
       var photoMap = {};
 
@@ -925,15 +842,18 @@ id="todo"
 
         var observerCallbacks = [];
     // Register an Observer
+
     this.registerObserverCallback = function(callback){
       observerCallbacks.push(callback);
-    };
+    }
+
     this.notifyObservers = function() {
       angular.forEach(observerCallbacks, function(callback){
         callback();
       });
     };
-    this.get_checklist_items = function(checklist_id) {
+
+    this.getChecklistItems = function(checklist_id) {
       var that = this;
       Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.checklist_items}',
@@ -941,8 +861,7 @@ id="todo"
         function(result, event){
           if (event.status) {
             checklistitems = result;
-
-            for (var i=0; i<checklistitems.length; i++) {
+            for (var i = 0; i < checklistitems.length; i++) {
               var type = checklistitems[i].Checklist_Item__r.Type__c;
               if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
                 var values = checklistitems[i].Checklist_Item__r.Values__c;
@@ -950,8 +869,6 @@ id="todo"
                   checklistitems[i].Checklist_Item__r.Values = values.split(', ');
                   checklistitems[i].Checklist_Item__r.Values2 = [];
                 }
-                console.log("Values");
-                console.log(checklistitems[i].Checklist_Item__r.Values);
               }
             }
             that.notifyObservers();
@@ -964,10 +881,11 @@ id="todo"
         {escape: true}
         );
 }
-this.get_completed_CLRI = function() {
+
+this.getCompletedChecklistResponses = function() {
   var that = this;
   Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.completed_checklists}',
+    '{!$RemoteAction.ChecklistExtension.completedChecklists}',
     function(result, event){
       if (event.status) {
         completedchecklistresponses = result;
@@ -981,10 +899,11 @@ this.get_completed_CLRI = function() {
     {escape: true}
     );
 }
-this.get_pending_CLRI = function() {
+
+this.getPendingChecklistResponses = function() {
   var that = this;
   Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.pending_checklists}',
+    '{!$RemoteAction.ChecklistExtension.pendingChecklists}',
     function(result, event){
       if (event.status) {
         pendingchecklistresponses = result;
@@ -998,16 +917,14 @@ this.get_pending_CLRI = function() {
     {escape: true}
     );
 }
+
 this.edit_checklist_items = function(checklist_response_id) {
   var that = this;
-  console.log(checklist_response_id);
   Visualforce.remoting.Manager.invokeAction(
     '{!$RemoteAction.ChecklistExtension.edit_checklist_items}',
     checklist_response_id,
     function(result, event){
       if (event.status) {
-        console.log('items');
-        console.log(result);
         if (result.length == 0) return;
         checklistitems = result;
         for (var i = 0; i < result.length; i++) {
@@ -1051,25 +968,6 @@ this.edit_checklist_items = function(checklist_response_id) {
     {escape: true}
     );
 }
-this.finish_checklist_response = function(checklist_response_id) {
-  var that = this;
-  Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.finish_checklist_items}',
-    checklist_response_id,
-    function(result, event){
-      if (event.status) {
-        pendingchecklistresponses = result[0];
-        completedchecklistresponses = result[1];
-        that.notifyObservers();
-      } else if (event.type === 'exception') {
-        console.log('Exception: ' + event.message);
-      } else {
-        console.log('Error!');
-      }
-    },
-    {escape: true}
-    );
-}
 this.getCLIs = function () {
   return checklistitems;
 };
@@ -1098,10 +996,10 @@ myApp.controller("CompletedListCtrl", function ($scope, userService) {
     $scope.$apply();
   };
   Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.completed_checklists}',
+    '{!$RemoteAction.ChecklistExtension.completedChecklists}',
     function(result, event){
       if (event.status) {
-        $scope.checklistitems = result; 
+        $scope.checklistitems = result;
       } else if (event.type === 'exception') {
         console.log('Exception: ' + event.message);
       } else {
@@ -1130,7 +1028,7 @@ myApp.controller("PendingListCtrl", function ($scope, userService) {
     $scope.$apply();
   };
   Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.pending_checklists}',
+    '{!$RemoteAction.ChecklistExtension.pendingChecklists}',
     function(result, event){
       if (event.status) {
         $scope.checklistitems = result; 
@@ -1181,8 +1079,11 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
     delete $scope.checklistitems.attributes;
   }
   function photoHelper(checklist_response_id) {
+    alert(Object.keys($scope.photoMap).length);
     if (Object.keys($scope.photoMap).length > 0) {
       for (var key in $scope.photoMap) {
+        alert('iterate');
+        console.log($scope.photoMap[key]);
         Visualforce.remoting.Manager.invokeAction(
           '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
           key,
@@ -1192,11 +1093,14 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
             if (event.status) {
               console.log('success!');
               var attachment_id = result;
+              alert(result);
               console.log('attachment: https://c.na15.visual.force.com/' + attachment_id);
             } else if (event.type === 'exception') {
               console.log('Exception: ' + event.message);
+              alert('Exception' + event.message);
             } else {
               console.log('Error!');
+              alert('Error');
             }
           },
           {escape: true}
@@ -1207,57 +1111,46 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
   $scope.submitForm = function() {
     var that = this;
     formHelper();
-      /*
-         var checklist_response;
-         checklist_response = getUrlVars()['id'];
-         if (checklist_response == null) {
-         checklist_response = '';
-         }
-         */
-         for(var i = 0; i < $scope.checklistitems.length; i++) {
-          var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
+    for(var i = 0; i < $scope.checklistitems.length; i++) {
+      var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
 
+    }
+    var checklist_response = $('#checklist_id').val(); 
+
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ChecklistExtension.submitResponses}',
+      checklist_response,
+      $scope.checklistitems,
+      function(result, event){
+        if (event.status) {
+          photoHelper(result);
+          userService.edit_checklist_items(checklist_response);
+        } else if (event.type === 'exception') {
+          console.log('Exception: ' + event.message);
+        } else {
+          console.log('Error!');
         }
-        var checklist_response = $('#checklist_id').val(); 
+      },
+      {escape: true}
+      );
+    userService.getPendingChecklistResponses();
+    userService.getCompletedChecklistResponses();
+    $("#messages").text('Success!');
+    setSection($('#container section#three'), $('.active'));
+  }
 
-        Visualforce.remoting.Manager.invokeAction(
-          '{!$RemoteAction.ChecklistExtension.submit_responses}',
-          checklist_response,
-          $scope.checklistitems,
-          function(result, event){
-            if (event.status) {
-              photoHelper(result);
-              userService.edit_checklist_items(checklist_response);
-            } else if (event.type === 'exception') {
-              console.log('Exception: ' + event.message);
-            } else {
-              console.log('Error!');
-            }
-          },
-          {escape: true}
-          );
-        $("#messages").text('Success!');
-        setSection($('#container section#three'), $('.active'));
-      }
-
-      $scope.saveResponse = function() {
-        var that = this;
-        formHelper();
-      /*
-         var checklist_response;
-         checklist_response = getUrlVars()['id'];
-         if (checklist_response == null) {
-         checklist_response = '';
-         }
-         */
+  $scope.saveResponse = function() {
+    var that = this;
+    formHelper();
       var checklist_response = $('#checklist_id').val(); // works for pending to completed
       Visualforce.remoting.Manager.invokeAction(
-        '{!$RemoteAction.ChecklistExtension.save_responses}',
+        '{!$RemoteAction.ChecklistExtension.saveResponses}',
         checklist_response,
         $scope.checklistitems,
         function(result, event){
           if (event.status) {
             photoHelper(result);
+            alert('photoHelper');
             userService.edit_checklist_items(checklist_response);
           } else if (event.type === 'exception') {
             console.log('Exception: ' + event.message);
@@ -1267,14 +1160,17 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
         },
         {escape: true}
         );
+      userService.getCompletedChecklistResponses();
+      userService.getPendingChecklistResponses();
       $("#messages").text('Success!');
+      setSection($('#container section#three'), $('.active'));
+
     }
   });
 
 var controllers = {};
 controllers.PagesController = function ($scope, userService) {
-  // var checklist = getUrlVars()['checklist_id']; 
-  var response = getUrlVars()['id']; 
+  var response = getUrlVars()['id'];
 
   function basePageState() {
     $scope.newlistPageActive = false;
@@ -1306,15 +1202,6 @@ controllers.PagesController = function ($scope, userService) {
       $('#save_button').hide();
     }
   }
-  // Specific checklist
-  // if (checklist != null ) {
-  //     userService.get_checklist_items(checklist);
-  //     $scope.newlistPageActive = false;
-  //     $scope.checklist_id = checklist;
-  //     $scope.mapActive = false;
-  //     $scope.detailPageActive = true;
-  // }
-  // Specific response
   if (response != null ) {
     userService.edit_checklist_items(response);
     $scope.newlistPageActive = false;
@@ -1322,22 +1209,14 @@ controllers.PagesController = function ($scope, userService) {
     $scope.mapActive = true;
     $scope.detailPageActive = true;
   }
-  // if (checklist == undefined && response == undefined) {
-  //     $scope.detailPageActive = false;
-  //     $scope.checklist_id = null;
-  //     $scope.newlistPageActive = false;
-  //     $scope.homePageActive = true;
-  // }
-  userService.get_pending_CLRI();
-  userService.get_completed_CLRI();
+  userService.getPendingChecklistResponses();
+  userService.getCompletedChecklistResponses();
 
   $scope.pendinglistPageActive = true;
   $scope.goToCreateDetailPage = function(checklist) {
     $scope.checklistName = checklist.Name;
-    console.log(checklist.Name);
-    console.log($scope.checklistName);
     setupDetail(checklist.Id);
-    userService.get_checklist_items(checklist.Id);
+    userService.getChecklistItems(checklist.Id);
   }
 
   $scope.goToEditDetailPage = function(checklist) {
@@ -1356,13 +1235,13 @@ controllers.PagesController = function ($scope, userService) {
 
   $scope.goToPendingListpage = function() {
     buttonShow(true);
-    userService.get_pending_CLRI();
+    userService.getPendingChecklistResponses();
     basePageState();
     $scope.pendinglistPageActive = true;
   };
   $scope.goTocompletedListPage = function() {
     buttonShow(false);
-    userService.get_completed_CLRI();
+    userService.getCompletedChecklistResponses();
     basePageState();
     $scope.completedListPageActive = true;
   };
