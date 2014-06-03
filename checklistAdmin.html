@@ -160,7 +160,7 @@ function removeParent(button) {
             <input type="text" ng-model="item.Values__c" name="Q1"></input>-->
           </div>
           <br/>
-          <input type='button' value='Remove Question' onclick='removeQuestion(item)'/>
+          <input type='button' value='Remove Question' ng-click='removeQuestion(item)'/>
           <br/>
         </li>
       </ol>
@@ -320,9 +320,10 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.showValues = function(item) {
       return (item.Type__c == 'Rating') || (item.Type__c == 'Picklist') || (item.Type__c == 'Multi-Select');
     }
+    
     $scope.removeQuestion = function(item) {
-      var index = $scope.questions.indexOf(item)
-      $scope.questions.splice(index,1);
+      console.log($scope.items.indexOf($scope.item));
+      $scope.items.splice($scope.items.indexOf($scope.item), 1);
     }
     $scope.editChecklist = function() {
       if ($scope.editPage.$valid) {

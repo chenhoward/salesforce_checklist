@@ -689,6 +689,20 @@ id="todo"
     .progress-message {
         color: #FFFFFF;
     }
+
+    .error-invalid::after {
+        display: block;
+        color: #f06060;
+        padding-top: 10px;
+        content: "This field is invalid";
+    }
+
+    .error-required::after {
+        display: block;
+        color: #f06060;
+        padding-top: 10px;
+        content: "This field is required";
+    }
     </style>
 </head>
 <body>
@@ -785,11 +799,11 @@ id="todo"
                     <img class="x" id="hide-checklist" src="{!$Resource.checklist_x}"></img>
                     <div class="title"> Checklist With A Long Name Like This  </div>
                     <div class="question">
-                        <p> This is a text question? </p>
+                        <p class="error-invalid"> This is a text question? </p>
                         <input type="text" name="text" required="required"></input>
                     </div>
                     <div class="question">
-                        <p> This is a text question that involves picture input? </p>
+                        <p class="error-required"> This is a text question that involves picture input? </p>
                         <input type="text" name="text" required="required"></input>
                         <p> 
                             <img class="camera" src="{!$Resource.checklist_camera}"></img>
