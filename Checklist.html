@@ -712,6 +712,7 @@ id="todo"
         padding-top: 10px;
         content: "This field is required";
     }
+
     </style>
   </head>
 
@@ -765,7 +766,7 @@ id="todo"
                   </a>-->
                 </section>
                 <section id="two" ng-controller="ChecklistCtrl">
-                  <form name="checklistForm" ng-submit="checklistForm.$valid  && submitForm()">
+                  <form name="checklistForm" class="checklistForm" ng-submit="checklistForm.$valid  && submitForm()">
                     <img class="x" id="hide-checklist" src="{!$Resource.checklist_x}"></img>
                     <div class="title"> {{checklistName}}  </div>
                     <div class="question" ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'">
