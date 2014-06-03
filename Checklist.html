@@ -698,6 +698,20 @@ id="todo"
       height: 100%;
       border: none;
     }
+
+    .error-invalid::after {
+        display: block;
+        color: #f06060;
+        padding-top: 10px;
+        content: "This field is invalid";
+    }
+
+    .error-required::after {
+        display: block;
+        color: #f06060;
+        padding-top: 10px;
+        content: "This field is required";
+    }
     </style>
   </head>
 
