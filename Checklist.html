@@ -921,7 +921,7 @@ this.getPendingChecklistResponses = function() {
 this.edit_checklist_items = function(checklist_response_id) {
   var that = this;
   Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.edit_checklist_items}',
+    '{!$RemoteAction.ChecklistExtension.editChecklistItems}',
     checklist_response_id,
     function(result, event){
       if (event.status) {
@@ -1051,7 +1051,6 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
   }
   function updateChecklistitems() {
     $scope.checklistitems = userService.getCLIs();
-    // Make sure the scope refreshes itself
     $scope.$apply();
   };
   function formHelper() {
