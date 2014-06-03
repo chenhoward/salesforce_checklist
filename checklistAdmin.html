@@ -133,7 +133,6 @@ function removeParent(button) {
           <input type="text" ng-model="item.Question__c" name="Q1" ng-required="true"></input>
           <br/><br/>
           <!--NEEDS TO BE FIXED TO FOLLOW DRAG AND DROP-->
-          <input type="hidden" ng-model="item.Order__c" name="O2" ng-required="true"></input>
           <label> Required: </label>
           <input type="checkbox" ng-model="item.Required__c" name="O3"></input>
           <br/><br/>
@@ -278,6 +277,9 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.newPage = bool;
     }
     $scope.newChecklist = function() {
+      for (var i = 0; i < $scope.items.length; i++) {
+        $scope.items[i].Order__c = i;
+      }
       if ($scope.newChecklistForm.$valid) {
       for(var i = 0; i < $scope.items.length; i++) {
         delete $scope.items[i].$$hashKey;
