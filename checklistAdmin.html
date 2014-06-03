@@ -138,28 +138,22 @@ function removeParent(button) {
           <br/><br/>
           <label> Photo Attachment: </label>
           <input type="checkbox" ng-model="item.Attach_Photo__c" name="O4"></input>
-          <br/>
+          <br/><br/>
           <div ng-show="showValues(item)">
-            <br/>
-            <!--NEEDS TO BE FIXED TO FOLLOW CHOICE ADDER-->
-            <div id='choice-wrapper'>
-              <label> Choice </label>
-              <input type='text' class="choice"/>
-              <input type='button' onclick='removeParent(this)' value='Remove Choice'/>
-              <br/><br/>
+            <div ng-repeat="choice in choices">
+              <!--NEEDS TO BE FIXED TO FOLLOW CHOICE ADDER-->
+              <div id='choice-wrapper'>
+                <label> Choice </label>
+                <input type='text' class="choice"/>
+                <input type='button' ng-click='removeChoice(choice)' value='Remove Choice'/>
+                <br/><br/>
+              </div>
+              <!--<label> Values: </label>
+              <input type="text" ng-model="item.Values__c" name="Q1"></input>-->
             </div>
-            <div id='choice-wrapper'>
-              <label> Choice </label>
-              <input type='text' class="choice"/>
-              <input type='button' onclick='removeParent(this)' value='Remove Choice'/>
-              <br/><br/>
-            </div>
-            <input type='button' onclick='addChoice(this)' value='Add Choice'/>
-            <br/>
-            <!--<label> Values: </label>
-            <input type="text" ng-model="item.Values__c" name="Q1"></input>-->
+            <input type='button' ng-click='addChoice()' value='Add Choice'/>
+            <br/><br/>
           </div>
-          <br/>
           <input type='button' value='Remove Question' ng-click='removeQuestion(item)'/>
           <br/>
         </li>
@@ -218,28 +212,22 @@ function removeParent(button) {
           <br/><br/>
           <label> Photo Attachment: </label>
           <input type="checkbox" ng-model="question.Attach_Photo__c" name="O4"></input>
-          <br/>
-          <div ng-show="showValues(question)">
-            <br/>
-            <!--NEEDS TO BE FIXED TO FOLLOW CHOICE ADDER-->
-            <div id='choice-wrapper'>
-              <label> Choice </label>
-              <input type='text'/>
-              <input type='button' onclick='removeParent(this)' value='Remove Choice'/>
-              <br/><br/>
+          <br/><br/>
+          <div ng-show="showValues(item)">
+            <div ng-repeat="choice in choices">
+              <!--NEEDS TO BE FIXED TO FOLLOW CHOICE ADDER-->
+              <div id='choice-wrapper'>
+                <label> Choice </label>
+                <input type='text' class="choice"/>
+                <input type='button' ng-click='removeChoice(choice)' value='Remove Choice'/>
+                <br/><br/>
+              </div>
+              <!--<label> Values: </label>
+              <input type="text" ng-model="item.Values__c" name="Q1"></input>-->
             </div>
-            <div id='choice-wrapper'>
-              <label> Choice </label>
-              <input type='text'/>
-              <input type='button' onclick='removeParent(this)' value='Remove Choice'/>
-              <br/><br/>
-            </div>
-            <input type='button' onclick='addChoice(this)' value='Add Choice'/>
-            <br/>
-            <!--<label> Values: </label>
-            <input type="text" ng-model="item.Values__c" name="Q1"></input>-->
+            <input type='button' ng-click='addChoice()' value='Add Choice'/>
+            <br/><br/>
           </div>
-          <br/>
           <input type="button" value="Remove Question" ng-click="deleteChecklistItem(question)"></input>
           <br/>
         </li>
@@ -317,13 +305,24 @@ checklistApp.controller("AdminCtrl", function ($scope) {
       var item = {isActive__c : true, Order__c: $scope.questionCount() + 1, Question__c : "New Question"}
       $scope.questions.push(item);
     }
+    $scope.removeQuestion = function(item) {
+      $scope.items.splice($scope.items.indexOf($scope.item), 1);
+    }
     $scope.showValues = function(item) {
+      if ($scope.choices == null) {
+        $scope.choices = new Array();
+        $scope.choices[0] = new Object();
+      }
       return (item.Type__c == 'Rating') || (item.Type__c == 'Picklist') || (item.Type__c == 'Multi-Select');
     }
-    
-    $scope.removeQuestion = function(item) {
-      console.log($scope.items.indexOf($scope.item));
-      $scope.items.splice($scope.items.indexOf($scope.item), 1);
+    $scope.addChoice = function() {
+      $scope.choices.push(new Object());
+    }
+    $scope.removeChoice = function(choice) {
+      $scope.choices.splice($scope.choices.indexOf($scope.choice), 1);
+    }
+    $scope.joinChoices = function(choices) {
+      
     }
     $scope.editChecklist = function() {
       if ($scope.editPage.$valid) {
