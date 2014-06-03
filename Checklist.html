@@ -1083,6 +1083,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
     if (Object.keys($scope.photoMap).length > 0) {
       for (var key in $scope.photoMap) {
         alert('iterate');
+        console.log($scope.photoMap[key]);
         Visualforce.remoting.Manager.invokeAction(
           '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
           key,
