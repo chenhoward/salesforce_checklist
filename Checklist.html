@@ -885,7 +885,7 @@ id="todo"
 this.getCompletedChecklistResponses = function() {
   var that = this;
   Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.completed_checklists}',
+    '{!$RemoteAction.ChecklistExtension.completedChecklists}',
     function(result, event){
       if (event.status) {
         completedchecklistresponses = result;
@@ -903,7 +903,7 @@ this.getCompletedChecklistResponses = function() {
 this.getPendingChecklistResponses = function() {
   var that = this;
   Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.pending_checklists}',
+    '{!$RemoteAction.ChecklistExtension.pendingChecklists}',
     function(result, event){
       if (event.status) {
         pendingchecklistresponses = result;
@@ -996,7 +996,7 @@ myApp.controller("CompletedListCtrl", function ($scope, userService) {
     $scope.$apply();
   };
   Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.completed_checklists}',
+    '{!$RemoteAction.ChecklistExtension.completedChecklists}',
     function(result, event){
       if (event.status) {
         $scope.checklistitems = result;
@@ -1028,7 +1028,7 @@ myApp.controller("PendingListCtrl", function ($scope, userService) {
     $scope.$apply();
   };
   Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.pending_checklists}',
+    '{!$RemoteAction.ChecklistExtension.pendingChecklists}',
     function(result, event){
       if (event.status) {
         $scope.checklistitems = result; 
@@ -1112,7 +1112,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
     var checklist_response = $('#checklist_id').val(); 
 
     Visualforce.remoting.Manager.invokeAction(
-      '{!$RemoteAction.ChecklistExtension.submit_responses}',
+      '{!$RemoteAction.ChecklistExtension.submitResponses}',
       checklist_response,
       $scope.checklistitems,
       function(result, event){
@@ -1138,7 +1138,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
     formHelper();
       var checklist_response = $('#checklist_id').val(); // works for pending to completed
       Visualforce.remoting.Manager.invokeAction(
-        '{!$RemoteAction.ChecklistExtension.save_responses}',
+        '{!$RemoteAction.ChecklistExtension.saveResponses}',
         checklist_response,
         $scope.checklistitems,
         function(result, event){
