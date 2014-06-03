@@ -139,7 +139,7 @@ function removeParent(button) {
           <label> Photo Attachment: </label>
           <input type="checkbox" ng-model="item.Attach_Photo__c" name="O4"></input>
           <br/>
-          <div ng-show="showValues(item)">
+          <li ng-repeat="choice in choices" ng-show="showValues(item)">
             <br/>
             <!--NEEDS TO BE FIXED TO FOLLOW CHOICE ADDER-->
             <div id='choice-wrapper'>
@@ -158,9 +158,9 @@ function removeParent(button) {
             <br/>
             <!--<label> Values: </label>
             <input type="text" ng-model="item.Values__c" name="Q1"></input>-->
-          </div>
+          </li>
           <br/>
-          <input type='button' value='Remove Question' onclick='removeQuestion(item)'/>
+          <input type='button' value='Remove Question' ng-click='removeQuestion(item)'/>
           <br/>
         </li>
       </ol>
@@ -320,9 +320,10 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.showValues = function(item) {
       return (item.Type__c == 'Rating') || (item.Type__c == 'Picklist') || (item.Type__c == 'Multi-Select');
     }
+    
     $scope.removeQuestion = function(item) {
-      var index = $scope.questions.indexOf(item)
-      $scope.questions.splice(index,1);
+      console.log($scope.items.indexOf($scope.item));
+      $scope.items.splice($scope.items.indexOf($scope.item), 1);
     }
     $scope.editChecklist = function() {
       if ($scope.editPage.$valid) {
