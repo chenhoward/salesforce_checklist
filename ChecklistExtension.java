@@ -9,7 +9,7 @@ global with sharing class ChecklistExtension {
 
     /** Returns all pending Checklists. */
     @RemoteAction
-    global static List<Checklist_Response__c> pending_checklists() {
+    global static List<Checklist_Response__c> pendingChecklists() {
        List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
                                                 Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending'];
        return checklists;
@@ -17,7 +17,7 @@ global with sharing class ChecklistExtension {
 
     /** Returns all completed Checklists. */
     @RemoteAction
-    global static List<Checklist_Response__c> completed_checklists() {
+    global static List<Checklist_Response__c> completedChecklists() {
        List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
                                                 Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Complete'];
        return checklists;
@@ -53,7 +53,7 @@ global with sharing class ChecklistExtension {
         }
         List<Checklist_Item_Response__c> finalResponses = new List<Checklist_Item_Response__c>();
         for(Checklist_Item_Response__c resp : responses){
-            if (resp.Answer__c != null){
+            if (resp.Answer__c != null || resp.Checklist_Item__r.Attach_Photo__c){
                 if (newResponse) {
                         resp.Checklist_Response__c = response.Id;
                 }
@@ -158,6 +158,8 @@ global with sharing class ChecklistExtension {
 
     @RemoteAction
     global static Id photo_remotecall(Id checklist_item_id, Id response_id, Blob bitphoto) {
+        System.debug('swag');
+        System.debug(bitphoto);
         if (checklist_item_id == null || response_id == null || bitphoto == null) {
             return null;
         }

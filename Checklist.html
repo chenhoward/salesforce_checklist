@@ -1079,8 +1079,10 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
     delete $scope.checklistitems.attributes;
   }
   function photoHelper(checklist_response_id) {
+    alert(Object.keys($scope.photoMap).length);
     if (Object.keys($scope.photoMap).length > 0) {
       for (var key in $scope.photoMap) {
+        alert('iterate');
         Visualforce.remoting.Manager.invokeAction(
           '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
           key,
@@ -1090,11 +1092,14 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
             if (event.status) {
               console.log('success!');
               var attachment_id = result;
+              alert(result);
               console.log('attachment: https://c.na15.visual.force.com/' + attachment_id);
             } else if (event.type === 'exception') {
               console.log('Exception: ' + event.message);
+              alert('Exception' + event.message);
             } else {
               console.log('Error!');
+              alert('Error');
             }
           },
           {escape: true}
@@ -1144,6 +1149,7 @@ myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
         function(result, event){
           if (event.status) {
             photoHelper(result);
+            alert('photoHelper');
             userService.edit_checklist_items(checklist_response);
           } else if (event.type === 'exception') {
             console.log('Exception: ' + event.message);
