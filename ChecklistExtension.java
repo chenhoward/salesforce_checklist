@@ -94,7 +94,7 @@ global with sharing class ChecklistExtension {
     }
 
     @RemoteAction
-    global static List<Checklist_Item_Response__c> edit_checklist_items(Id checklist_response) {
+    global static List<Checklist_Item_Response__c> editChecklistItems(Id checklist_response) {
         List<Checklist_Item_Response__c> to_return = [SELECT Id, Answer__c, Checklist_Item__c, Checklist_Item__r.Order__c, Checklist_Item__r.Question__c, Checklist_Item__r.Checklist__c,
                                                       Checklist_Item__r.Required__c, Checklist_Item__r.Type__c, Checklist_Item__r.Values__c, Checklist_Item__r.Attach_Photo__c
                                                       FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:checklist_response 
