@@ -736,7 +736,7 @@ id="todo"
           <p> <img id="new" src="{!$Resource.checklist_new}"></img> </p>
           <p id="newtag"> New </p>
         </div>
-        <div id="new-div" ng-controller="NewListCtrl">
+        <div id="new-div">
           <img class="x" id="hide-new" src="{!$Resource.checklist_x}"></img>
           <div class="title"> New Checklist </div>
           <a class="link" data-section="two" href="#" ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist)">
@@ -746,7 +746,7 @@ id="todo"
           </a>
         </div>
         <div id="container">
-          <section id="one" class="active" ng-controller="PendingListCtrl" ng-show="pendinglistPageActive">
+          <section id="one" class="active" ng-show="pendinglistPageActive">
             <div class="spacer"> </div>
             <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
               <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
@@ -763,7 +763,7 @@ id="todo"
                     <div class="arrow-right"></div>
                   </a>-->
                 </section>
-                <section id="two" ng-controller="ChecklistCtrl">
+                <section id="two">
                   <form id="checklistForm" name="checklistForm" class="checklistForm" ng-submit="checklistForm.$valid  && submitForm()">
                     <img class="x" id="hide-checklist" src="{!$Resource.checklist_x}"></img>
                     <div class="title"> {{checklistName}}  </div>
@@ -816,7 +816,7 @@ id="todo"
                 </div>
                 <a class="link last" id="return" data-section="one" href="#"> Return </a>
               </section>
-              <section id="four" ng-controller="CompletedListCtrl">
+              <section id="four">
                 <div class="spacer"> </div>
                 <div class="link maplink" onclick="showMap()">
                   <img class="map" src="{!$Resource.checklist_map}"></img>
@@ -863,11 +863,6 @@ id="todo"
       observerCallbacks.push(callback);
     }
 
-    this.notifyObservers = function() {
-      angular.forEach(observerCallbacks, function(callback){
-        callback();
-      });
-    };
 
     this.getChecklistItems = function(checklist_id) {
       var that = this;
@@ -887,7 +882,6 @@ id="todo"
                 }
               }
             }
-            that.notifyObservers();
           } else if (event.type === 'exception') {
             console.log('Exception: ' + event.message);
           } else {
@@ -898,92 +892,8 @@ id="todo"
         );
 }
 
-this.getCompletedChecklistResponses = function() {
-  var that = this;
-  Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.completedChecklists}',
-    function(result, event){
-      if (event.status) {
-        completedchecklistresponses = result;
-        that.notifyObservers();
-      } else if (event.type === 'exception') {
-        console.log('Exception: ' + event.message);
-      } else {
-        console.log('Error!');
-      }
-    },
-    {escape: true}
-    );
-}
 
-this.getPendingChecklistResponses = function() {
-  var that = this;
-  Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.pendingChecklists}',
-    function(result, event){
-      if (event.status) {
-        pendingchecklistresponses = result;
-        that.notifyObservers();
-      } else if (event.type === 'exception') {
-        console.log('Exception: ' + event.message);
-      } else {
-        console.log('Error!');
-      }
-    },
-    {escape: true}
-    );
-}
 
-this.edit_checklist_items = function(checklist_response_id) {
-  var that = this;
-  Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.editChecklistItems}',
-    checklist_response_id,
-    function(result, event){
-      if (event.status) {
-        if (result.length == 0) return;
-        checklistitems = result;
-        for (var i = 0; i < result.length; i++) {
-          var type = checklistitems[i].Checklist_Item__r.Type__c;
-          if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
-            var values = checklistitems[i].Checklist_Item__r.Values__c; 
-            if (values) {
-              checklistitems[i].Checklist_Item__r.Values = values.split(', ');
-              checklistitems[i].Checklist_Item__r.Values2 = [];
-            }
-            if (type == "Multi-Select") {
-              if (checklistitems[i].Answer__c) {
-                var ansArr = checklistitems[i].Answer__c.split(',');
-                var boolArr = [];
-                for (var j = 0; j < checklistitems[i].Checklist_Item__r.Values.length; j++) {
-                  if (ansArr.indexOf(checklistitems[i].Checklist_Item__r.Values[j]) > -1) {
-                    boolArr[j] = true;
-                  } else {
-                    boolArr[j] = false;
-                  }
-                }
-                checklistitems[i].Checklist_Item__r.Values2 = boolArr;
-              }
-            }
-          }
-          if (checklistitems[i].Answer__c == "true") { 
-            checklistitems[i].Answer__c = true;
-          } else if (checklistitems[i].Answer__c == "false") {
-            checklistitems[i].Answer__c = false;
-          } else if (!isNaN(checklistitems[i].Answer__c)) {
-            checklistitems[i].Answer__c = parseInt(checklistitems[i].Answer__c);
-          }
-        }
-        that.notifyObservers();
-      } else if (event.type === 'exception') {
-        console.log('Exception: ' + event.message);
-      } else {
-        console.log('Error!');
-      }
-    },
-    {escape: true}
-    );
-}
 this.getCLIs = function () {
   return checklistitems;
 };
@@ -995,56 +905,25 @@ this.getCompletedCLRs = function() {
 }
 })
 
-checklistApp.controller("CompletedListCtrl", function ($scope, userService) {
-  init();
-  function init() {
-    $scope.pendingchecklistresponses = userService.getPendingCLRs();
-    $scope.completedchecklistresponses = userService.getCompletedCLRs();
-    userService.registerObserverCallback(updatechecklistresponses);
-  }
-  function updatechecklistresponses() {
-    $scope.pendingchecklistresponses = userService.getPendingCLRs();
-    $scope.completedchecklistresponses = userService.getCompletedCLRs();
-    // Make sure the scope refreshes itself
-    $scope.$apply();
-  };
-  Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.completedChecklists}',
-    function(result, event){
-      if (event.status) {
-        $scope.checklistitems = result;
-      } else if (event.type === 'exception') {
-        console.log('Exception: ' + event.message);
-      } else {
-        console.log('Error!');
-      }
-    },
-    {escape: true}
-    );
-});
 
-checklistApp.controller("NewListCtrl", function ($scope, userService) {
+
+var controllers = {};
+controllers.PagesController = function ($scope, userService) {
+  var response = getUrlVars()['id'];
   $scope.checklists = {!Checklists};
-});
+    $scope.checklistitems;
+    $scope.completedchecklistresponses;
+    $scope.pendingchecklistresponses;
+    $scope.photoMap = {};
 
-checklistApp.controller("PendingListCtrl", function ($scope, userService) {
-  init();
-  function init() {
-    $scope.pendingchecklistresponses = userService.getPendingCLRs();
-    $scope.completedchecklistresponses = userService.getCompletedCLRs();
-    userService.registerObserverCallback(updatechecklistresponses);
-  }
-  function updatechecklistresponses() {
-    $scope.pendingchecklistresponses = userService.getPendingCLRs();
-    $scope.completedchecklistresponses = userService.getCompletedCLRs();
-    // Make sure the scope refreshes itself
-    $scope.$apply();
-  };
+var getPendingChecklistResponses = function() {
+  var that = this;
   Visualforce.remoting.Manager.invokeAction(
     '{!$RemoteAction.ChecklistExtension.pendingChecklists}',
     function(result, event){
       if (event.status) {
-        $scope.checklistitems = result; 
+        $scope.pendingchecklistresponses = result;
+        $scope.$apply();
       } else if (event.type === 'exception') {
         console.log('Exception: ' + event.message);
       } else {
@@ -1053,20 +932,109 @@ checklistApp.controller("PendingListCtrl", function ($scope, userService) {
     },
     {escape: true}
     );
-});
+}
 
-checklistApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
-  init();
-  function init() {
-    $scope.checklistitems = userService.getCLIs();
-    $scope.photoMap = $window.photoMap;
-    userService.registerObserverCallback(updateChecklistitems);
-  }
-  function updateChecklistitems() {
-    $scope.checklistitems = userService.getCLIs();
-    $scope.$apply();
-  };
-  function formHelper() {
+var getCompletedChecklistResponses = function() {
+  console.log('gdsafasdf');
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ChecklistExtension.completedChecklists}',
+    function(result, event){
+      if (event.status) {
+        console.log('go');
+        $scope.completedchecklistresponses = result;
+        console.log($scope.completedchecklistresponses);
+        $scope.$apply;
+      } else if (event.type === 'exception') {
+        console.log('Exception: ' + event.message);
+      } else {
+        console.log('Error!');
+      }
+    },
+    {escape: true}
+    );
+}
+getPendingChecklistResponses();
+getCompletedChecklistResponses();
+
+  var editChecklistItems = function(checklist_response_id) {
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ChecklistExtension.editChecklistItems}',
+    checklist_response_id,
+    function(result, event){
+      if (event.status) {
+        if (result.length == 0) return;
+        $scope.checklistitems = result;
+        for (var i = 0; i < result.length; i++) {
+          var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
+          if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
+            var values = $scope.checklistitems[i].Checklist_Item__r.Values__c; 
+            if (values) {
+              $scope.checklistitems[i].Checklist_Item__r.Values = values.split(', ');
+              $scope.checklistitems[i].Checklist_Item__r.Values2 = [];
+            }
+            if (type == "Multi-Select") {
+              if ($scope.checklistitems[i].Answer__c) {
+                var ansArr = $scope.checklistitems[i].Answer__c.split(',');
+                var boolArr = [];
+                for (var j = 0; j < $scope.checklistitems[i].Checklist_Item__r.Values.length; j++) {
+                  if (ansArr.indexOf($scope.checklistitems[i].Checklist_Item__r.Values[j]) > -1) {
+                    boolArr[j] = true;
+                  } else {
+                    boolArr[j] = false;
+                  }
+                }
+                $scope.checklistitems[i].Checklist_Item__r.Values2 = boolArr;
+              }
+            }
+          }
+          if ($scope.checklistitems[i].Answer__c == "true") { 
+            $scope.checklistitems[i].Answer__c = true;
+          } else if ($scope.checklistitems[i].Answer__c == "false") {
+            $scope.checklistitems[i].Answer__c = false;
+          } else if (!isNaN($scope.checklistitems[i].Answer__c)) {
+            $scope.checklistitems[i].Answer__c = parseInt($scope.checklistitems[i].Answer__c);
+          }
+        }
+                        $scope.$apply();
+
+      } else if (event.type === 'exception') {
+        console.log('Exception: ' + event.message);
+      } else {
+        console.log('Error!');
+      }
+    },
+    {escape: true}
+    );
+}
+var getChecklistItems = function(checklist_id) {
+      var that = this;
+      Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ChecklistExtension.checklist_items}',
+        checklist_id,
+        function(result, event){
+          if (event.status) {
+            $scope.checklistitems = result;
+            for (var i = 0; i < $scope.checklistitems.length; i++) {
+              var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
+              if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
+                var values = $scope.checklistitems[i].Checklist_Item__r.Values__c;
+                if (values) {
+                  $scope.checklistitems[i].Checklist_Item__r.Values = values.split(', ');
+                  $scope.checklistitems[i].Checklist_Item__r.Values2 = [];
+                }
+              }
+            }
+            $scope.$apply();
+          } else if (event.type === 'exception') {
+            console.log('Exception: ' + event.message);
+          } else {
+            console.log('Error!');
+          }
+        },
+        {escape: true}
+        );
+    }
+    function formHelper() {
     for(var i = 0; i < $scope.checklistitems.length; i++) {
       delete $scope.checklistitems[i].$$hashKey;
       var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
@@ -1136,7 +1104,7 @@ checklistApp.controller("ChecklistCtrl", function ($scope, userService, $window)
       function(result, event){
         if (event.status) {
           photoHelper(result);
-          userService.edit_checklist_items(checklist_response);
+          editChecklistItems(checklist_response);
         } else if (event.type === 'exception') {
           console.log('Exception: ' + event.message);
         } else {
@@ -1145,8 +1113,9 @@ checklistApp.controller("ChecklistCtrl", function ($scope, userService, $window)
       },
       {escape: true}
       );
-    userService.getPendingChecklistResponses();
-    userService.getCompletedChecklistResponses();
+    console.log("yoo");
+    getPendingChecklistResponses();
+    getCompletedChecklistResponses();
     $("#messages").text('Success!');
     setSection($('#container section#three'), $('.active'));
   }
@@ -1163,7 +1132,6 @@ checklistApp.controller("ChecklistCtrl", function ($scope, userService, $window)
           if (event.status) {
             photoHelper(result);
             alert('photoHelper');
-            userService.edit_checklist_items(checklist_response);
           } else if (event.type === 'exception') {
             console.log('Exception: ' + event.message);
           } else {
@@ -1172,26 +1140,10 @@ checklistApp.controller("ChecklistCtrl", function ($scope, userService, $window)
         },
         {escape: true}
         );
-      userService.getCompletedChecklistResponses();
-      userService.getPendingChecklistResponses();
+      getPendingChecklistResponses();
       $("#messages").text('Success!');
       setSection($('#container section#three'), $('.active'));
-
     }
-  });
-
-var controllers = {};
-controllers.PagesController = function ($scope, userService) {
-  var response = getUrlVars()['id'];
-
-  function basePageState() {
-    $scope.newlistPageActive = false;
-    $scope.detailPageActive = false;
-    $scope.mapActive = false;
-    $scope.newlistPageActive = false;
-    $scope.completedListPageActive = false;
-    $scope.pendinglistPageActive = false;
-  };
 
   function setupDetail(checklist_id) {
     $scope.detailPageActive = true;
@@ -1204,16 +1156,6 @@ controllers.PagesController = function ($scope, userService) {
     $('#checklist_id').val(checklist_id);
   }
 
-  function buttonShow(show) {
-    $("#messages").text('');
-    if (show) {
-      $('#submit_button').show();
-      $('#save_button').show();
-    } else {
-      $('#submit_button').hide();
-      $('#save_button').hide();
-    }
-  }
   if (response != null ) {
     userService.edit_checklist_items(response);
     $scope.newlistPageActive = false;
@@ -1221,40 +1163,32 @@ controllers.PagesController = function ($scope, userService) {
     $scope.mapActive = true;
     $scope.detailPageActive = true;
   }
-  userService.getPendingChecklistResponses();
-  userService.getCompletedChecklistResponses();
+  getPendingChecklistResponses();
 
   $scope.pendinglistPageActive = true;
   $scope.goToCreateDetailPage = function(checklist) {
     $scope.checklistName = checklist.Name;
     setupDetail(checklist.Id);
-    userService.getChecklistItems(checklist.Id);
+    getChecklistItems(checklist.Id);
   }
 
   $scope.goToEditDetailPage = function(checklist) {
     $scope.checklistName = checklist.Checklist__r.Name;
     setSection($('#two'), $('#one'));
     setupDetail(checklist.Id);
-    userService.edit_checklist_items(checklist.Id);
+    editChecklistItems(checklist.Id);
   }
 
   $scope.goToNewListpage = function() {
-    buttonShow(true);
     $('#checklist_id').val('');
-    basePageState();
     $scope.newlistPageActive = true;
   }
 
   $scope.goToPendingListpage = function() {
-    buttonShow(true);
     userService.getPendingChecklistResponses();
-    basePageState();
     $scope.pendinglistPageActive = true;
   };
   $scope.goTocompletedListPage = function() {
-    buttonShow(false);
-    userService.getCompletedChecklistResponses();
-    basePageState();
     $scope.completedListPageActive = true;
   };
 }
@@ -1342,6 +1276,7 @@ function handlePhoto(evt){
   })(file);
   reader.readAsDataURL(file);
 };
+
 
 </script>
 
