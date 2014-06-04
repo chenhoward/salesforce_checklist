@@ -1116,7 +1116,6 @@ var getChecklistItems = function(checklist_id) {
     console.log("yoo");
     getPendingChecklistResponses();
     getCompletedChecklistResponses();
-    $("#messages").text('Success!');
     setSection($('#container section#three'), $('.active'));
   }
 
@@ -1141,30 +1140,19 @@ var getChecklistItems = function(checklist_id) {
         {escape: true}
         );
       getPendingChecklistResponses();
-      $("#messages").text('Success!');
       setSection($('#container section#three'), $('.active'));
     }
 
   function setupDetail(checklist_id) {
-    $scope.detailPageActive = true;
-    $scope.mapActive = true;
     setTimeout(function(){
       setupPhoto();
     },2000);
-    $("#messages").text('');
-    $scope.checklist_id = checklist_id;
     $('#checklist_id').val(checklist_id);
   }
 
   if (response != null ) {
     userService.edit_checklist_items(response);
-    $scope.newlistPageActive = false;
-    $scope.checklist_id = response;
-    $scope.mapActive = true;
-    $scope.detailPageActive = true;
   }
-  getPendingChecklistResponses();
-
   $scope.pendinglistPageActive = true;
   $scope.goToCreateDetailPage = function(checklist) {
     $scope.checklistName = checklist.Name;
@@ -1179,18 +1167,6 @@ var getChecklistItems = function(checklist_id) {
     editChecklistItems(checklist.Id);
   }
 
-  $scope.goToNewListpage = function() {
-    $('#checklist_id').val('');
-    $scope.newlistPageActive = true;
-  }
-
-  $scope.goToPendingListpage = function() {
-    userService.getPendingChecklistResponses();
-    $scope.pendinglistPageActive = true;
-  };
-  $scope.goTocompletedListPage = function() {
-    $scope.completedListPageActive = true;
-  };
 }
 
 checklistApp.controller(controllers);
