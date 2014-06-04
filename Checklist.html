@@ -700,20 +700,17 @@ id="todo"
       border: none;
     }
 
-    .error-invalid::after {
+    .error-invalid::after{
         display: block;
         color: #f06060;
         padding-top: 10px;
-        content: "This field is invalid";
+        content: "Invalid or required content";
     }
 
-    .error-required::after {
-        display: block;
-        color: #f06060;
-        padding-top: 10px;
-        content: "This field is required";
+    .error-border {
+        border: 2px solid #f06060;
+        border-radius: 7px;
     }
-
     </style>
   </head>
 
@@ -767,7 +764,7 @@ id="todo"
                   </a>-->
                 </section>
                 <section id="two" ng-controller="ChecklistCtrl">
-                  <form name="checklistForm" class="checklistForm" ng-submit="checklistForm.$valid  && submitForm()">
+                  <form id="checklistForm" name="checklistForm" class="checklistForm" ng-submit="checklistForm.$valid  && submitForm()">
                     <img class="x" id="hide-checklist" src="{!$Resource.checklist_x}"></img>
                     <div class="title"> {{checklistName}}  </div>
                     <div class="question" ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'">
@@ -778,7 +775,7 @@ id="todo"
                        <input class="yes-no" id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c"> </input>
                        <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="yes-button"> Yes </label>
                        <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="no-button"> No </label>
-                       <input id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-switch-when="Number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+                       <input id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-switch-when="Number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" class="h5-number"> </input>
                        <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                        <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
                        <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
@@ -1455,6 +1452,7 @@ function handlePhoto(evt){
           var $element = $(options.element),
             $errorID = $(options.errorID);
           $element.addClass(options.errorClass).removeClass(options.validClass);
+          $element.prev().addClass('error-invalid');
 
           // User needs help. Enable active validation.
           $element.addClass(options.settings.activeClass);
@@ -1476,6 +1474,8 @@ function handlePhoto(evt){
             $errorID = $(options.errorID);
 
           $element.addClass(options.validClass).removeClass(options.errorClass);
+          $element.prev().removeClass('error-invalid');
+
           if ($errorID.length) {
             $errorID.hide();
           }
@@ -1906,6 +1906,9 @@ function handlePhoto(evt){
 
 <script>
 $(document).ready(function () {
+  $('#checklistForm').h5Validate({
+      errorClass:'error-border'
+    });
     $('form').h5Validate();
 });
 </script>
