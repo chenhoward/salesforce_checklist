@@ -21,7 +21,7 @@ id="todo"
   margin: 25px;
 }
 h1 { padding: .2em; margin: 0; }
-ol { margin-left: -30px; }
+#admin-panel ol { margin: 0 !important; padding: 0 !important; }
 .ui-widget-header {
   font-size: 24px;
   margin-left: -5px;
@@ -33,7 +33,8 @@ ol { margin-left: -30px; }
 }
 #admin-panel li {
   list-style-type: none;
-  padding: 10px;
+  padding: 15px;
+  margin: 0 !important;
   color: #333333;
   background: #FFFFFF;
   border: 1px solid #CCCCCC;
@@ -154,10 +155,8 @@ function removeParent(button) {
             <input type='button' ng-click='addChoice()' value='Add Choice'/>
             <br/><br/>
           </div>
-          <input type='button' value='Show Index' ng-click='showIndex($index)'/>
-          <input type='button' value='Show Index' ng-click='showIndex($index)'/>
-
-          <!--<input type='button' value='Remove Question' ng-click='removeQuestion(item)'/>-->
+          <!--<input type='button' value='Show Index' ng-click='showIndex($index)'/>-->
+          <input type='button' value='Remove Question' ng-click='removeQuestion(item)'/>
           <br/>
         </li>
       </ol>
