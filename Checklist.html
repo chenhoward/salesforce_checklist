@@ -8,7 +8,7 @@ applyHtmlTag="false"
 applyBodyTag="false"
 id="todo"
 >
-<html ng-app="myApp">
+<html ng-app="checklistApp">
 <head>
   <apex:stylesheet value="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400"/>
   <meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1, user-scalable=no"/>
@@ -836,16 +836,19 @@ id="todo"
       </body>
 
       <script>
-      /* Angular */
+
+        /* Fix text boxes on mobile. */
         window.onkeydown = function(e){
         var $focused = $(':focus');
         window.focus();
         $focused.focus();
-      }
-      var myApp = angular.module('myApp', []);
+        }
+
+      /* Angular */
+      var checklistApp = angular.module('checklistApp', []);
       var photoMap = {};
 
-      myApp.service('userService', function() {
+      checklistApp.service('userService', function() {
 
         var checklistitems;
         var pendingchecklistresponses;
@@ -992,10 +995,7 @@ this.getCompletedCLRs = function() {
 }
 })
 
-myApp.controller("homeCtrl", function ($scope, userService) {
-});
-
-myApp.controller("CompletedListCtrl", function ($scope, userService) {
+checklistApp.controller("CompletedListCtrl", function ($scope, userService) {
   init();
   function init() {
     $scope.pendingchecklistresponses = userService.getPendingCLRs();
@@ -1023,11 +1023,11 @@ myApp.controller("CompletedListCtrl", function ($scope, userService) {
     );
 });
 
-myApp.controller("NewListCtrl", function ($scope, userService) {
+checklistApp.controller("NewListCtrl", function ($scope, userService) {
   $scope.checklists = {!Checklists};
 });
 
-myApp.controller("PendingListCtrl", function ($scope, userService) {
+checklistApp.controller("PendingListCtrl", function ($scope, userService) {
   init();
   function init() {
     $scope.pendingchecklistresponses = userService.getPendingCLRs();
@@ -1055,7 +1055,7 @@ myApp.controller("PendingListCtrl", function ($scope, userService) {
     );
 });
 
-myApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
+checklistApp.controller("ChecklistCtrl", function ($scope, userService, $window) {
   init();
   function init() {
     $scope.checklistitems = userService.getCLIs();
@@ -1259,7 +1259,7 @@ controllers.PagesController = function ($scope, userService) {
   };
 }
 
-myApp.controller(controllers);
+checklistApp.controller(controllers);
 
 google.maps.event.addDomListener(window, "load", initMap);
 function initMap(){
