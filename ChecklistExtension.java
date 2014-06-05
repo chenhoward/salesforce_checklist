@@ -117,13 +117,11 @@ global with sharing class ChecklistExtension {
             Checklist_Item_Response__c r = checklistItemId2Resp.get(item.Id);
             if (r == null) {
                 Checklist_Item_Response__c emptyResp = new Checklist_Item_Response__c(Checklist_Item__c = item.Id, 
-                                                                                        Checklist_Item__r = item,
-                                                                                       Checklist_Response__c = checklist_response);
+                  Checklist_Item__r = item, Checklist_Response__c = checklist_response);
                 responses.add(emptyResp);                                                                               
             } else {
                 responses.add(r);
             }
-
         }
         return responses;
     }
