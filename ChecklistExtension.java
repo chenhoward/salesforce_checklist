@@ -135,7 +135,7 @@ global with sharing class ChecklistExtension {
     }
 
     @RemoteAction
-    global static Id photo_remotecall(Id checklist_item_id, Id response_id, Blob bitphoto) {
+    global static Id photoRemotecall(Id checklist_item_id, Id response_id, Blob bitphoto) {
         System.debug('swag');
         System.debug(bitphoto);
         if (checklist_item_id == null || response_id == null || bitphoto == null) {

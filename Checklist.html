@@ -968,7 +968,7 @@ id="todo"
 /** Gets Checklist Items to create a new Checklist Response. */
 var getChecklistItems = function() {
   Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.checklist_items}',
+    '{!$RemoteAction.ChecklistExtension.getAllChecklistItems}',
     $scope.currentChecklistId,
     function(result, event){
       if (event.status) {
@@ -1020,7 +1020,7 @@ function photoHelper(checklist_response_id) {
       alert('iterate');
       console.log($scope.photoMap[key]);
       Visualforce.remoting.Manager.invokeAction(
-        '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
+        '{!$RemoteAction.ChecklistExtension.photoRemotecall}',
         key,
         checklist_response_id,
         $scope.photoMap[key],
