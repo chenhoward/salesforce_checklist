@@ -701,15 +701,15 @@ id="todo"
     }
 
     .error-invalid::after{
-        display: block;
-        color: #f06060;
-        padding-top: 10px;
-        content: "Invalid or required content";
+      display: block;
+      color: #f06060;
+      padding-top: 10px;
+      content: "Invalid or required content";
     }
 
     .error-border {
-        border: 2px solid #f06060;
-        border-radius: 7px;
+      border: 2px solid #f06060;
+      border-radius: 7px;
     }
     </style>
   </head>
@@ -835,12 +835,12 @@ id="todo"
 
       <script>
 
-        /* Fix text boxes on mobile. */
-        window.onkeydown = function(e){
+      /* Fix text boxes on mobile. */
+      window.onkeydown = function(e){
         var $focused = $(':focus');
         window.focus();
         $focused.focus();
-        }
+      }
 
       /* Angular */
       var checklistApp = angular.module('checklistApp', []);
@@ -848,97 +848,125 @@ id="todo"
 
 
 
-var controllers = {};
-controllers.PagesController = function ($scope) {
-  var response = getUrlVars()['id'];
-  $scope.checklists = {!Checklists};
-    $scope.checklistitems;
-    $scope.completedchecklistresponses;
-    $scope.pendingchecklistresponses;
-    $scope.photoMap = {};
-    $scope.currentChecklistId;
+      var controllers = {};
+      controllers.PagesController = function ($scope) {
+        var response = getUrlVars()['id'];
+        $scope.checklists = {!Checklists};
+        $scope.checklistitems;
+        $scope.completedchecklistresponses;
+        $scope.pendingchecklistresponses;
+        $scope.photoMap = {};
+        $scope.currentChecklistId;
 
-var getPendingChecklistResponses = function() {
-  var that = this;
-  Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.pendingChecklists}',
-    function(result, event){
-      if (event.status) {
-        $scope.pendingchecklistresponses = result;
-        $scope.$apply();
-      } else if (event.type === 'exception') {
-        console.log('Exception: ' + event.message);
-      } else {
-        console.log('Error!');
-      }
-    },
-    {escape: true}
-    );
-}
+        var getPendingChecklistResponses = function() {
+          var that = this;
+          Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ChecklistExtension.pendingChecklists}',
+            function(result, event){
+              if (event.status) {
+                $scope.pendingchecklistresponses = result;
+                $scope.$apply();
+              } else if (event.type === 'exception') {
+                console.log('Exception: ' + event.message);
+              } else {
+                console.log('Error!');
+              }
+            },
+            {escape: true}
+            );
+        }
 
-var getCompletedChecklistResponses = function() {
-  console.log('gdsafasdf');
-  Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.completedChecklists}',
-    function(result, event){
-      if (event.status) {
-        console.log('go');
-        $scope.completedchecklistresponses = result;
-        console.log($scope.completedchecklistresponses);
-        $scope.$apply();
-      } else if (event.type === 'exception') {
-        console.log('Exception: ' + event.message);
-      } else {
-        console.log('Error!');
-      }
-    },
-    {escape: true}
-    );
-}
-getPendingChecklistResponses();
-getCompletedChecklistResponses();
+        var getCompletedChecklistResponses = function() {
+          console.log('gdsafasdf');
+          Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ChecklistExtension.completedChecklists}',
+            function(result, event){
+              if (event.status) {
+                console.log('go');
+                $scope.completedchecklistresponses = result;
+                console.log($scope.completedchecklistresponses);
+                $scope.$apply();
+              } else if (event.type === 'exception') {
+                console.log('Exception: ' + event.message);
+              } else {
+                console.log('Error!');
+              }
+            },
+            {escape: true}
+            );
+        }
+        getPendingChecklistResponses();
+        getCompletedChecklistResponses();
 
-  var editChecklistItems = function() {
+        var valueSplitter = function(i) {
+          var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
+                  if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
+                    var values = $scope.checklistitems[i].Checklist_Item__r.Values__c; 
+                    if (values) {
+                      $scope.checklistitems[i].Checklist_Item__r.Values = values.split(', ');
+                      $scope.checklistitems[i].Checklist_Item__r.Values2 = [];
+                    }
+          }
+          return type;
+        }
+
+        var editChecklistItems = function() {
+          Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ChecklistExtension.editChecklistItems}',
+            $scope.currentChecklistId,
+            function(result, event){
+              if (event.status) {
+                if (result.length == 0) return;
+                $scope.checklistitems = result;
+                for (var i = 0; i < result.length; i++) {
+                  var type = valueSplitter(i);
+                    if (type == "Multi-Select") {
+                      if ($scope.checklistitems[i].Answer__c) {
+                        var ansArr = $scope.checklistitems[i].Answer__c.split(',');
+                        var boolArr = [];
+                        for (var j = 0; j < $scope.checklistitems[i].Checklist_Item__r.Values.length; j++) {
+                          if (ansArr.indexOf($scope.checklistitems[i].Checklist_Item__r.Values[j]) > -1) {
+                            boolArr[j] = true;
+                          } else {
+                            boolArr[j] = false;
+                          }
+                        }
+                        $scope.checklistitems[i].Checklist_Item__r.Values2 = boolArr;
+                      }
+                    }
+                  
+                  if ($scope.checklistitems[i].Answer__c == "true") { 
+                    $scope.checklistitems[i].Answer__c = true;
+                  } else if ($scope.checklistitems[i].Answer__c == "false") {
+                    $scope.checklistitems[i].Answer__c = false;
+                  } else if (!isNaN($scope.checklistitems[i].Answer__c)) {
+                    $scope.checklistitems[i].Answer__c = parseInt($scope.checklistitems[i].Answer__c);
+                  }
+                $scope.$apply();
+              }
+
+              } else if (event.type === 'exception') {
+                console.log('Exception: ' + event.message);
+              } else {
+                console.log('Error!');
+              }
+            },
+            {escape: true}
+            );
+        }
+
+
+var getChecklistItems = function() {
   Visualforce.remoting.Manager.invokeAction(
-    '{!$RemoteAction.ChecklistExtension.editChecklistItems}',
+    '{!$RemoteAction.ChecklistExtension.checklist_items}',
     $scope.currentChecklistId,
     function(result, event){
       if (event.status) {
-        if (result.length == 0) return;
         $scope.checklistitems = result;
-        for (var i = 0; i < result.length; i++) {
-          var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
-          if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
-            var values = $scope.checklistitems[i].Checklist_Item__r.Values__c; 
-            if (values) {
-              $scope.checklistitems[i].Checklist_Item__r.Values = values.split(', ');
-              $scope.checklistitems[i].Checklist_Item__r.Values2 = [];
-            }
-            if (type == "Multi-Select") {
-              if ($scope.checklistitems[i].Answer__c) {
-                var ansArr = $scope.checklistitems[i].Answer__c.split(',');
-                var boolArr = [];
-                for (var j = 0; j < $scope.checklistitems[i].Checklist_Item__r.Values.length; j++) {
-                  if (ansArr.indexOf($scope.checklistitems[i].Checklist_Item__r.Values[j]) > -1) {
-                    boolArr[j] = true;
-                  } else {
-                    boolArr[j] = false;
-                  }
-                }
-                $scope.checklistitems[i].Checklist_Item__r.Values2 = boolArr;
-              }
-            }
-          }
-          if ($scope.checklistitems[i].Answer__c == "true") { 
-            $scope.checklistitems[i].Answer__c = true;
-          } else if ($scope.checklistitems[i].Answer__c == "false") {
-            $scope.checklistitems[i].Answer__c = false;
-          } else if (!isNaN($scope.checklistitems[i].Answer__c)) {
-            $scope.checklistitems[i].Answer__c = parseInt($scope.checklistitems[i].Answer__c);
-          }
+        for (var i = 0; i < $scope.checklistitems.length; i++) {
+          valueSplitter(i);
         }
-                        $scope.$apply();
-
+        $scope.$apply();
       } else if (event.type === 'exception') {
         console.log('Exception: ' + event.message);
       } else {
@@ -948,158 +976,131 @@ getCompletedChecklistResponses();
     {escape: true}
     );
 }
-var getChecklistItems = function() {
+function formHelper() {
+  for(var i = 0; i < $scope.checklistitems.length; i++) {
+    delete $scope.checklistitems[i].$$hashKey;
+    var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
+    if (type == "Multi-Select") {
+      if ($scope.checklistitems[i].Checklist_Item__r.Values2.length != 0) {
+        var answer = [];
+        for (var j = 0; j < $scope.checklistitems[i].Checklist_Item__r.Values.length; j++) {
+          if ($scope.checklistitems[i].Checklist_Item__r.Values2[j]) {
+            answer.push($scope.checklistitems[i].Checklist_Item__r.Values[j]);
+          }
+        }
+        $scope.checklistitems[i].Answer__c = answer.join();
+        $scope.checklistitems[i].Checklist_Item__r.Values2;
+      }
+    }
+    if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
+      delete $scope.checklistitems[i].Checklist_Item__r.Values;
+      delete $scope.checklistitems[i].Checklist_Item__r.Values2;
+
+    }
+  }
+  delete $scope.checklistitems.attributes;
+}
+function photoHelper(checklist_response_id) {
+  alert(Object.keys($scope.photoMap).length);
+  if (Object.keys($scope.photoMap).length > 0) {
+    for (var key in $scope.photoMap) {
+      alert('iterate');
+      console.log($scope.photoMap[key]);
       Visualforce.remoting.Manager.invokeAction(
-        '{!$RemoteAction.ChecklistExtension.checklist_items}',
-        $scope.currentChecklistId,
+        '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
+        key,
+        checklist_response_id,
+        $scope.photoMap[key],
         function(result, event){
           if (event.status) {
-            $scope.checklistitems = result;
-            for (var i = 0; i < $scope.checklistitems.length; i++) {
-              var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
-              if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
-                var values = $scope.checklistitems[i].Checklist_Item__r.Values__c;
-                if (values) {
-                  $scope.checklistitems[i].Checklist_Item__r.Values = values.split(', ');
-                  $scope.checklistitems[i].Checklist_Item__r.Values2 = [];
-                }
-              }
-            }
-            $scope.$apply();
+            console.log('success!');
+            var attachment_id = result;
+            alert(result);
+            console.log('attachment: https://c.na15.visual.force.com/' + attachment_id);
           } else if (event.type === 'exception') {
             console.log('Exception: ' + event.message);
+            alert('Exception' + event.message);
           } else {
             console.log('Error!');
+            alert('Error');
           }
         },
         {escape: true}
         );
     }
-    function formHelper() {
-    for(var i = 0; i < $scope.checklistitems.length; i++) {
-      delete $scope.checklistitems[i].$$hashKey;
-      var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
-      if (type == "Multi-Select") {
-        if ($scope.checklistitems[i].Checklist_Item__r.Values2.length != 0) {
-          var answer = [];
-          for (var j = 0; j < $scope.checklistitems[i].Checklist_Item__r.Values.length; j++) {
-            if ($scope.checklistitems[i].Checklist_Item__r.Values2[j]) {
-              answer.push($scope.checklistitems[i].Checklist_Item__r.Values[j]);
-            }
-          }
-          $scope.checklistitems[i].Answer__c = answer.join();
-          $scope.checklistitems[i].Checklist_Item__r.Values2;
-        }
+  }
+};
+$scope.submitForm = function() {
+  var that = this;
+  formHelper();
+  for(var i = 0; i < $scope.checklistitems.length; i++) {
+    var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
+
+  }
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ChecklistExtension.submitResponses}',
+    $scope.currentChecklistId,
+    $scope.checklistitems,
+    function(result, event){
+      if (event.status) {
+        photoHelper(result);
+        editChecklistItems();
+      } else if (event.type === 'exception') {
+        console.log('Exception: ' + event.message);
+      } else {
+        console.log('Error!');
       }
-      if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
-        delete $scope.checklistitems[i].Checklist_Item__r.Values;
-        delete $scope.checklistitems[i].Checklist_Item__r.Values2;
+    },
+    {escape: true}
+    );
+  console.log("yoo");
+  getPendingChecklistResponses();
+  getCompletedChecklistResponses();
+  setSection($('#container section#three'), $('.active'));
+}
 
+$scope.saveResponse = function() {
+  var that = this;
+  formHelper();
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ChecklistExtension.saveResponses}',
+    $scope.currentChecklistId,
+    $scope.checklistitems,
+    function(result, event){
+      if (event.status) {
+        photoHelper(result);
+        alert('photoHelper');
+      } else if (event.type === 'exception') {
+        console.log('Exception: ' + event.message);
+      } else {
+        console.log('Error!');
       }
-    }
-    delete $scope.checklistitems.attributes;
-  }
-  function photoHelper(checklist_response_id) {
-    alert(Object.keys($scope.photoMap).length);
-    if (Object.keys($scope.photoMap).length > 0) {
-      for (var key in $scope.photoMap) {
-        alert('iterate');
-        console.log($scope.photoMap[key]);
-        Visualforce.remoting.Manager.invokeAction(
-          '{!$RemoteAction.ChecklistExtension.photo_remotecall}',
-          key,
-          checklist_response_id,
-          $scope.photoMap[key],
-          function(result, event){
-            if (event.status) {
-              console.log('success!');
-              var attachment_id = result;
-              alert(result);
-              console.log('attachment: https://c.na15.visual.force.com/' + attachment_id);
-            } else if (event.type === 'exception') {
-              console.log('Exception: ' + event.message);
-              alert('Exception' + event.message);
-            } else {
-              console.log('Error!');
-              alert('Error');
-            }
-          },
-          {escape: true}
-          );
-      }
-    }
-  };
-  $scope.submitForm = function() {
-    var that = this;
-    formHelper();
-    for(var i = 0; i < $scope.checklistitems.length; i++) {
-      var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
+    },
+    {escape: true}
+    );
+  getPendingChecklistResponses();
+  setSection($('#container section#three'), $('.active'));
+}
 
-    }
-    Visualforce.remoting.Manager.invokeAction(
-      '{!$RemoteAction.ChecklistExtension.submitResponses}',
-      $scope.currentChecklistId,
-      $scope.checklistitems,
-      function(result, event){
-        if (event.status) {
-          photoHelper(result);
-          editChecklistItems();
-        } else if (event.type === 'exception') {
-          console.log('Exception: ' + event.message);
-        } else {
-          console.log('Error!');
-        }
-      },
-      {escape: true}
-      );
-    console.log("yoo");
-    getPendingChecklistResponses();
-    getCompletedChecklistResponses();
-    setSection($('#container section#three'), $('.active'));
-  }
+function setupDetail(checklist_id) {
+  setTimeout(function(){
+    setupPhoto();
+  },2000);
+  $scope.currentChecklistId = checklist_id;
+}
 
-  $scope.saveResponse = function() {
-    var that = this;
-    formHelper();
-      Visualforce.remoting.Manager.invokeAction(
-        '{!$RemoteAction.ChecklistExtension.saveResponses}',
-        $scope.currentChecklistId,
-        $scope.checklistitems,
-        function(result, event){
-          if (event.status) {
-            photoHelper(result);
-            alert('photoHelper');
-          } else if (event.type === 'exception') {
-            console.log('Exception: ' + event.message);
-          } else {
-            console.log('Error!');
-          }
-        },
-        {escape: true}
-        );
-      getPendingChecklistResponses();
-      setSection($('#container section#three'), $('.active'));
-    }
+$scope.goToCreateDetailPage = function(checklist) {
+  $scope.checklistName = checklist.Name;
+  setupDetail(checklist.Id);
+  getChecklistItems();
+}
 
-  function setupDetail(checklist_id) {
-    setTimeout(function(){
-      setupPhoto();
-    },2000);
-    $scope.currentChecklistId = checklist_id;
-  }
-
-  $scope.goToCreateDetailPage = function(checklist) {
-    $scope.checklistName = checklist.Name;
-    setupDetail(checklist.Id);
-    getChecklistItems();
-  }
-
-  $scope.goToEditDetailPage = function(checklist) {
-    $scope.checklistName = checklist.Checklist__r.Name;
-    setSection($('#two'), $('#one'));
-    setupDetail(checklist.Id);
-    editChecklistItems();
-  }
+$scope.goToEditDetailPage = function(checklist) {
+  $scope.checklistName = checklist.Checklist__r.Name;
+  setSection($('#two'), $('#one'));
+  setupDetail(checklist.Id);
+  editChecklistItems();
+}
 }
 
 checklistApp.controller(controllers);
@@ -1203,8 +1204,8 @@ function handlePhoto(evt){
  * Developed under the sponsorship of RootMusic, Zumba Fitness, LLC, and Rese Property Management
  */
 
-/*global jQuery, window, console */
-(function ($) {
+ /*global jQuery, window, console */
+ (function ($) {
   'use strict';
   var console = window.console || function () {},
     h5 = { // Public API
@@ -1294,7 +1295,7 @@ function handlePhoto(evt){
         // http://www.whatwg.org/specs/web-apps/current-work/multipage/association-of-controls-and-forms.html#dom-cva-setcustomvalidity
         markInvalid: function markInvalid(options) {
           var $element = $(options.element),
-            $errorID = $(options.errorID);
+          $errorID = $(options.errorID);
           $element.addClass(options.errorClass).removeClass(options.validClass);
           $element.prev().addClass('error-invalid');
 
@@ -1315,7 +1316,7 @@ function handlePhoto(evt){
         // Mark field valid.
         markValid: function markValid(options) {
           var $element = $(options.element),
-            $errorID = $(options.errorID);
+          $errorID = $(options.errorID);
 
           $element.addClass(options.validClass).removeClass(options.errorClass);
           $element.prev().removeClass('error-invalid');
@@ -1364,7 +1365,7 @@ function handlePhoto(evt){
        *      .revalidate - trigger validation function first?
        * @return {Boolean}
        */
-      isValid: function (settings, options) {
+       isValid: function (settings, options) {
         var $this = $(this);
 
         options = (settings && options) || {};
@@ -1378,20 +1379,20 @@ function handlePhoto(evt){
       },
       allValid: function (config, options) {
         var valid = true,
-          formValidity = [],
-          $this = $(this),
-          $allFields,
-          $filteredFields,
-          radioNames = [],
-          getValidity = function getValidity(e, data) {
-            data.e = e;
-            formValidity.push(data);
-          },
+        formValidity = [],
+        $this = $(this),
+        $allFields,
+        $filteredFields,
+        radioNames = [],
+        getValidity = function getValidity(e, data) {
+          data.e = e;
+          formValidity.push(data);
+        },
           settings = $.extend({}, config, options); // allow options to override settings
 
-        options = options || {};
+          options = options || {};
 
-        $this.trigger('formValidate', {settings: $.extend(true, {}, settings)});
+          $this.trigger('formValidate', {settings: $.extend(true, {}, settings)});
 
         // Make sure we're not triggering handlers more than we need to.
         $this.undelegate(settings.allValidSelectors,
@@ -1409,13 +1410,13 @@ function handlePhoto(evt){
           if(this.tagName === "INPUT"
             && this.type === "radio") {
             name = this.name;
-            if(radioNames[name] === true) {
-              return false;
-            }
-            radioNames[name] = true;
+          if(radioNames[name] === true) {
+            return false;
           }
-          return true;
-        });
+          radioNames[name] = true;
+        }
+        return true;
+      });
 
         $filteredFields.each(function () {
           var $this = $(this);
@@ -1429,20 +1430,20 @@ function handlePhoto(evt){
         // Get the HTML5 pattern attribute if it exists.
         // ** TODO: If a pattern class exists, grab the pattern from the patternLibrary, but the pattern attrib should override that value.
         var $this = $(this),
-          pattern = $this.filter('[pattern]')[0] ? $this.attr('pattern') : false,
+        pattern = $this.filter('[pattern]')[0] ? $this.attr('pattern') : false,
 
           // The pattern attribute must match the whole value, not just a subset:
           // "...as if it implied a ^(?: at the start of the pattern and a )$ at the end."
           re = new RegExp('^(?:' + pattern + ')$'),
           $radiosWithSameName = null,
           value = ($this.is('[type=checkbox]')) ?
-              $this.is(':checked') : ($this.is('[type=radio]') ?
+          $this.is(':checked') : ($this.is('[type=radio]') ?
                 // Cache all radio buttons (in the same form) with the same name as this one
                 ($radiosWithSameName = $this.parents('form')
                   // **TODO: escape the radio buttons' name before using it in the jQuery selector
                   .find('input[name="' + $this.attr('name') + '"]'))
-                  .filter(':checked')
-                  .length > 0 : $this.val()),
+                .filter(':checked')
+                .length > 0 : $this.val()),
           errorClass = settings.errorClass,
           validClass = settings.validClass,
           errorIDbare = $this.attr(settings.errorAttribute) || false, // Get the ID of the error element.
@@ -1472,8 +1473,8 @@ function handlePhoto(evt){
 
         maxlength = parseInt($this.attr('maxlength'), 10);
         if (!isNaN(maxlength) && value.length > maxlength) {
-            validity.valid = false; 
-            validity.tooLong = true;
+          validity.valid = false; 
+          validity.tooLong = true;
         }
 
         if (required && !value) {
@@ -1516,14 +1517,14 @@ function handlePhoto(evt){
 
           settings.alreadyCheckingRelatedRadioButtons = true;
 
-          $radiosWithSameName
-            .not($this)
-            .trigger('validate');
+        $radiosWithSameName
+        .not($this)
+        .trigger('validate');
 
-          settings.alreadyCheckingRelatedRadioButtons = false;
+        settings.alreadyCheckingRelatedRadioButtons = false;
 
-        }
-      },
+      }
+    },
 
       /**
        * Take the event preferences and delegate the events to selected
@@ -1533,12 +1534,12 @@ function handlePhoto(evt){
        * 
        * @returns {element} The passed element (for method chaining).
        */
-      delegateEvents: function (selectors, eventFlags, element, settings) {
+       delegateEvents: function (selectors, eventFlags, element, settings) {
         var events = {},
-          key = 0,
-          validate = function () {
-            settings.validate.call(this, settings);
-          };
+        key = 0,
+        validate = function () {
+          settings.validate.call(this, settings);
+        };
         $.each(eventFlags, function (key, value) {
           if (value) {
             events[key] = key;
@@ -1560,9 +1561,9 @@ function handlePhoto(evt){
        * 
        * @returns {object} jQuery object for chaining.
        */
-      bindDelegation: function (settings) {
+       bindDelegation: function (settings) {
         var $this = $(this),
-          $forms;
+        $forms;
         // Attach patterns from the library to elements.
         // **TODO: pattern / validation method matching should
         // take place inside the validate action.
@@ -1573,12 +1574,12 @@ function handlePhoto(evt){
         });
 
         $forms = $this.filter('form')
-            .add($this.find('form'))
-            .add($this.parents('form'));
+        .add($this.find('form'))
+        .add($this.parents('form'));
 
         $forms
-          .attr('novalidate', 'novalidate')
-          .submit(checkValidityOnSubmitHandler);
+        .attr('novalidate', 'novalidate')
+        .submit(checkValidityOnSubmitHandler);
 
         $forms.find("input[formnovalidate][type='submit']").click(function(){
           $(this).closest("form").unbind('submit', checkValidityOnSubmitHandler);
@@ -1586,17 +1587,17 @@ function handlePhoto(evt){
 
         return this.each(function () {
           var kbEvents = {
-              focusout: settings.focusout,
-              focusin: settings.focusin,
-              change: settings.change,
-              keyup: settings.keyup
-            },
-            mEvents = {
-              click: settings.click
-            },
-            activeEvents = {
-              keyup: settings.activeKeyup
-            };
+            focusout: settings.focusout,
+            focusin: settings.focusin,
+            change: settings.change,
+            keyup: settings.keyup
+          },
+          mEvents = {
+            click: settings.click
+          },
+          activeEvents = {
+            keyup: settings.activeKeyup
+          };
 
           settings.delegateEvents(':input', settings.customEvents, this, settings);
           settings.delegateEvents(settings.kbSelectors, kbEvents, this, settings);
@@ -1618,11 +1619,11 @@ function handlePhoto(evt){
      * 
      * @returns {object} undefined if no validation was done, true if validation passed, false if validation didn't.
      */
-    checkValidityOnSubmitHandler = function(evt) {
+     checkValidityOnSubmitHandler = function(evt) {
 
       var $this,
-        settings = getInstance.call(this),
-        allValid;
+      settings = getInstance.call(this),
+      allValid;
 
       if(settings.submit !== true) {
         return;
@@ -1636,9 +1637,9 @@ function handlePhoto(evt){
 
         if(settings.focusFirstInvalidElementOnSubmit === true){
           var $invalid = $(settings.allValidSelectors, $this)
-                  .filter(function(index){
-                    return $(this).h5Validate('isValid', { revalidate: false }) !== true;
-                  });
+          .filter(function(index){
+            return $(this).h5Validate('isValid', { revalidate: false }) !== true;
+          });
 
           $invalid.first().focus();
         }
@@ -1652,7 +1653,7 @@ function handlePhoto(evt){
     buildSettings = function buildSettings(options) {
       // Combine defaults and options to get current settings.
       var settings = $.extend({}, defaults, options, methods),
-        activeClass = settings.classPrefix + settings.activeClass;
+      activeClass = settings.classPrefix + settings.activeClass;
 
       return $.extend(settings, {
         activeClass: activeClass,
@@ -1675,7 +1676,7 @@ function handlePhoto(evt){
       $(this).trigger('instance', { 'data-h5-instanceId': instanceId });
     };
 
-  $.h5Validate = {
+    $.h5Validate = {
     /**
      * Take a map of pattern names and HTML5-compatible regular
      * expressions, and add them to the patternLibrary. Patterns in
@@ -1687,9 +1688,9 @@ function handlePhoto(evt){
      * 
      * @returns {Object} patternLibrary The modified pattern library
      */
-    addPatterns: function (patterns) {
+     addPatterns: function (patterns) {
       var patternLibrary = defaults.patternLibrary,
-        key;
+      key;
       for (key in patterns) {
         if (patterns.hasOwnProperty(key)) {
           patternLibrary[key] = patterns[key];
@@ -1707,11 +1708,11 @@ function handlePhoto(evt){
      * @param {Array} values A list of valid values to validate selected 
      * fields against.
      */
-    validValues: function (selector, values) {
+     validValues: function (selector, values) {
       var i = 0,
-        ln = values.length,
-        pattern = '',
-        re;
+      ln = values.length,
+      pattern = '',
+      re;
       // Build regex pattern
       for (i = 0; i < ln; i += 1) {
         pattern = pattern ? pattern + '|' + values[i] : values[i];
@@ -1723,8 +1724,8 @@ function handlePhoto(evt){
 
   $.fn.h5Validate = function h5Validate(options) {
     var action,
-      args,
-      settings;
+    args,
+    settings;
 
     if (typeof options === 'string' && typeof methods[options] === 'function') {
       // Whoah, hold on there! First we need to get the instance:
@@ -1751,9 +1752,9 @@ function handlePhoto(evt){
 <script>
 $(document).ready(function () {
   $('#checklistForm').h5Validate({
-      errorClass:'error-border'
-    });
-    $('form').h5Validate();
+    errorClass:'error-border'
+  });
+  $('form').h5Validate();
 });
 </script>
 
