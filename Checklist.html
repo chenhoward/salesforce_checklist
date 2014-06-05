@@ -746,7 +746,7 @@ id="todo"
           </a>
         </div>
         <div id="container">
-          <section id="one" class="active" ng-show="pendinglistPageActive">
+          <section id="one" class="active">
             <div class="spacer"> </div>
             <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
               <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
@@ -1093,7 +1093,6 @@ var getChecklistItems = function(checklist_id) {
     $('#checklist_id').val(checklist_id);
   }
 
-  $scope.pendinglistPageActive = true;
   $scope.goToCreateDetailPage = function(checklist) {
     $scope.checklistName = checklist.Name;
     setupDetail(checklist.Id);
