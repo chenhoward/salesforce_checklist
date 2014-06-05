@@ -79,11 +79,13 @@ global with sharing class ChecklistExtension {
 
     /** Completes a Checklist Response whose ID is CHECCKLISTRESPID containing RESPONSES. */
     @RemoteAction
-    global static Id submitResponses(String checklistRespId, List<Checklist_Item_Response__c> responses) {
+    global static Id submitResponses(String checklistRespId, List<Checklist_Item_Response__c> responses, Double latitude, Double longitude) {
         if (responses == null || responses.size() == 0)
             return null;
         Checklist_Response__c r = responseUpdate(checklistRespId, responses);
         r.Status__c = 'Complete';
+        r.Location__latitude__s = latitude;
+        r.Location__longitude__s = longitude;
         update r;
         return r.Id;
     }
