@@ -898,10 +898,10 @@ var getCompletedChecklistResponses = function() {
 getPendingChecklistResponses();
 getCompletedChecklistResponses();
 
-  var editChecklistItems = function(checklist_response_id) {
+  var editChecklistItems = function() {
   Visualforce.remoting.Manager.invokeAction(
     '{!$RemoteAction.ChecklistExtension.editChecklistItems}',
-    checklist_response_id,
+    $scope.currentChecklistId,
     function(result, event){
       if (event.status) {
         if (result.length == 0) return;
@@ -1043,7 +1043,7 @@ var getChecklistItems = function() {
       function(result, event){
         if (event.status) {
           photoHelper(result);
-          editChecklistItems(checklist_response);
+          editChecklistItems();
         } else if (event.type === 'exception') {
           console.log('Exception: ' + event.message);
         } else {
@@ -1091,14 +1091,14 @@ var getChecklistItems = function() {
   $scope.goToCreateDetailPage = function(checklist) {
     $scope.checklistName = checklist.Name;
     setupDetail(checklist.Id);
-    getChecklistItems(checklist.Id);
+    getChecklistItems();
   }
 
   $scope.goToEditDetailPage = function(checklist) {
     $scope.checklistName = checklist.Checklist__r.Name;
     setSection($('#two'), $('#one'));
     setupDetail(checklist.Id);
-    editChecklistItems(checklist.Id);
+    editChecklistItems();
   }
 }
 
