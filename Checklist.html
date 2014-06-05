@@ -1121,6 +1121,28 @@ $scope.goToEditDetailPage = function(checklistResponse) {
   editChecklistItems();
 }
 
+function setupPhoto(){
+  $(".photo").each(function(key,value) {
+    $("#" + value.id).change(handlePhoto);
+  })
+}
+
+function handlePhoto(evt){
+  var file = evt.target.files[0];
+  // replace above with actual file
+  var reader = new FileReader();
+  reader.onload = (function(theFile) {
+    return function(e) {
+      // Extract raw base64 data from data URL
+      $(evt.target.id).attr('src',e.target.result);
+      imageData = e.target.result.split(',')[1];
+      var id = evt.target.id.substring(evt.target.id.length-18, evt.target.id.length);
+      $scope.photoMap[id] = imageData;
+    };
+  })(file);
+  reader.readAsDataURL(file);
+}
+
 }
 
 checklistApp.controller(controllers);
@@ -1185,27 +1207,7 @@ function getUrlVars() {
   return vars;
 }
 
-function setupPhoto(){
-  $(".photo").each(function(key,value) {
-    $("#" + value.id).change(handlePhoto);
-  })
-}
 
-function handlePhoto(evt){
-  var file = evt.target.files[0];
-  // replace above with actual file
-  var reader = new FileReader();
-  reader.onload = (function(theFile) {
-    return function(e) {
-      // Extract raw base64 data from data URL
-      $(evt.target.id).attr('src',e.target.result);
-      imageData = e.target.result.split(',')[1];
-      var id = evt.target.id.substring(evt.target.id.length-18, evt.target.id.length);
-      photoMap[id] = imageData;
-    };
-  })(file);
-  reader.readAsDataURL(file);
-};
 
 
 </script>
