@@ -1121,12 +1121,14 @@ $scope.goToEditDetailPage = function(checklistResponse) {
   editChecklistItems();
 }
 
-function setupPhoto(){
+/** Attatches an event handler to every photo input. */
+var setupPhoto = function(){
   $(".photo").each(function(key,value) {
     $("#" + value.id).change(handlePhoto);
   })
 }
 
+/** When the EVT occurs, the image is stored into the photoMAP as a base64 string. */
 function handlePhoto(evt){
   var file = evt.target.files[0];
   // replace above with actual file
