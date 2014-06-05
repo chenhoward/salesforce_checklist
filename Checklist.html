@@ -849,17 +849,23 @@ id="todo"
 
 
       var controllers = {};
+      /** The main controller for Checklist. */
       controllers.PagesController = function ($scope) {
-        var response = getUrlVars()['id'];
+        /** List of all Checklist types. */
         $scope.checklists = {!Checklists};
+        /** List of Checklist Items. */
         $scope.checklistitems;
+        /** List of Completed Checklist Responses. */
         $scope.completedchecklistresponses;
+        /** List of Pending Checklist Responses. */
         $scope.pendingchecklistresponses;
+        /** A map between a Checklist Response Item Id and an image. */
         $scope.photoMap = {};
+        /** The Id of the current Checklist or Checklist Response being worked on. */
         $scope.currentChecklistId;
 
+        /** Returns all the pending Checklist Responses. */
         var getPendingChecklistResponses = function() {
-          var that = this;
           Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.pendingChecklists}',
             function(result, event){
@@ -876,6 +882,7 @@ id="todo"
             );
         }
 
+        /** REturns all the complete Checklist Responses. */
         var getCompletedChecklistResponses = function() {
           console.log('gdsafasdf');
           Visualforce.remoting.Manager.invokeAction(
@@ -895,21 +902,25 @@ id="todo"
             {escape: true}
             );
         }
+
+        /* Initiate the list of pending and complete Checklist Responses. */
         getPendingChecklistResponses();
         getCompletedChecklistResponses();
 
+        /** Splits the Checklist Item's possible values if they are a certain type and returns the type. */
         var valueSplitter = function(i) {
           var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
-                  if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
-                    var values = $scope.checklistitems[i].Checklist_Item__r.Values__c; 
-                    if (values) {
-                      $scope.checklistitems[i].Checklist_Item__r.Values = values.split(', ');
-                      $scope.checklistitems[i].Checklist_Item__r.Values2 = [];
-                    }
+          if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
+            var values = $scope.checklistitems[i].Checklist_Item__r.Values__c;
+            if (values) {
+              $scope.checklistitems[i].Checklist_Item__r.Values = values.split(', ');
+              $scope.checklistitems[i].Checklist_Item__r.Values2 = [];
+            }
           }
           return type;
         }
 
+        /** Sets up Checklist Items to edit a pending Checklist. */
         var editChecklistItems = function() {
           Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistExtension.editChecklistItems}',
@@ -920,21 +931,20 @@ id="todo"
                 $scope.checklistitems = result;
                 for (var i = 0; i < result.length; i++) {
                   var type = valueSplitter(i);
-                    if (type == "Multi-Select") {
-                      if ($scope.checklistitems[i].Answer__c) {
-                        var ansArr = $scope.checklistitems[i].Answer__c.split(',');
-                        var boolArr = [];
-                        for (var j = 0; j < $scope.checklistitems[i].Checklist_Item__r.Values.length; j++) {
-                          if (ansArr.indexOf($scope.checklistitems[i].Checklist_Item__r.Values[j]) > -1) {
-                            boolArr[j] = true;
-                          } else {
-                            boolArr[j] = false;
-                          }
+                  if (type == "Multi-Select") {
+                    if ($scope.checklistitems[i].Answer__c) {
+                      var ansArr = $scope.checklistitems[i].Answer__c.split(',');
+                      var boolArr = [];
+                      for (var j = 0; j < $scope.checklistitems[i].Checklist_Item__r.Values.length; j++) {
+                        if (ansArr.indexOf($scope.checklistitems[i].Checklist_Item__r.Values[j]) > -1) {
+                          boolArr[j] = true;
+                        } else {
+                          boolArr[j] = false;
                         }
-                        $scope.checklistitems[i].Checklist_Item__r.Values2 = boolArr;
                       }
+                      $scope.checklistitems[i].Checklist_Item__r.Values2 = boolArr;
                     }
-                  
+                  }
                   if ($scope.checklistitems[i].Answer__c == "true") { 
                     $scope.checklistitems[i].Answer__c = true;
                   } else if ($scope.checklistitems[i].Answer__c == "false") {
@@ -942,9 +952,8 @@ id="todo"
                   } else if (!isNaN($scope.checklistitems[i].Answer__c)) {
                     $scope.checklistitems[i].Answer__c = parseInt($scope.checklistitems[i].Answer__c);
                   }
-                $scope.$apply();
-              }
-
+                  $scope.$apply();
+                }
               } else if (event.type === 'exception') {
                 console.log('Exception: ' + event.message);
               } else {
@@ -953,9 +962,10 @@ id="todo"
             },
             {escape: true}
             );
-        }
+}
 
 
+/** Gets Checklist Items to create a new Checklist Response. */
 var getChecklistItems = function() {
   Visualforce.remoting.Manager.invokeAction(
     '{!$RemoteAction.ChecklistExtension.checklist_items}',
@@ -976,6 +986,8 @@ var getChecklistItems = function() {
     {escape: true}
     );
 }
+
+/** Removes attributes from Checklist Items to allow it to be inserted into or updated in the database. */
 function formHelper() {
   for(var i = 0; i < $scope.checklistitems.length; i++) {
     delete $scope.checklistitems[i].$$hashKey;
@@ -995,11 +1007,12 @@ function formHelper() {
     if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
       delete $scope.checklistitems[i].Checklist_Item__r.Values;
       delete $scope.checklistitems[i].Checklist_Item__r.Values2;
-
     }
   }
   delete $scope.checklistitems.attributes;
 }
+
+
 function photoHelper(checklist_response_id) {
   alert(Object.keys($scope.photoMap).length);
   if (Object.keys($scope.photoMap).length > 0) {
@@ -1030,6 +1043,8 @@ function photoHelper(checklist_response_id) {
     }
   }
 };
+
+/** Completes the current Checklist Response. */
 $scope.submitForm = function() {
   var that = this;
   formHelper();
@@ -1059,6 +1074,7 @@ $scope.submitForm = function() {
   setSection($('#container section#three'), $('.active'));
 }
 
+/** Saves the current Checklist Response as a pending response. */
 $scope.saveResponse = function() {
   var that = this;
   formHelper();
@@ -1082,6 +1098,7 @@ $scope.saveResponse = function() {
   setSection($('#container section#three'), $('.active'));
 }
 
+/** Sets up Images and updates which Checklist Response that is currently being worked on. */
 function setupDetail(checklist_id) {
   setTimeout(function(){
     setupPhoto();
@@ -1089,18 +1106,21 @@ function setupDetail(checklist_id) {
   $scope.currentChecklistId = checklist_id;
 }
 
+/** Sets up the page for creating a Checklist Response for CHECKLIST. */
 $scope.goToCreateDetailPage = function(checklist) {
   $scope.checklistName = checklist.Name;
   setupDetail(checklist.Id);
   getChecklistItems();
 }
 
-$scope.goToEditDetailPage = function(checklist) {
-  $scope.checklistName = checklist.Checklist__r.Name;
+/** Sets up the page for updating a Checklist Response CHECKLIST. */
+$scope.goToEditDetailPage = function(checklistResponse) {
+  $scope.checklistName = checklistResponse.Checklist__r.Name;
   setSection($('#two'), $('#one'));
-  setupDetail(checklist.Id);
+  setupDetail(checklistResponse.Id);
   editChecklistItems();
 }
+
 }
 
 checklistApp.controller(controllers);
