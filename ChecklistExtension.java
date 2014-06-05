@@ -24,7 +24,8 @@ global with sharing class ChecklistExtension {
     } 
 
     /** Returns Checklist Responses to a CHECKLIST. */
-    public static List<Checklist_Item_Response__c> getAllChecklistItems(Id checklist){
+    @RemoteAction
+    global static List<Checklist_Item_Response__c> getAllChecklistItems(Id checklist){
         List<Checklist_Item__c> to_return = [SELECT Id, Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c, Attach_Photo__c 
                 FROM Checklist_Item__c WHERE Checklist__c=:checklist AND isActive__c = True order by Order__c];
 
@@ -38,8 +39,8 @@ global with sharing class ChecklistExtension {
         return responses;
     }
 
-    /** Updates the RESPONSES to CHECKLISTRESPID and returns the response. */
-    public static Checklist_Response__c save_helper(String checklistRespId, List<Checklist_Item_Response__c> responses) {
+    /** Updates the RESPONSES to CHECKLISTRESPID and returns the Checklist Response. */
+    public static Checklist_Response__c responseUpdate(String checklistRespId, List<Checklist_Item_Response__c> responses) {
         List<Checklist_Response__c> responseDB = [SELECT Id FROM Checklist_Response__c WHERE Id=:checklistRespId];
         Checklist_Response__c  response;
         Boolean newResponse = false;
@@ -70,7 +71,7 @@ global with sharing class ChecklistExtension {
     global static Id saveResponses(String checklistRespId, List<Checklist_Item_Response__c> responses) {
         if (responses == null || responses.size() == 0)
             return null;
-        Checklist_Response__c r = save_helper(checklistRespId, responses);
+        Checklist_Response__c r = responseUpdate(checklistRespId, responses);
         r.Status__c = 'Pending';
         update r;
         return r.Id;
@@ -81,16 +82,10 @@ global with sharing class ChecklistExtension {
     global static Id submitResponses(String checklistRespId, List<Checklist_Item_Response__c> responses) {
         if (responses == null || responses.size() == 0)
             return null;
-        Checklist_Response__c r = save_helper(checklistRespId, responses);
+        Checklist_Response__c r = responseUpdate(checklistRespId, responses);
         r.Status__c = 'Complete';
         update r;
         return r.Id;
-    }
-
-    // Creates Checklist Response Item Objects
-    @RemoteAction
-    global static List<Checklist_Item_Response__c> checklist_items(Id checklist) {
-        return getAllChecklistItems(checklist);
     }
 
     @RemoteAction
@@ -137,23 +132,6 @@ global with sharing class ChecklistExtension {
     global static String lat_long(Id checklist_response) {
         Checklist_Response__c response = [SELECT Location__c FROM Checklist_Response__c WHERE Id=: checklist_response];
         return JSON.serialize(response);
-    }
-
-    @RemoteAction
-    global static String[] finish_checklist_items(Id checklist_response_id) {
-       Checklist_Response__c r = [SELECT Id FROM Checklist_Response__c WHERE Id=:checklist_response_id];
-       r.Status__c = 'Complete';
-       update(r);
-       List<Checklist_Response__c> pending_checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
-                                                         Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending'];
-       List<Checklist_Response__c> completed_checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
-                                                          Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Complete'];
-       String return_pending = JSON.serialize(pending_checklists);
-       String return_completed = JSON.serialize(completed_checklists);       
-       String[] to_return = new String[]{};
-       to_return[0] = return_pending;
-       to_return[1] = return_completed;
-       return to_return;
     }
 
     @RemoteAction
