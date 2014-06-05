@@ -716,8 +716,6 @@ id="todo"
 
   <body>
     <div class="flipbox-container" ng-controller="PagesController">
-      <input class='normal' id='checklist_id' type='hidden' value='{!$CurrentPage.parameters.checklist_id}'/>
-
       <div class="flipbox">
         <div id="navbar">
           <!-- Currently no icons -->
@@ -858,6 +856,7 @@ controllers.PagesController = function ($scope) {
     $scope.completedchecklistresponses;
     $scope.pendingchecklistresponses;
     $scope.photoMap = {};
+    $scope.currentChecklistId;
 
 var getPendingChecklistResponses = function() {
   var that = this;
@@ -886,7 +885,7 @@ var getCompletedChecklistResponses = function() {
         console.log('go');
         $scope.completedchecklistresponses = result;
         console.log($scope.completedchecklistresponses);
-        $scope.$apply;
+        $scope.$apply();
       } else if (event.type === 'exception') {
         console.log('Exception: ' + event.message);
       } else {
@@ -949,11 +948,10 @@ getCompletedChecklistResponses();
     {escape: true}
     );
 }
-var getChecklistItems = function(checklist_id) {
-      var that = this;
+var getChecklistItems = function() {
       Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.checklist_items}',
-        checklist_id,
+        $scope.currentChecklistId,
         function(result, event){
           if (event.status) {
             $scope.checklistitems = result;
@@ -1038,11 +1036,9 @@ var getChecklistItems = function(checklist_id) {
       var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
 
     }
-    var checklist_response = $('#checklist_id').val(); 
-
     Visualforce.remoting.Manager.invokeAction(
       '{!$RemoteAction.ChecklistExtension.submitResponses}',
-      checklist_response,
+      $scope.currentChecklistId,
       $scope.checklistitems,
       function(result, event){
         if (event.status) {
@@ -1065,10 +1061,9 @@ var getChecklistItems = function(checklist_id) {
   $scope.saveResponse = function() {
     var that = this;
     formHelper();
-      var checklist_response = $('#checklist_id').val(); // works for pending to completed
       Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.ChecklistExtension.saveResponses}',
-        checklist_response,
+        $scope.currentChecklistId,
         $scope.checklistitems,
         function(result, event){
           if (event.status) {
@@ -1090,7 +1085,7 @@ var getChecklistItems = function(checklist_id) {
     setTimeout(function(){
       setupPhoto();
     },2000);
-    $('#checklist_id').val(checklist_id);
+    $scope.currentChecklistId = checklist_id;
   }
 
   $scope.goToCreateDetailPage = function(checklist) {
