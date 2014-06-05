@@ -848,67 +848,10 @@ id="todo"
       var checklistApp = angular.module('checklistApp', []);
       var photoMap = {};
 
-      checklistApp.service('userService', function() {
-
-        var checklistitems;
-        var pendingchecklistresponses;
-        var completedchecklistresponses;
-        var checklists;
-        var checklist_id;
-
-        var observerCallbacks = [];
-    // Register an Observer
-
-    this.registerObserverCallback = function(callback){
-      observerCallbacks.push(callback);
-    }
-
-
-    this.getChecklistItems = function(checklist_id) {
-      var that = this;
-      Visualforce.remoting.Manager.invokeAction(
-        '{!$RemoteAction.ChecklistExtension.checklist_items}',
-        checklist_id,
-        function(result, event){
-          if (event.status) {
-            checklistitems = result;
-            for (var i = 0; i < checklistitems.length; i++) {
-              var type = checklistitems[i].Checklist_Item__r.Type__c;
-              if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
-                var values = checklistitems[i].Checklist_Item__r.Values__c;
-                if (values) {
-                  checklistitems[i].Checklist_Item__r.Values = values.split(', ');
-                  checklistitems[i].Checklist_Item__r.Values2 = [];
-                }
-              }
-            }
-          } else if (event.type === 'exception') {
-            console.log('Exception: ' + event.message);
-          } else {
-            console.log('Error!');
-          }
-        },
-        {escape: true}
-        );
-}
-
-
-
-this.getCLIs = function () {
-  return checklistitems;
-};
-this.getPendingCLRs = function() {
-  return pendingchecklistresponses;
-}
-this.getCompletedCLRs = function() {
-  return completedchecklistresponses;
-}
-})
-
 
 
 var controllers = {};
-controllers.PagesController = function ($scope, userService) {
+controllers.PagesController = function ($scope) {
   var response = getUrlVars()['id'];
   $scope.checklists = {!Checklists};
     $scope.checklistitems;
@@ -1150,9 +1093,6 @@ var getChecklistItems = function(checklist_id) {
     $('#checklist_id').val(checklist_id);
   }
 
-  if (response != null ) {
-    userService.edit_checklist_items(response);
-  }
   $scope.pendinglistPageActive = true;
   $scope.goToCreateDetailPage = function(checklist) {
     $scope.checklistName = checklist.Name;
@@ -1166,7 +1106,6 @@ var getChecklistItems = function(checklist_id) {
     setupDetail(checklist.Id);
     editChecklistItems(checklist.Id);
   }
-
 }
 
 checklistApp.controller(controllers);
