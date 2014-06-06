@@ -816,12 +816,12 @@ id="todo"
               </section>
               <section id="four">
                 <div class="spacer"> </div>
-                <div class="link maplink" onclick="showMap()">
+                <div class="link maplink" ng-click="revealMap()">
                   <img class="map" src="{!$Resource.checklist_map}"></img>
                   <p> View Map </p>
-                  <p class="blurb"> 2 Completed Locations </p>
+                  <p class="blurb"> {{completedchecklistresponses.size}} Completed Locations </p>
                 </div>
-                <div id="googleMap">
+                <div id="googleMap" ng-show="showMapView">
                 </div>
                 <div class="link maplink" ng-repeat="checklist in completedchecklistresponses">
                   <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
@@ -869,6 +869,18 @@ id="todo"
         $scope.latitude;
         /** The current longitude. */
         $scope.longitude;
+        /** Determines if the map should be showing. */
+        $scope.showMapView = false;
+
+        $scope.revealMap = function() {
+          console.log('click');
+                    $scope.showMapView = true;
+          console.log(map);
+          map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+          createMarkers();
+        }
+
+
 
         /** Returns all the pending Checklist Responses. */
         var getPendingChecklistResponses = function() {
@@ -896,7 +908,6 @@ id="todo"
               if (event.status) {
                 $scope.completedchecklistresponses = result;
                 console.log($scope.completedchecklistresponses);
-                createMarkers();
                 $scope.$apply();
               } else if (event.type === 'exception') {
                 console.log('Exception: ' + event.message);
@@ -1165,7 +1176,7 @@ function showPosition(position) {
 function showError(error) {
     switch(error.code) {
         case error.PERMISSION_DENIED:
-            alert("User denied the request for Geolocation.")
+            alert("Please turn on locations in S1.")
             break;
         case error.POSITION_UNAVAILABLE:
             alert("Location information is unavailable.")
@@ -1185,11 +1196,11 @@ var mapInit = function() {
 
   var mapProp = {
     center:new google.maps.LatLng(51.508742,-0.120850),
-    zoom:5,
+    zoom:15,
     mapTypeId:google.maps.MapTypeId.ROADMAP
   }
 
-  var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+  var map;
 
 google.maps.event.addDomListener(window, 'load', mapInit);
 
@@ -1206,8 +1217,8 @@ var markers = [];
         title: response.Checklist__r.Name
       });
       markers.push(marker);
-      console.log(marker);
       marker.setMap(map);
+      map.panTo(coordinates);
     }
   }
 
@@ -1215,7 +1226,6 @@ var markers = [];
     for (var i = markers.length - 1; i >= 0; i--) {
       markers[i].setMap(null);
       markers.pop();
-      console.log(markers.length);
     }
   }
 }
@@ -1267,7 +1277,7 @@ function getUrlVars() {
 <style type="text/css">
       html { height: 100% }
       body { height: 100%; margin: 0; padding: 0 }
-      #googleMap { height: 100% }
+      #googleMap { height: 100%; width: 100% }
     </style>
 
 <script>
