@@ -1179,16 +1179,33 @@ function showError(error) {
 
 
 var mapInit = function() {
+}
+
   var mapProp = {
     center:new google.maps.LatLng(51.508742,-0.120850),
     zoom:5,
     mapTypeId:google.maps.MapTypeId.ROADMAP
   }
+
   var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-}
 
 google.maps.event.addDomListener(window, 'load', mapInit);
 
+var markers = [];
+
+  var createMarkers = function() {
+    var response;
+    for (var i = 0; i < $scope.completedchecklistresponses.length; i++) {
+      response = $scope.completedchecklistresponses[i];
+      var coordinates = new google.maps.LatLng(response.Location__latitude__s, response.Location__longitude__s);
+      var marker = new google.maps.Marker({
+        position: coordinates,
+        title: response.Name
+      });
+      markers.push(marker);
+      marker.setMap(map);
+    }
+  }
 
 }
 
