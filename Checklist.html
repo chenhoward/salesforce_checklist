@@ -821,7 +821,7 @@ id="todo"
                   <p> View Map </p>
                   <p class="blurb"> 2 Completed Locations </p>
                 </div>
-                <div id="googleMap" onclick="initMap()">
+                <div id="googleMap">
                 </div>
                 <div class="link maplink" ng-repeat="checklist in completedchecklistresponses">
                   <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
@@ -895,6 +895,8 @@ id="todo"
             function(result, event){
               if (event.status) {
                 $scope.completedchecklistresponses = result;
+                console.log($scope.completedchecklistresponses);
+                createMarkers();
                 $scope.$apply();
               } else if (event.type === 'exception') {
                 console.log('Exception: ' + event.message);
@@ -1192,21 +1194,20 @@ var mapInit = function() {
 google.maps.event.addDomListener(window, 'load', mapInit);
 
 var markers = [];
-
   var createMarkers = function() {
     var response;
     for (var i = 0; i < $scope.completedchecklistresponses.length; i++) {
       response = $scope.completedchecklistresponses[i];
-      var coordinates = new google.maps.LatLng(response.Location__latitude__s, response.Location__longitude__s);
+      var coordinates = new google.maps.LatLng(response.Location__Latitude__s, response.Location__Longitude__s);
       var marker = new google.maps.Marker({
         position: coordinates,
         title: response.Name
       });
       markers.push(marker);
+      console.log(marker);
       marker.setMap(map);
     }
   }
-
 }
 
 checklistApp.controller(controllers);
