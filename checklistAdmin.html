@@ -33,7 +33,7 @@ h1 { padding: .2em; margin: 0; }
 }
 #admin-panel li {
   list-style-type: none;
-  padding: 15px;
+  padding: 30px;
   margin: 0 !important;
   color: #333333;
   background: #FFFFFF;
@@ -44,19 +44,19 @@ h1 { padding: .2em; margin: 0; }
 #checklist-edit {
   margin-right: 200px;
 }
-#sortable {
+.sortable {
   margin-top: 0px;
   width: 100%;
 }
-#sortable li {
+.sortable li {
   list-style-type: none;
   box-sizing: border-box;
   padding: 30px;
   width: 100%;
   margin-left: -10px;
-  border-top: 20px solid #BBDDBB;
+  border-top: 20px solid #BBDDBB !important;
 }
-.form-info {
+.form-info, .border-light {
   list-style-type: none;
   padding: 30px !important;
   border-top: 20px solid #BBDDBB !important;
@@ -90,19 +90,6 @@ $(function() {
   });
 });
 </script>
-<script>
-function addChoice(button) {
-  $( "<div id='choice-wrapper'> \
-        <label> Choice </label> \
-        <input type='text' class='choice'/> \
-        <input type='button' onclick='removeParent(this)' value='Remove Choice'/> \
-        <br><br> \
-      </div>" ).insertBefore(button);
-}
-function removeParent(button) {
-  $(button).parent().remove();
-}
-</script>
 </head>
 <body>
 <div id="admin-panel" ng-controller="AdminCtrl">
@@ -123,72 +110,39 @@ function removeParent(button) {
         <input type="text" ng-model="checklist.description"></input>
         <br/>
       </li>
-      <ol ui-sortable="true" ng-model="items">
+      <ol class="sortable" ui-sortable="true" ng-model="items">
         <li ng-repeat="item in items">
-          <!--NEEDS TO BE FIXED TO FOLLOW DRAG AND DROP-->
-          <!--<h1> Question {{$index + 1}}</h1>-->
           <label> Type: </label>
           <select ng-model="item.Type__c" ng-options="type for type in types" ng-required="true"></select>
           <br/><br/>
           <label> Question: </label>
           <input type="text" ng-model="item.Question__c" name="Q1" ng-required="true"></input>
           <br/><br/>
-          <!--NEEDS TO BE FIXED TO FOLLOW DRAG AND DROP-->
           <label> Required: </label>
           <input type="checkbox" ng-model="item.Required__c" name="O3"></input>
           <br/><br/>
           <label> Photo Attachment: </label>
           <input type="checkbox" ng-model="item.Attach_Photo__c" name="O4"></input>
           <br/><br/>
-          <div ng-show="showValues(item)">
-            <div ng-repeat="choice in choices">
-              <!--NEEDS TO BE FIXED TO FOLLOW CHOICE ADDER-->
-              <div id='choice-wrapper'>
-                <label> Choice </label>
-                <input type='text' class="choice"/>
-                <input type='button' ng-click='removeChoice(choice)' value='Remove Choice'/>
-                <br/><br/>
-              </div>
-              <!--<label> Values: </label>
-              <input type="text" ng-model="item.Values__c" name="Q1"></input>-->
-            </div>
-            <input type='button' ng-click='addChoice()' value='Add Choice'/>
-            <br/><br/>
-          </div>
-          <!--<input type='button' value='Show Index' ng-click='showIndex($index)'/>-->
+          <input type="text" ng-model="item.Values__c" name="Q1" ng-show="showValues(item)"></input>
           <input type='button' value='Remove Question' ng-click='removeQuestion(item)'/>
           <br/>
         </li>
       </ol>
       <br/>
-      {{items.length}}
       <input type="button" value="Add Question" ng-click="addQuestion()"></input>
-      <!-- FIX TO ALLOW REMOVING OF INDIVIDUAL QUESTIONS FROM REMOVE BUTTON
-      <input type="button" value="-" ng-click="removeQuestion()"></input>-->
       <input type="submit" value="Create" ng-click="newChecklist()"> </input>
-      <!--<div id="cart">
-        <div class="ui-widget-content">
-          <ol id="sortable">
-            <li class="placeholder" id="placeholder"> 
-              <label for='type'> Question Type </label>
-              <select id='type'>
-                <option value='text'> Text </option>
-                <option value='message'> Message </option>
-                <option value='number'> Number </option>
-                <option value='date'> Date </option>
-                <option value='picklist'> Picklist </option>
-              </select>
-              <input id="add-question" type='submit' value='Add Question' onclick="addQuestion( '#cart ol' )"/>
-              <p> Re-Order Using Drag and Drop </p>
-            </li>
-          </ol>
-        </div>
-      </div>-->
     </form>
   </div>
   <div id="editChecklist" ng-show="!newPage" >
-    <div ng-repeat="checklist in checklists2">
-    </div>
+    <li class="border-light">
+      <h1>Choose a checklist to edit</h1>
+      <select ng-model="checklistIndex" ng-change="setNewPage(false)">
+        <option ng-repeat="checklist in checklists2" value="{{checklists2.indexOf(checklist)}}">
+          {{checklist.Name}}
+        </option>
+      </select>
+    </li>
     <form name="editPage">
       <li class="form-info">
         <h1>Checklist Name</h1>
@@ -198,17 +152,14 @@ function removeParent(button) {
         <input type="text" ng-model="item.Description__c" ng-required="true"></input>
         <br/>
       </li>
-      <ol id="sortable">
+      <ol class="sortable">
         <li ng-repeat="question in questions | filter:{isActive__c:'true'}" draggable="true" class="question">
-          <!--NEEDS TO BE FIXED TO FOLLOW DRAG AND DROP-->
-          <!--<h1> Question {{$index + 1}}</h1>-->
           <label> Type: </label>
           <select ng-model="question.Type__c" ng-options="type for type in types" ng-required="true"></select>
           <br/><br/>
           <label> Question: </label>
           <input type="text" ng-model="question.Question__c" ng-required="true"></input>
           <br/><br/>
-          <!--NEEDS TO BE FIXED TO FOLLOW DRAG AND DROP-->
           <input type="hidden" ng-model="question.Order__c" ng-required="question.isActive__c"></input>
           <label> Required: </label>
           <input type="checkbox" ng-model="question.Required__c"></input>
@@ -216,38 +167,13 @@ function removeParent(button) {
           <label> Photo Attachment: </label>
           <input type="checkbox" ng-model="question.Attach_Photo__c" name="O4"></input>
           <br/><br/>
-          <div ng-show="showValues(item)">
-            <div ng-repeat="choice in choices">
-              <!--NEEDS TO BE FIXED TO FOLLOW CHOICE ADDER-->
-              <div id='choice-wrapper'>
-                <label> Choice </label>
-                <input type='text' class="choice"/>
-                <input type='button' ng-click='removeChoice(choice)' value='Remove Choice'/>
-                <br/><br/>
-              </div>
-              <!--<label> Values: </label>
-              <input type="text" ng-model="item.Values__c" name="Q1"></input>-->
-            </div>
-            <input type='button' ng-click='addChoice()' value='Add Choice'/>
-            <br/><br/>
-          </div>
+          <input type="text" ng-model="question.Values__c" name="Q1" ng-show="showValues(question)"></input>
           <input type="button" value="Remove Question" ng-click="deleteChecklistItem(question)"></input>
           <br/>
         </li>
       </ol>
-      <!--<div ng-repeat="question in questions | filter:{isActive__c:'true'}" draggable="true" class="question">
-        <p ng-show="inDB(question)">{{question.Question__c}}</p>
-        <input ng-show="!inDB(question)" type="text" ng-model="question.Question__c" ng-required="true"></input>
-        Order:
-        <input type="number" ng-model="question.Order__c" ng-required="question.isActive__c"></input>
-        <input type="checkbox" ng-model="question.Required__c"></input>
-        Required? : {{question.Required__c}}
-        <input type="checkbox" ng-model="question.Attach_Photo__c" name="O4"></input>
-        <select ng-model="question.Type__c" ng-options="type for type in types" ng-required="true"></select>
-        <input type="text" ng-model="question.Values__c" name="Q1" ng-show="showValues(question)"></input>
-        <input type="button" value="Delete" ng-click="deleteChecklistItem(question)"></input>
-      </div>-->
     </form>
+    <br/>
     <input type="button" value="Add Question" ng-click="addQuestionEdit()"></input>
     <input type="submit" value="Update" ng-click="editChecklist()"></input>
   </div>
@@ -258,6 +184,7 @@ function removeParent(button) {
 var checklistApp = angular.module('checklistApp', ['ui.sortable']);
 checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.newPage = true;
+    $scope.checklistIndex = 0;
     $scope.items = new Array();
     $scope.items[0] = new Object();
     $scope.checklist = new Object();
@@ -273,7 +200,8 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     return item.Id != null;
     }
     $scope.setNewPage = function(bool) {
-    $scope.newPage = bool;
+      $scope.item = $scope.checklists[$scope.checklistIndex];
+      $scope.newPage = bool;
     }
     $scope.newChecklist = function() {
       for (var i = 0; i < $scope.items.length; i++) {
@@ -315,23 +243,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
       $scope.items.splice($scope.items.indexOf($scope.item), 1);
     }
     $scope.showValues = function(item) {
-      if ($scope.choices == null) {
-        $scope.choices = new Array();
-        $scope.choices[0] = new Object();
-      }
       return (item.Type__c == 'Rating') || (item.Type__c == 'Picklist') || (item.Type__c == 'Multi-Select');
-    }
-    $scope.addChoice = function() {
-      $scope.choices.push(new Object());
-    }
-    $scope.removeChoice = function(choice) {
-      $scope.choices.splice($scope.choices.indexOf($scope.choice), 1);
-    }
-    $scope.showIndex = function(index) {
-      console.log(index);
-    }
-    $scope.joinChoices = function(choices) {
-
     }
     $scope.editChecklist = function() {
       if ($scope.editPage.$valid) {
