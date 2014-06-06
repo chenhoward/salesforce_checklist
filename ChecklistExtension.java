@@ -19,7 +19,7 @@ global with sharing class ChecklistExtension {
     @RemoteAction
     global static List<Checklist_Response__c> completedChecklists() {
        List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
-                                                Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Complete'];
+                                                Checklist__r.Id, Location__latitude__s, Location__longitude__s FROM Checklist_Response__c WHERE Status__c=:'Complete' AND CreatedByID=:UserInfo.getUserId()];
        return checklists;
     } 
 
