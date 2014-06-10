@@ -14,7 +14,7 @@ global with sharing class ChecklistExtension {
             return null;
         }
         List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
-                                                Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending'];
+                                                Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending' AND Responder__c=:UserInfo.getUserId()];
        return checklists;
     } 
 
@@ -25,7 +25,7 @@ global with sharing class ChecklistExtension {
             return null;
         }
         List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
-                                                Checklist__r.Id, Location__latitude__s, Location__longitude__s FROM Checklist_Response__c WHERE Status__c=:'Complete' AND CreatedByID=:UserInfo.getUserId()];
+                                                Checklist__r.Id, Location__latitude__s, Location__longitude__s FROM Checklist_Response__c WHERE Status__c=:'Complete' AND Responder__c=:UserInfo.getUserId()];
         return checklists;
     } 
 
@@ -170,7 +170,6 @@ global with sharing class ChecklistExtension {
         Attachment attach = new Attachment();
         attach.Body = bitphoto;
         attach.Name = 'Photo for response: ' + resp.Id;
-        // attach.ContentType = ;
         attach.ParentID = resp.Id;
         insert attach;
         return attach.Id;
