@@ -110,14 +110,16 @@ global with sharing class ChecklistExtension {
         return r.Id;
     }
 
+
+    /** Returns Checklist Item Responses to edit for CHECKLISTRESPONSE. */
     @RemoteAction
-    global static List<Checklist_Item_Response__c> editChecklistItems(Id checklist_response) {        
+    global static List<Checklist_Item_Response__c> editChecklistItems(Id checklistResponse) {        
         if(!Schema.SObjectType.Checklist_Item_Response__c.isAccessible()) {
             return null;
         }
         List<Checklist_Item_Response__c> to_return = [SELECT Id, Answer__c, Checklist_Item__c, Checklist_Item__r.Order__c, Checklist_Item__r.Question__c, Checklist_Item__r.Checklist__c,
                                                       Checklist_Item__r.Required__c, Checklist_Item__r.Type__c, Checklist_Item__r.Values__c, Checklist_Item__r.Attach_Photo__c
-                                                      FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:checklist_response 
+                                                      FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:checklistResponse 
                                                       order by Checklist_Item__r.Order__c];
 
         Map<Id, Checklist_Item_Response__c> checklistItemId2Resp = new Map<Id, Checklist_Item_Response__c>();
@@ -126,7 +128,7 @@ global with sharing class ChecklistExtension {
         }
         Id checklistId;
         if (to_return.size() == 0) {
-            Checklist_Response__c[] resp = [select Checklist__c from Checklist_Response__c where id = :checklist_response limit 1];
+            Checklist_Response__c[] resp = [select Checklist__c from Checklist_Response__c where id = :checklistResponse limit 1];
             if (resp.size() == 1) {
                 checklistId = resp[0].Checklist__c;
             }
@@ -142,7 +144,7 @@ global with sharing class ChecklistExtension {
             Checklist_Item_Response__c r = checklistItemId2Resp.get(item.Id);
             if (r == null) {
                 Checklist_Item_Response__c emptyResp = new Checklist_Item_Response__c(Checklist_Item__c = item.Id, 
-                  Checklist_Item__r = item, Checklist_Response__c = checklist_response);
+                  Checklist_Item__r = item, Checklist_Response__c = checklistResponse);
                 responses.add(emptyResp);                                                                               
             } else {
                 responses.add(r);
@@ -151,16 +153,17 @@ global with sharing class ChecklistExtension {
         return responses;
     }
 
+    /** Handle the BITPHOTO for the Response with id RESPONSEID to the Checklist Item with the Id CHECKLISTITEMID. */
     @RemoteAction
-    global static Id photoRemotecall(Id checklist_item_id, Id response_id, Blob bitphoto) {
+    global static Id photoRemotecall(Id checklistItemId, Id responseId, Blob bitphoto) {
         Boolean valid = Schema.SObjectType.Checklist_Item_Response__c.isAccessible() && Schema.SObjectType.Attachment.isCreateable();
         if (!valid) {
             return null;
         }
-        if (checklist_item_id == null || response_id == null || bitphoto == null) {
+        if (checklistItemId == null || responseId == null || bitphoto == null) {
             return null;
         }
-        Checklist_Item_Response__c resp = [SELECT Id FROM Checklist_Item_Response__c WHERE Checklist_Item__c=:checklist_item_id AND Checklist_Response__c=:response_id];
+        Checklist_Item_Response__c resp = [SELECT Id FROM Checklist_Item_Response__c WHERE Checklist_Item__c=:checklistItemId AND Checklist_Response__c=:responseId];
         List<Attachment> a = [SELECT Id FROM Attachment WHERE ParentId=:resp.Id];
         if (a.size() != 0) {
             for (Integer i=0; i<a.size(); i++) {
