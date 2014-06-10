@@ -1112,7 +1112,8 @@ function formHelper() {
       delete $scope.checklistitems[i].Checklist_Item__r.Values2;
     }
     if ($scope.checklistitems[i].Answer__c) {
-      $scope.checklistitems[i].Answer__c = escapeHtml($scope.checklistitems[i].Answer__c.trim());
+      $scope.checklistitems[i].Answer__c = escapeHtml($scope.checklistitems[i].Answer__c);
+
     }
   }
   delete $scope.checklistitems.attributes;
