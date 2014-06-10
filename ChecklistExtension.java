@@ -93,6 +93,7 @@ global with sharing class ChecklistExtension {
         }
         Checklist_Response__c r = responseUpdate(checklistRespId, responses);
         r.Status__c = 'Pending';
+        r.Responder__c = UserInfo.getUserId();
         update r;
         return r.Id;
     }
@@ -106,6 +107,7 @@ global with sharing class ChecklistExtension {
         r.Status__c = 'Complete';
         r.Location__latitude__s = latitude;
         r.Location__longitude__s = longitude;
+        r.Responder__c = UserInfo.getUserId();
         update r;
         return r.Id;
     }

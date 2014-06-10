@@ -141,7 +141,7 @@ id="todo"
     left: 0%;
   }
 
-  #two, #three {
+  #two, #three, #five {
     z-index: 2;
   }
 
@@ -913,6 +913,13 @@ id="todo"
         </div>
         <div class="spacer"> </div>
       </section>
+      <section id="five">
+        <div class="title"> {{checklistName}} </div>
+        <div class="question">
+          <p id="conclusion"> You've just saved a review of <span class="green_text"> {{checklistName}} </span>. </p>
+        </div>
+        <a class="link last" id="return" data-section="one" href="#"> Return </a>
+      </section>
     </div>
   </div>
 </div>
@@ -1193,7 +1200,7 @@ $scope.saveResponse = function() {
     {escape: true}
     );
   getPendingChecklistResponses();
-  setSection($('#container section#three'), $('.active'));
+  setSection($('#container section#five'), $('.active'));
 }
 
 /** Sets up Images and updates which Checklist Response that is currently being worked on. */
