@@ -1,0 +1,630 @@
+<apex:page docType="html-5.0"
+sidebar="true" 
+showheader="true"
+standardStylesheets="false"
+Controller="ChecklistAdminController"
+applyHtmlTag="true"
+applyBodyTag="false"
+id="todo"
+>
+
+<html ng-app="checklistApp">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+<meta name="viewport" content="initial-scale = 1.0, user-scalable = no"/>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"></script>
+<style>
+h1 { padding: .2em; margin: 0; }
+#admin-panel ol { margin: 0 !important; padding: 0 !important; }
+.ui-widget-header {
+  font-size: 24px;
+  margin-left: -5px;
+  font-weight: 400;
+  color: #333333;
+}
+#checklist .pbTitle {
+  padding: 5px 12px !important;
+}
+#checklist .pbSubsection {
+  padding: 7px 12px !important;
+}
+#footer {
+  border-top: none;
+}
+#footer .pbBottomButtons {
+  margin: 0;
+}
+#admin-panel li {
+  list-style-type: none;
+  padding: 30px;
+  margin: 15px 0 !important;
+  color: #333333;
+  background: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 7px;
+}
+#checklist-edit {
+  margin-right: 200px;
+}
+.sortable {
+  margin-top: 0px;
+  width: 100%;
+}
+.sortable li {
+  list-style-type: none;
+  box-sizing: border-box;
+  padding: 30px;
+  width: 100%;
+  margin-left: -10px;
+}
+.form-info, .border-light {
+  list-style-type: none;
+  padding: 30px !important;
+  border-top: 20px solid #BBDDBB !important;
+}
+#placeholder {
+  background: #FFFFFF !important;
+  color: #333333 !important;
+  border: none !important;
+  padding: 0px !important;
+}
+label {
+  margin-right: 15px;
+}
+.question {
+  width: 400px;
+}
+</style>
+<script>
+$(function() {
+  $( "ol" ).sortable({
+    items: "li:not(.placeholder)",
+    sort: function() {
+      // gets added unintentionally by droppable interacting with sortable
+      // using connectWithSortable fixes this, but doesn't allow you to customize active/hoverClass options
+      $(this).removeClass( "ui-state-default" );
+    }
+  });
+});
+</script>
+</head>
+<body>
+<div id="admin-panel" ng-controller="AdminCtrl">
+  <div class="bPageTitle">
+    <div class="ptBody">
+      <div class="content">
+        <div class="pageTitleIcon" title="Products"></div>
+        <h1 class="pageType">Checklist Edit<span class="titleSeparatingColon">:</span></h1>
+        <h2 class="pageDescription"> New Checklist</h2>
+      </div>
+    </div>
+  </div>
+  <div class="bDescription"> Drag and drop questions to re-order them. </div>
+  <div class="bPageBlock brandSecondaryBrd bEditBlock secondaryPalette" id="checklist">
+    <div class="pbHeader">
+      <table border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr> 
+            <td class="pbTitle" id="checklistTitle"> 
+              <h2 class="mainTitle" style="font-size: 14px;">Checklist Edit</h2>
+            </td>
+            <td class="pbButton" id="topButtonRow">
+              <input type="submit" class="btn" value="Save" ng-click="newChecklist()"> </input>
+              <input type="button" class="btn" value="Add Question" ng-click="addQuestion()"></input>
+              <input type="submit" class="btn" value="Cancel"> </input>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pbBody">
+      <div class="pbSubsection">
+        <table class="detailList" border="0" cellpadding="0" cellspacing="0">
+          <tbody>
+            <tr>
+              <td class="labelCol requiredInput">
+                <label for="Name"><span class="requiredMark">*</span>Checklist Name</label>
+              </td>
+              <td class="data2Col" colspan="3">
+                <div class="requiredInput">
+                  <div class="requiredBlock">
+                  </div>
+                  <input id="Name" maxlength="255" size="20" tabindex="1" type="text" ng-model="checklist.name" name="formName" ng-required="true"/>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="labelCol last">
+                <label for="Description">Checklist Description</label>
+                <div class="textCounterOuter">
+                  <div class="textCounterMiddle">
+                    <div class="textCounter" id="Description_counter">4000 remaining</div>
+                  </div>
+                </div>
+              </td>
+              <td class="data2Col last" colspan="3">
+                <textarea cols="75" id="Description" maxlength="4000" name="Description" onchange="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onclick="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onkeydown="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onkeyup="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onmousedown="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" rows="6" tabindex="5" type="text" wrap="soft" ng-model="checklist.description"></textarea>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div name="newPage" ng-show="newPage">
+    <form name="newChecklistForm">
+      <ol class="sortable" ui-sortable="true" ng-model="items">
+        <li ng-repeat="item in items">
+          <h1> Question {{$index + 1}} </h1>
+          <br/><br/>
+          <label> Type: </label>
+          <select ng-model="item.Type__c" ng-options="type for type in types" ng-required="true"></select>
+          <br/><br/>
+          <label> Question: </label>
+          <input type="text" ng-model="item.Question__c" name="Q1" ng-required="true"></input>
+          <br/><br/>
+          <label> Required: </label>
+          <input type="checkbox" ng-model="item.Required__c" name="O3"></input>
+          <br/><br/>
+          <label> Photo Attachment: </label>
+          <input type="checkbox" ng-model="item.Attach_Photo__c" name="O4"></input>
+          <br/>
+          <div ng-show="showValues(item)">
+            <p> Input multiple values for your question below using a comma to separate each individual value. </p>
+            <label> Values: </label>
+            <input type="text" ng-model="question.Values__c" name="Q1" ></input>
+            <br/>
+          </div>
+          <br/>
+          <input type='button' class="btn" value='Delete' ng-click='removeQuestion(item)'/>
+          <br/>
+        </li>
+      </ol>
+    </form>
+  </div>
+  <div class="bPageBlock brandSecondaryBrd bEditBlock secondaryPalette" id="footer">
+    <div class="pbBottomButtons">
+      <table border="0" cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <td class="pbTitle">
+              &nbsp;
+            </td>
+            <td class="pbButtonb" id="bottomButtonRow">
+              <input type="submit" class="btn" value="Save" ng-click="newChecklist()"> </input>
+              <input type="button" class="btn" value="Add Question" ng-click="addQuestion()"></input>
+              <input type="submit" class="btn" value="Cancel"> </input>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!--<div id="editChecklist" ng-show="!newPage" >
+    <li class="border-light">
+      <h1>Choose a checklist to edit</h1>
+      <select ng-model="checklistIndex" ng-change="setNewPage(false)">
+        <option ng-repeat="checklist in checklists2" value="{{checklists2.indexOf(checklist)}}">
+          {{checklist.Name}}
+        </option>
+      </select>
+    </li>
+    <form name="editPage">
+      <li class="form-info">
+        <h1>Checklist Name</h1>
+        <input type="text" ng-model="item.Name" ng-required="true"></input>
+        <br/><br/>
+        <h1>Checklist Description</h1>
+        <input type="text" ng-model="item.Description__c" ng-required="true"></input>
+        <br/>
+      </li>
+      <ol class="sortable">
+        <li ng-repeat="question in questions | filter:{isActive__c:'true'}" draggable="true" class="question">
+          <label> Type: </label>
+          <select ng-model="question.Type__c" ng-options="type for type in types" ng-required="true"></select>
+          <br/><br/>
+          <label> Question: </label>
+          <input type="text" ng-model="question.Question__c" ng-required="true"></input>
+          <br/><br/>
+          <input type="hidden" ng-model="question.Order__c" ng-required="question.isActive__c"></input>
+          <label> Required: </label>
+          <input type="checkbox" ng-model="question.Required__c"></input>
+          <br/><br/>
+          <label> Photo Attachment: </label>
+          <input type="checkbox" ng-model="question.Attach_Photo__c" name="O4"></input>
+          <br/><br/>
+          <div ng-show="showValues(question)">
+            <label> Values: </label>
+            <input type="text" ng-model="question.Values__c" name="Q1" ></input>
+            <p> Input multiple answer choices for your question using a comma to separate each individual option. </p>
+            <br/><br/>
+          </div>
+          <input type="button" value="Remove Question" ng-click="deleteChecklistItem(question)"></input>
+          <br/>
+        </li>
+      </ol>
+    </form>
+    <br/>
+    <input type="button" value="Add Question" ng-click="addQuestionEdit()"></input>
+    <input type="submit" value="Update" ng-click="editChecklist()"></input>
+  </div>-->
+</div>
+</body>
+<script>
+/* Angular */
+var checklistApp = angular.module('checklistApp', ['ui.sortable']);
+checklistApp.controller("AdminCtrl", function ($scope) {
+    $scope.newPage = true;
+    $scope.checklistIndex = 0;
+    $scope.items = new Array();
+    $scope.items[0] = new Object();
+    $scope.checklist = new Object();
+    $scope.checklist.name = 'Default Name';
+    $scope.checklist.description = 'Default Description';
+    $scope.checklists = {!CheckLists};
+    console.log($scope.checklists);
+    var emptyDB = $scope.checklists.length == 0;
+    $scope.checklists2 = $scope.checklists;
+    $scope.item = $scope.checklists[0];
+    $scope.types = ['Yes/No', 'Number', 'Text', 'Date','Long Text', 'Rating', 'Picklist', 'Multi-Select'];
+    $scope.inDB = function(item) {
+    return item.Id != null;
+    }
+    $scope.setNewPage = function(bool) {
+      $scope.item = $scope.checklists[$scope.checklistIndex];
+      $scope.newPage = bool;
+    }
+    $scope.newChecklist = function() {
+      for (var i = 0; i < $scope.items.length; i++) {
+        $scope.items[i].Order__c = i;
+      }
+      if ($scope.newChecklistForm.$valid) {
+      for(var i = 0; i < $scope.items.length; i++) {
+        delete $scope.items[i].$$hashKey;
+        console.log($scope.items[i].Type__c);
+      }
+      Visualforce.remoting.Manager.invokeAction(
+          '{!$RemoteAction.ChecklistAdminController.createChecklistWithQuestions}',
+          $scope.checklist.name,
+          $scope.checklist.description,
+          $scope.items,
+          function(result, event) {
+          if (event.status) {
+          console.log('Created everything');
+          } else if (event.type == 'exception') {
+          console.log('Exception');
+          } else {
+          console.log('Error!');
+          }
+          },
+          {escape: true}
+          );
+      } else {
+        console.log('Invalid New Checklist');
+      }
+    }
+    $scope.addQuestion = function() {
+      $scope.items.push(new Object());
+    }
+    $scope.addQuestionEdit = function() {
+      var item = {isActive__c : true, Order__c: $scope.questionCount() + 1, Question__c : "New Question"}
+      $scope.questions.push(item);
+    }
+    $scope.removeQuestion = function(item) {
+      $scope.items.splice($scope.items.indexOf($scope.item), 1);
+    }
+    $scope.showValues = function(item) {
+      return (item.Type__c == 'Rating') || (item.Type__c == 'Picklist') || (item.Type__c == 'Multi-Select');
+    }
+    $scope.editChecklist = function() {
+      if ($scope.editPage.$valid) {
+        delete $scope.item.attributes;
+        var copy = {};
+        copy.Id = $scope.item.Id;
+        copy.Name = $scope.item.Name;
+        copy.Description__c = $scope.item.Description__c;
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ChecklistAdminController.updateChecklist}',
+            copy,
+            function(result, event) {
+            if (event.status) {
+            console.log('Updated everything');
+            } else if (event.type == 'exception') {
+            console.log('Exception');
+            } else {
+            console.log('Error!');
+            }
+            },
+            {escape: true}
+            );
+        for(var i = 0; i < $scope.questions.length; i++) {
+          delete $scope.questions[i].$$hashKey;
+          $scope.questions[i].Checklist__c = $scope.item.Id;
+        }
+        console.log($scope.questions);
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ChecklistAdminController.updateChecklistItems}',
+            $scope.questions,
+            function(result, event) {
+            if (event.status) {
+            console.log('Updated everything items');
+            } else if (event.type == 'exception') {
+            console.log('Exception');
+            } else {
+            console.log('Error!');
+            }
+            }, {escape: true}
+            );
+      } else {
+        console.log("Fix EditForm");
+      }};
+    $scope.deleteChecklistItem = function(item) {
+      console.log(item);
+      item.isActive__c = false;
+      if(!$scope.inDB(item)) {
+        console.log("new");
+        var index = $scope.questions.indexOf(item);
+        if (index > -1) {
+          $scope.questions.splice(index, 1);
+        }
+      }
+    }
+    $scope.questionCount = function() {
+      var count = 0;
+      for (var i = 0; i < $scope.questions.length; i++) {
+        if ($scope.questions[i].isActive__c) {
+          count++;
+        }
+      }
+      return count;
+    }
+    $scope.getChecklistItems = function() {
+      var copy = {};
+      copy.Id = $scope.item.Id;
+      Visualforce.remoting.Manager.invokeAction(
+          '{!$RemoteAction.ChecklistAdminController.getChecklistItems}',
+          copy,
+          function(result, event) {
+          if(event.status) {
+          $scope.questions = result;
+          $scope.$apply();
+          } else if (event.type == 'exception') {
+          console.log('Exception');
+          } else {
+          console.log('Error!');
+          }
+          },
+          {escape:true}
+          );
+    };
+    if (!emptyDB) {
+        $scope.getChecklistItems();
+    }
+});
+
+/*
+ jQuery UI Sortable plugin wrapper
+
+ @param [ui-sortable] {object} Options to pass to $.fn.sortable() merged onto ui.config
+ */
+angular.module('ui.sortable', [])
+  .value('uiSortableConfig',{})
+  .directive('uiSortable', [
+    'uiSortableConfig', '$timeout', '$log',
+    function(uiSortableConfig, $timeout, $log) {
+      return {
+        require: '?ngModel',
+        link: function(scope, element, attrs, ngModel) {
+          var savedNodes;
+
+          function combineCallbacks(first,second){
+            if(second && (typeof second === 'function')) {
+              return function(e, ui) {
+                first(e, ui);
+                second(e, ui);
+              };
+            }
+            return first;
+          }
+
+          function hasSortingHelper (element) {
+            var helperOption = element.sortable('option','helper');
+            return helperOption === 'clone' || typeof helperOption === 'function';
+          }
+
+          var opts = {};
+
+          var callbacks = {
+            receive: null,
+            remove:null,
+            start:null,
+            stop:null,
+            update:null
+          };
+
+          angular.extend(opts, uiSortableConfig);
+
+          if (!angular.element.fn || !angular.element.fn.jquery) {
+            $log.error('ui.sortable: jQuery should be included before AngularJS!');
+            return;
+          }
+
+          if (ngModel) {
+
+            // When we add or remove elements, we need the sortable to 'refresh'
+            // so it can find the new/removed elements.
+            scope.$watch(attrs.ngModel+'.length', function() {
+              // Timeout to let ng-repeat modify the DOM
+              $timeout(function() {
+                // ensure that the jquery-ui-sortable widget instance
+                // is still bound to the directive's element
+                if (!!element.data('ui-sortable')) {
+                  element.sortable('refresh');
+                }
+              });
+            });
+
+            callbacks.start = function(e, ui) {
+              // Save the starting position of dragged item
+              ui.item.sortable = {
+                index: ui.item.index(),
+                cancel: function () {
+                  ui.item.sortable._isCanceled = true;
+                },
+                isCanceled: function () {
+                  return ui.item.sortable._isCanceled;
+                },
+                _isCanceled: false
+              };
+            };
+
+            callbacks.activate = function(/*e, ui*/) {
+              // We need to make a copy of the current element's contents so
+              // we can restore it after sortable has messed it up.
+              // This is inside activate (instead of start) in order to save
+              // both lists when dragging between connected lists.
+              savedNodes = element.contents();
+
+              // If this list has a placeholder (the connected lists won't),
+              // don't inlcude it in saved nodes.
+              var placeholder = element.sortable('option','placeholder');
+
+              // placeholder.element will be a function if the placeholder, has
+              // been created (placeholder will be an object).  If it hasn't
+              // been created, either placeholder will be false if no
+              // placeholder class was given or placeholder.element will be
+              // undefined if a class was given (placeholder will be a string)
+              if (placeholder && placeholder.element && typeof placeholder.element === 'function') {
+                var phElement = placeholder.element();
+                // workaround for jquery ui 1.9.x,
+                // not returning jquery collection
+                phElement = angular.element(phElement);
+
+                // exact match with the placeholder's class attribute to handle
+                // the case that multiple connected sortables exist and
+                // the placehoilder option equals the class of sortable items
+                var excludes = element.find('[class="' + phElement.attr('class') + '"]');
+
+                savedNodes = savedNodes.not(excludes);
+              }
+            };
+
+            callbacks.update = function(e, ui) {
+              // Save current drop position but only if this is not a second
+              // update that happens when moving between lists because then
+              // the value will be overwritten with the old value
+              if(!ui.item.sortable.received) {
+                ui.item.sortable.dropindex = ui.item.index();
+                ui.item.sortable.droptarget = ui.item.parent();
+
+                // Cancel the sort (let ng-repeat do the sort for us)
+                // Don't cancel if this is the received list because it has
+                // already been canceled in the other list, and trying to cancel
+                // here will mess up the DOM.
+                element.sortable('cancel');
+              }
+
+              // Put the nodes back exactly the way they started (this is very
+              // important because ng-repeat uses comment elements to delineate
+              // the start and stop of repeat sections and sortable doesn't
+              // respect their order (even if we cancel, the order of the
+              // comments are still messed up).
+              if (hasSortingHelper(element)) {
+                // restore all the savedNodes except .ui-sortable-helper element
+                // (which is placed last). That way it will be garbage collected.
+                savedNodes = savedNodes.not(savedNodes.last());
+              }
+              savedNodes.appendTo(element);
+
+              // If received is true (an item was dropped in from another list)
+              // then we add the new item to this list otherwise wait until the
+              // stop event where we will know if it was a sort or item was
+              // moved here from another list
+              if(ui.item.sortable.received && !ui.item.sortable.isCanceled()) {
+                scope.$apply(function () {
+                  ngModel.$modelValue.splice(ui.item.sortable.dropindex, 0,
+                                             ui.item.sortable.moved);
+                });
+              }
+            };
+
+            callbacks.stop = function(e, ui) {
+              // If the received flag hasn't be set on the item, this is a
+              // normal sort, if dropindex is set, the item was moved, so move
+              // the items in the list.
+              if(!ui.item.sortable.received &&
+                 ('dropindex' in ui.item.sortable) &&
+                 !ui.item.sortable.isCanceled()) {
+
+                scope.$apply(function () {
+                  ngModel.$modelValue.splice(
+                    ui.item.sortable.dropindex, 0,
+                    ngModel.$modelValue.splice(ui.item.sortable.index, 1)[0]);
+                });
+              } else {
+                // if the item was not moved, then restore the elements
+                // so that the ngRepeat's comment are correct.
+                if ((!('dropindex' in ui.item.sortable) || ui.item.sortable.isCanceled()) &&
+                    !hasSortingHelper(element)) {
+                  savedNodes.appendTo(element);
+                }
+              }
+            };
+
+            callbacks.receive = function(e, ui) {
+              // An item was dropped here from another list, set a flag on the
+              // item.
+              ui.item.sortable.received = true;
+            };
+
+            callbacks.remove = function(e, ui) {
+              // Remove the item from this list's model and copy data into item,
+              // so the next list can retrive it
+              if (!ui.item.sortable.isCanceled()) {
+                scope.$apply(function () {
+                  ui.item.sortable.moved = ngModel.$modelValue.splice(
+                    ui.item.sortable.index, 1)[0];
+                });
+              }
+            };
+
+            scope.$watch(attrs.uiSortable, function(newVal /*, oldVal*/) {
+              // ensure that the jquery-ui-sortable widget instance
+              // is still bound to the directive's element
+              if (!!element.data('ui-sortable')) {
+                angular.forEach(newVal, function(value, key) {
+                  if(callbacks[key]) {
+                    if( key === 'stop' ){
+                      // call apply after stop
+                      value = combineCallbacks(
+                        value, function() { scope.$apply(); });
+                    }
+                    // wrap the callback
+                    value = combineCallbacks(callbacks[key], value);
+                  }
+                  
+                  element.sortable('option', key, value);
+                });
+              }
+            }, true);
+
+            angular.forEach(callbacks, function(value, key) {
+              opts[key] = combineCallbacks(value, opts[key]);
+            });
+
+          } else {
+            $log.info('ui.sortable: ngModel not provided!', element);
+          }
+
+          // Create sortable
+          element.sortable(opts);
+        }
+      };
+    }
+  ]);
+</script>
+</html>
+</apex:page>
