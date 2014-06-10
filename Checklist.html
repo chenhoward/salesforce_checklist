@@ -954,11 +954,10 @@ controllers.PagesController = function ($scope) {
   /** Determines if the map should be showing. */
   $scope.showMapView = false;
 
+  /** Reveals the map on the screen. */
   $scope.revealMap = function() {
     document.getElementById('googleMap').style.display="block";
-    console.log('click');
     $scope.showMapView = true;
-    console.log(map);
     map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
     google.maps.event.trigger(map, 'resize');
     $("#googleMap").addClass("animated");
@@ -987,14 +986,13 @@ controllers.PagesController = function ($scope) {
       );
   }
 
-  /** REturns all the complete Checklist Responses. */
+  /** Returns all the complete Checklist Responses. */
   var getCompletedChecklistResponses = function() {
     Visualforce.remoting.Manager.invokeAction(
       '{!$RemoteAction.ChecklistExtension.completedChecklists}',
       function(result, event){
         if (event.status) {
           $scope.completedchecklistresponses = result;
-          console.log($scope.completedchecklistresponses);
           $scope.$apply();
         } else if (event.type === 'exception') {
           console.log('Exception: ' + event.message);
@@ -1119,7 +1117,6 @@ function formHelper() {
 
 
 function photoHelper(checklist_response_id) {
-  /*alert(Object.keys($scope.photoMap).length);*/
   if (Object.keys($scope.photoMap).length > 0) {
     for (var key in $scope.photoMap) {
       Visualforce.remoting.Manager.invokeAction(
@@ -1129,9 +1126,7 @@ function photoHelper(checklist_response_id) {
         $scope.photoMap[key],
         function(result, event){
           if (event.status) {
-            console.log('success!');
             var attachment_id = result;
-            /*alert(result);*/
             console.log('attachment: https://c.na15.visual.force.com/' + attachment_id);
           } else if (event.type === 'exception') {
             console.log('Exception: ' + event.message);
@@ -1184,7 +1179,6 @@ $scope.saveResponse = function() {
     function(result, event){
       if (event.status) {
         photoHelper(result);
-        /*alert('photoHelper');*/
         getLocation();
       } else if (event.type === 'exception') {
         console.log('Exception: ' + event.message);
@@ -1246,16 +1240,13 @@ function handlePhoto(evt){
 }
 
 function getLocation() {
-  console.log('getLocation');
   if (navigator.geolocation) {
-    console.log(navigator.geolocation.getCurrentPosition);
     navigator.geolocation.getCurrentPosition(showPosition, showError);
   } else {
     alert("No locaiton");
   }
 }
 function showPosition(position) {
-  console.log('showPosition');
   $scope.latitude = position.coords.latitude;
   $scope.longitude = position.coords.longitude; 
 }
@@ -1318,47 +1309,6 @@ var clearMarkers = function() {
 }
 
 checklistApp.controller(controllers);
-
-  /*
-     Visualforce.remoting.Manager.invokeAction(
-     '{!$RemoteAction.ChecklistExtension.lat_long}',
-     response,
-     function(result, event){
-     if (event.status) {
-     console.log('result: ' + result);
-     console.log(result['&quot;Location__c&quot;']);
-
-     var latlng = new google.maps.LatLng(-34.397, 150.644);
-     var myOptions = {
-zoom: 5,
-center: latlng,
-mapTypeId: google.maps.MapTypeId.ROADMAP
-};
-var map = new google.maps.Map(document.getElementById("map"),myOptions);
-} else if (event.type === 'exception') {
-console.log('Exception: ' + event.message);
-} else {
-console.log('Error!');
-}
-},
-{escape: true}
-);
-*/
-
-// Get Url Parameters
-function getUrlVars() {
-  var vars = [], hash;
-  var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-  for (var i = 0; i < hashes.length; i++) {
-    hash = hashes[i].split('=');
-    vars.push(hash[0]);
-    vars[hash[0]] = hash[1];
-  }
-  return vars;
-}
-
-
-
 
 </script>
 <style type="text/css">
