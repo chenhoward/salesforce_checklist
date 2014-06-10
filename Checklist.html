@@ -902,7 +902,7 @@ id="todo"
         <div class="link maplink" ng-click="revealMap()">
           <img class="map" src="{!$Resource.checklist_map}"></img>
           <p> View Map </p>
-          <p class="blurb"> {{completedchecklistresponses.size}} Completed Locations </p>
+          <p class="blurb"> {{completedchecklistresponses.length}} Completed Checklists </p>
         </div>
         <div id="googleMap" ng-show="showMapView"></div>
         <img class="x" id="hide-map" ng-show="showMapView" src="{!$Resource.checklist_x}" ng-click="showMapView = false;"></img>
