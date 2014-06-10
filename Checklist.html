@@ -1111,6 +1111,9 @@ function formHelper() {
       delete $scope.checklistitems[i].Checklist_Item__r.Values;
       delete $scope.checklistitems[i].Checklist_Item__r.Values2;
     }
+    if ($scope.checklistitems[i].Answer__c) {
+      $scope.checklistitems[i].Answer__c = escapeHtml($scope.checklistitems[i].Answer__c.trim());
+    }
   }
   delete $scope.checklistitems.attributes;
 }
@@ -1309,6 +1312,19 @@ var clearMarkers = function() {
 }
 
 checklistApp.controller(controllers);
+
+var entityMap = {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': '&quot;',
+          "/": '&#x2F;'
+        };
+function escapeHtml(string) {
+  return String(string).replace(/[&<>"\/]/g, function (s) {
+    return entityMap[s];
+  });
+}
 
 </script>
 <style type="text/css">
