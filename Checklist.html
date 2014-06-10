@@ -955,6 +955,7 @@ controllers.PagesController = function ($scope) {
   $scope.showMapView = false;
 
   $scope.revealMap = function() {
+    document.getElementById('googleMap').style.display="block";
     console.log('click');
     $scope.showMapView = true;
     console.log(map);
