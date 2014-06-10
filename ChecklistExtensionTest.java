@@ -10,7 +10,15 @@ public class ChecklistExtensionTest{
         response.Responder__c = UserInfo.getUserId();
         insert response;
         System.assertEquals(ChecklistExtension.pendingChecklists().size(), 1);
-
     }
 
+    static testmethod void testCompleted() {
+        Checklist__c checklist = ChecklistUtilities.createChecklist('c', null);
+        Checklist_Response__c response = new Checklist_Response__c();
+        response.Checklist__c = checklist.Id;
+        response.Status__c = 'Complete';
+        response.Responder__c = UserInfo.getUserId();
+        insert response;
+        System.assertEquals(ChecklistExtension.completedChecklists().size(), 1);
+    }
 }
