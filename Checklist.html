@@ -19,966 +19,1052 @@ id="todo"
   <!--flip.js-->
   <script>
   Visualforce.remoting.timeout = 120000;
-  !function(a){function b(){a("document").ready(function(){var a,b=document.createElement("p"),c={webkitTransform:"-webkit-transform",OTransform:"-o-transform",msTransform:"-ms-transform",MozTransform:"-moz-transform",transform:"transform"};document.body.appendChild(b);for(var d in c)void 0!==b.style[d]&&(b.style[d]="rotateX(1deg)",a=window.getComputedStyle(b).getPropertyValue(c[d]));document.body.removeChild(b),f=void 0!==a&&a.length>0&&"none"!==a})}var c={aliceblue:"#f0f8ff",antiquewhite:"#faebd7",aqua:"#00ffff",aquamarine:"#7fffd4",azure:"#f0ffff",beige:"#f5f5dc",bisque:"#ffe4c4",black:"#000000",blanchedalmond:"#ffebcd",blue:"#0000ff",blueviolet:"#8a2be2",brown:"#a52a2a",burlywood:"#deb887",cadetblue:"#5f9ea0",chartreuse:"#7fff00",chocolate:"#d2691e",coral:"#ff7f50",cornflowerblue:"#6495ed",cornsilk:"#fff8dc",crimson:"#dc143c",cyan:"#00ffff",darkblue:"#00008b",darkcyan:"#008b8b",darkgoldenrod:"#b8860b",darkgray:"#a9a9a9",darkgrey:"#a9a9a9",darkgreen:"#006400",darkkhaki:"#bdb76b",darkmagenta:"#8b008b",darkolivegreen:"#556b2f",darkorange:"#ff8c00",darkorchid:"#9932cc",darkred:"#8b0000",darksalmon:"#e9967a",darkseagreen:"#8fbc8f",darkslateblue:"#483d8b",darkslategray:"#2f4f4f",darkslategrey:"#2f4f4f",darkturquoise:"#00ced1",darkviolet:"#9400d3",deeppink:"#ff1493",deepskyblue:"#00bfff",dimgray:"#696969",dimgrey:"#696969",dodgerblue:"#1e90ff",firebrick:"#b22222",floralwhite:"#fffaf0",forestgreen:"#228b22",fuchsia:"#ff00ff",gainsboro:"#dcdcdc",ghostwhite:"#f8f8ff",gold:"#ffd700",goldenrod:"#daa520",gray:"#808080",grey:"#808080",green:"#008000",greenyellow:"#adff2f",honeydew:"#f0fff0",hotpink:"#ff69b4","indianred ":"#cd5c5c","indigo  ":"#4b0082",ivory:"#fffff0",khaki:"#f0e68c",lavender:"#e6e6fa",lavenderblush:"#fff0f5",lawngreen:"#7cfc00",lemonchiffon:"#fffacd",lightblue:"#add8e6",lightcoral:"#f08080",lightcyan:"#e0ffff",lightgoldenrodyellow:"#fafad2",lightgray:"#d3d3d3",lightgrey:"#d3d3d3",lightgreen:"#90ee90",lightpink:"#ffb6c1",lightsalmon:"#ffa07a",lightseagreen:"#20b2aa",lightskyblue:"#87cefa",lightslategray:"#778899",lightslategrey:"#778899",lightsteelblue:"#b0c4de",lightyellow:"#ffffe0",lime:"#00ff00",limegreen:"#32cd32",linen:"#faf0e6",magenta:"#ff00ff",maroon:"#800000",mediumaquamarine:"#66cdaa",mediumblue:"#0000cd",mediumorchid:"#ba55d3",mediumpurple:"#9370d8",mediumseagreen:"#3cb371",mediumslateblue:"#7b68ee",mediumspringgreen:"#00fa9a",mediumturquoise:"#48d1cc",mediumvioletred:"#c71585",midnightblue:"#191970",mintcream:"#f5fffa",mistyrose:"#ffe4e1",moccasin:"#ffe4b5",navajowhite:"#ffdead",navy:"#000080",oldlace:"#fdf5e6",olive:"#808000",olivedrab:"#6b8e23",orange:"#ffa500",orangered:"#ff4500",orchid:"#da70d6",palegoldenrod:"#eee8aa",palegreen:"#98fb98",paleturquoise:"#afeeee",palevioletred:"#d87093",papayawhip:"#ffefd5",peachpuff:"#ffdab9",peru:"#cd853f",pink:"#ffc0cb",plum:"#dda0dd",powderblue:"#b0e0e6",purple:"#800080",red:"#ff0000",rosybrown:"#bc8f8f",royalblue:"#4169e1",saddlebrown:"#8b4513",salmon:"#fa8072",sandybrown:"#f4a460",seagreen:"#2e8b57",seashell:"#fff5ee",sienna:"#a0522d",silver:"#c0c0c0",skyblue:"#87ceeb",slateblue:"#6a5acd",slategray:"#708090",slategrey:"#708090",snow:"#fffafa",springgreen:"#00ff7f",steelblue:"#4682b4",tan:"#d2b48c",teal:"#008080",thistle:"#d8bfd8",tomato:"#ff6347",turquoise:"#40e0d0",violet:"#ee82ee",wheat:"#f5deb3",white:"#ffffff",whitesmoke:"#f5f5f5",yellow:"#ffff00",yellowgreen:"#9acd32"},d="Microsoft Internet Explorer"==navigator.appName,e=window.HTMLCanvasElement,f=null;b();var g=Math.PI,h=function(b,h,i){this.animate=function(b){if(b?this._RBefore():this._Before(),typeof b!==i&&b){var c=this._Recto,d=this._Recto_color;switch(this._Recto=this._Verso,this._Color=this._Recto_color=this._Verso_color,this._Verso=c,this._Color_target=this._Verso_color=d,this._Reversing=!0,this._Direction){case"TOP":this._Direction="BOTTOM";break;case"BOTTOM":this._Direction="TOP";break;case"LEFT":this._Direction="RIGHT";break;case"RIGHT":this._Direction="LEFT"}}this._noCSS||!f?(this.initiateFlippy(),this.cvO=document.getElementById("flippy"+this._UID),this.jO.data("_oFlippy_",this),this._Int=setInterval(a.proxy(this.drawFlippy,this),this._Refresh_rate)):(this.jO.addClass("flippy_active").parent().css({perspective:Math.floor(this._Depth*this._nW)+"px"}),this.jO.data("_oFlippy_",this),this._Int=setInterval(a.proxy(this.drawFlippyCSS,this),this._Refresh_rate))},this.drawFlippyCSS=function(){this._Ang="RIGHT"==this._Direction||"TOP"==this._Direction?this._Ang+this._Step_ang:this._Ang-this._Step_ang;var a="RIGHT"==this._Direction||"LEFT"==this._Direction?"Y":"X";return(("RIGHT"==this._Direction||"TOP"==this._Direction)&&this._Ang>90&&this._Ang<=90+this._Step_ang||("LEFT"==this._Direction||"BOTTOM"==this._Direction)&&this._Ang<-90&&this._Ang>=-90-this._Step_ang)&&(this._Reversing?this._RMidway():this._Midway(),this.jO.css({opacity:this._Color_target_alpha,background:this._Color_target}).empty().append(this._Verso),this._Ang="RIGHT"==this._Direction||"TOP"==this._Direction?-90:90,this._Half=!0),this._Ang="RIGHT"==this._Direction||"TOP"==this._Direction?this._Ang>this._Step_ang&&this._Half?this._Ang-this._Step_ang:this._Ang:this._Ang<-this._Step_ang&&this._Half?this._Ang+this._Step_ang:this._Ang,("RIGHT"==this._Direction||"TOP"==this._Direction)&&this._Ang>0&&this._Half||("LEFT"==this._Direction||"BOTTOM"==this._Direction)&&this._Ang<0&&this._Half?(this.jO.removeClass("flippy_active").css({"-webkit-transform":"rotate"+a+"(0deg)","-moz-transform":"rotate"+a+"(0deg)","-o-transform":"rotate"+a+"(0deg)","-ms-transform":"rotate"+a+"(0deg)",transform:"rotate"+a+"(0deg)"}).find(".flippy_light").remove(),clearInterval(this._Int),this._Half=!1,void(this._Reversing?this._RAfter():this._After())):(this.jO.css({"-webkit-transform":"rotate"+a+"("+this._Ang+"deg)","-moz-transform":"rotate"+a+"("+this._Ang+"deg)","-o-transform":"rotate"+a+"("+this._Ang+"deg)","-ms-transform":"rotate"+a+"("+this._Ang+"deg)",transform:"rotate"+a+"("+this._Ang+"deg)"}),this.applyLight(),void(this._Reversing?this._RDuring():this._During()))},this.applyLight=function(){0===this.jO.find(".flippy_light").size()?this.jO.append('<div class="flippy_light"></div>').find(".flippy_light").css({position:"absolute",top:"0",left:"0","min-width":this._nW+"px","min-height":this._nH+"px",width:this._nW+"px",height:this._nH+"px","background-color":"LEFT"==this._Direction&&this._Half||"RIGHT"==this._Direction&&!this._Half||"TOP"==this._Direction&&this._Half||"BOTTOM"==this._Direction&&!this._Half?"#000":"#FFF",opacity:Math.abs(this._Ang)*this._Light/90/100}):this.jO.find(".flippy_light").css({"background-color":"LEFT"==this._Direction&&this._Half||"RIGHT"==this._Direction&&!this._Half||"TOP"==this._Direction&&this._Half||"BOTTOM"==this._Direction&&!this._Half?"#000":"#FFF",opacity:Math.abs(this._Ang)*this._Light/90/100})},this.initiateFlippy=function(){var a;switch(this.jO.addClass("flippy_active").empty().css({opacity:this._Color_alpha,background:"none",position:"relative",overflow:"visible"}),this._Direction){case"TOP":this._CenterX=Math.sin(g/2)*this._nW*this._Depth,this._CenterY=this._H/2,a='<canvas id="flippy'+this._UID+'" class="flippy" width="'+(this._W+2*this._CenterX)+'" height="'+this._H+'"></canvas>',this.new_flippy(a),this.jO.find("#flippy"+this._UID).css({position:"absolute",top:"0",left:"-"+this._CenterX+"px"});break;case"BOTTOM":this._CenterX=Math.sin(g/2)*this._nW*this._Depth,this._CenterY=this._H/2,a='<canvas id="flippy'+this._UID+'" class="flippy" width="'+(this._W+2*this._CenterX)+'" height="'+this._H+'"></canvas>',this.new_flippy(a),this.jO.find("#flippy"+this._UID).css({position:"absolute",top:"0",left:"-"+this._CenterX+"px"});break;case"LEFT":this._CenterY=Math.sin(g/2)*this._nH*this._Depth,this._CenterX=this._W/2,a='<canvas id="flippy'+this._UID+'" class="flippy" width="'+this._W+'" height="'+(this._H+2*this._CenterY)+'"></canvas>',this.new_flippy(a),this.jO.find("#flippy"+this._UID).css({position:"absolute",top:"-"+this._CenterY+"px",left:"0"});break;case"RIGHT":this._CenterY=Math.sin(g/2)*this._nH*this._Depth,this._CenterX=this._W/2,a='<canvas id="flippy'+this._UID+'" class="flippy" width="'+this._W+'" height="'+(this._H+2*this._CenterY)+'"></canvas>',this.new_flippy(a),this.jO.find("#flippy"+this._UID).css({position:"absolute",top:"-"+this._CenterY+"px",left:"0"})}},this.drawFlippy=function(){this._Ang+=this._Step_ang,this._Ang>90&&this._Ang<=90+this._Step_ang&&(this._Reversing?this._RMidway():this._Midway(),this.jO.css({opacity:this._Color_target_alpha})),this._Ang=this._Ang>180+this._Step_ang?this._Ang-(180+this._Step_ang):this._Ang;var a=this._Ang/180*g;if(null!==this.cvO){d&&!e&&G_vmlCanvasManager.initElement(this.cvO);var b=this.cvO.getContext("2d");b.clearRect(0,0,this._W+2*this._CenterX,this._H+2*this._CenterY),b.beginPath();var c,f,h=Math.sin(a)*this._H*this._Depth,i=Math.sin(a)*this._W*this._Depth;switch(this._Direction){case"LEFT":c=Math.cos(a)*(this._W/2),b.fillStyle=this._Ang>90?this.changeColor(this._Color_target,Math.floor(Math.sin(a)*this._Light)):this.changeColor(this._Color,-Math.floor(Math.sin(a)*this._Light)),b.moveTo(this._CenterX-c,this._CenterY+h),b.lineTo(this._CenterX+c,this._CenterY-h),b.lineTo(this._CenterX+c,this._CenterY+this._H+h),b.lineTo(this._CenterX-c,this._CenterY+this._H-h),b.lineTo(this._CenterX-c,this._CenterY),b.fill();break;case"RIGHT":c=Math.cos(a)*(this._W/2),b.fillStyle=this._Ang>90?this.changeColor(this._Color_target,-Math.floor(Math.sin(a)*this._Light)):this.changeColor(this._Color,Math.floor(Math.sin(a)*this._Light)),b.moveTo(this._CenterX+c,this._CenterY+h),b.lineTo(this._CenterX-c,this._CenterY-h),b.lineTo(this._CenterX-c,this._CenterY+this._H+h),b.lineTo(this._CenterX+c,this._CenterY+this._H-h),b.lineTo(this._CenterX+c,this._CenterY),b.fill();break;case"TOP":f=Math.cos(a)*(this._H/2),b.fillStyle=this._Ang>90?this.changeColor(this._Color_target,-Math.floor(Math.sin(a)*this._Light)):this.changeColor(this._Color,Math.floor(Math.sin(a)*this._Light)),b.moveTo(this._CenterX+i,this._CenterY-f),b.lineTo(this._CenterX-i,this._CenterY+f),b.lineTo(this._CenterX+this._W+i,this._CenterY+f),b.lineTo(this._CenterX+this._W-i,this._CenterY-f),b.lineTo(this._CenterX,this._CenterY-f),b.fill();break;case"BOTTOM":f=Math.cos(a)*(this._H/2),b.fillStyle=this._Ang>90?this.changeColor(this._Color_target,Math.floor(Math.sin(a)*this._Light)):this.changeColor(this._Color,-Math.floor(Math.sin(a)*this._Light)),b.moveTo(this._CenterX+i,this._CenterY+f),b.lineTo(this._CenterX-i,this._CenterY-f),b.lineTo(this._CenterX+this._W+i,this._CenterY-f),b.lineTo(this._CenterX+this._W-i,this._CenterY+f),b.lineTo(this._CenterX,this._CenterY+f),b.fill()}return this._Ang>180?(this.jO.removeClass("flippy_active").css({background:this._Color_target}).append(this._Verso).removeClass("flippy_container").find(".flippy").remove(),clearInterval(this._Int),void(this._Reversing?this._RAfter():this._After())):void(this._Reversing?this._RDuring():this._During())}},this.new_flippy=function(a){if(d&&!e){this.jO.addClass("flippy_container").attr("id","flippy_container"+this._UID);var b=document.getElementById("flippy_container"+this._UID),c=document.createElement(a);b.appendChild(c)}else this.jO.append(a)},this.convertColor=function(a){var b=c.hasOwnProperty(a)?c[a]:a;return/^transparent$/i.test(b)?"#ffffff":"rgb("==b.substr(0,4)?["#",this.toHex(b.substr(4,b.length).split(",")[0]>>>0),this.toHex(b.substr(3,b.length).split(",")[1]>>>0),this.toHex(b.substr(3,b.length-4).split(",")[2]>>>0)].join(""):"rgba("==b.substr(0,5)?["#",this.toHex(b.substr(5,b.length).split(",")[0]>>>0),this.toHex(b.substr(3,b.length).split(",")[1]>>>0),this.toHex(b.substr(3,b.length-4).split(",")[2]>>>0)].join(""):b},this.toHex=function(a){for(var b=[];Math.floor(a)>16;)b.push(a%16),a=Math.floor(a/16);var c,d;switch(a){case 10:c="A";break;case 11:c="B";break;case 12:c="C";break;case 13:c="D";break;case 14:c="E";break;case 15:c="F";break;default:c=""+a}for(d=b.length-1;d>=0;d--)switch(b[d]){case 10:c+="A";break;case 11:c+="B";break;case 12:c+="C";break;case 13:c+="D";break;case 14:c+="E";break;case 15:c+="F";break;default:c+=""+b[d]}return 1==c.length?"0"+c:c},this.changeColor=function(a,b){var c=a.substr(1,2),d=a.substr(3,2),e=a.substr(5,2),f=parseInt(c,16)+b>255?255:parseInt(c,16)+b,g=parseInt(d,16)+b>255?255:parseInt(d,16)+b,h=parseInt(e,16)+b>255?255:parseInt(e,16)+b;return c=0>=f?"00":this.toHex(f),d=0>=g?"00":this.toHex(g),e=0>=h?"00":this.toHex(h),"#"+c+d+e},h=a.extend({step_ang:10,refresh_rate:15,duration:300,depth:.12,color_target:"white",light:60,content:"",direction:"LEFT",noCSS:!1,onStart:function(){},onMidway:function(){},onAnimation:function(){},onFinish:function(){},onReverseStart:function(){},onReverseMidway:function(){},onReverseAnimation:function(){},onReverseFinish:function(){}},h),this._Reversing=!1,this._Half=!1,this._UID=Math.floor(1e6*Math.random()),this.jO=b,this._noCSS=h.noCSS,this._Ang=0,this._Step_ang=h.refresh_rate/h.duration*200,this._Refresh_rate=h.refresh_rate,this._Duration=h.duration,this._Depth=h.depth,h.color_target&&(this._Color_target_is_rgba="rgba("==h.color_target.substr(0,5),this._Color=b.css("background-color"),this._Color_target_alpha=this._Color_target_is_rgba?h.color_target.substr(3,h.color_target.length-4).split(",")[3]>>>0:1,this._Color_alpha=/^transparent$/i.test(""+this._Color)?0:"rgba("==this._Color.substr(0,5)?this._Color.substr(3,this._Color.length-4).split(",")[3]>>>0:1,this._Color_target=this.convertColor(h.color_target),this._Color=this.convertColor(this._Color)),this._Direction=h.direction.toUpperCase(),this._Light=h.light,this._Content="object"==typeof h.content?h.content.html():h.content,this._Recto_color=this._Color,this._Verso_color=this._Color_target,this._Recto=h.recto!==i?h.recto:this.jO.html(),this._Verso=h.verso!==i?h.verso:this._Content,this._Before=h.onStart,this._During=h.onAnimation,this._Midway=h.onMidway,this._After=h.onFinish,this._RBefore=h.onReverseStart,this._RDuring=h.onReverseAnimation,this._RMidway=h.onReverseMidway,this._RAfter=h.onReverseFinish,this._nW=this.jO.width(),this._nH=this.jO.height(),this._W=this.jO.outerWidth(),this._H=this.jO.outerHeight(),h=null};a.fn.flippy=function(b){return this.each(function(){if($t=a(this),!$t.hasClass("flippy_active")){var c=new h($t,b);c.animate()}})},a.fn.flippyReverse=function(){return this.each(function(){if($t=a(this),!$t.hasClass("flippy_active")){var b=$t.data("_oFlippy_");b.animate(!0)}})}}(jQuery);
-    </script>
-    <script type="text/javascript">
-    function showMap() {
-      $(".flipbox").flippy({
-        duration: "400",
-        content:'<div id="back"><iframe src="https://goo.gl/4RKIGo"></iframe><img class="x" id="hide-map" src="{!$Resource.checklist_x}" onclick="hideMap()"></img></div>'
-      })
-    }
-    function hideMap() {
-      $(".flipbox").flippyReverse();
-      location.reload();
-    }
-    function setSection(to, from)
+  </script>
+  <script type="text/javascript">
+  function setSection(to, from)
+  {
+    if (!(to.hasClass("active")))
     {
-      if (!(to.hasClass("active")))
+      from.animate({"left":"-100%"},100,'linear')
+      to.animate({"left":"0%"},100,'linear',function()
       {
-        from.animate({"left":"-100%"},100,'linear')
-        to.animate({"left":"0%"},100,'linear',function()
-        {
-          from.css("left","100%");
-          from.removeClass("active");
-          to.addClass("active");
-        });
-        if (to.is("#one")) {
-          $("#pending-tab").addClass("active-tab");
-          $("#pending-alt").css("display", "inline");
-          $("#pending").css("display", "none");
-        }
-        if (from.is("#one")) {
-          $("#pending-tab").removeClass("active-tab");
-          $("#pending").css("display", "inline");
-          $("#pending-alt").css("display", "none");
-        }
-        if (to.is("#four")) {
-          $("#complete-tab").addClass("active-tab");
-          $("#complete-alt").css("display", "inline");
-          $("#complete").css("display", "none");
-        }
-        if (from.is("#four")) {
-          $("#complete-tab").removeClass("active-tab");
-          $("#complete").css("display", "inline");
-          $("#complete-alt").css("display", "none");
-        }
-        $('#new-div').animate({"top":"100%"},100,'linear');
+        from.css("left","100%");
+        from.removeClass("active");
+        to.addClass("active");
+      });
+      if (to.is("#one")) {
+        $("#pending-tab").addClass("active-tab");
+        $("#pending-alt").css("display", "inline");
+        $("#pending").css("display", "none");
       }
+      if (from.is("#one")) {
+        $("#pending-tab").removeClass("active-tab");
+        $("#pending").css("display", "inline");
+        $("#pending-alt").css("display", "none");
+      }
+      if (to.is("#four")) {
+        $("#complete-tab").addClass("active-tab");
+        $("#complete-alt").css("display", "inline");
+        $("#complete").css("display", "none");
+      }
+      if (from.is("#four")) {
+        $("#complete-tab").removeClass("active-tab");
+        $("#complete").css("display", "inline");
+        $("#complete-alt").css("display", "none");
+      }
+      $('#new-div').animate({"top":"100%"},100,'linear');
     }
-    $(document).ready(function(){
-      $('a').on('click', function(event)
-      {
-        var sectionId = $(this).attr("data-section"),
-        $toSlide= $("#container section#"+sectionId),
-        $fromSlide= $('.active');
-        setSection($toSlide, $fromSlide);
-      });
-      $('#newbut').on('click', function(event)
-      {
-        $('#new-div').animate({"top":"0%"},100,'linear');
-      });
-      $('#hide-new').on('click', function(event)
-      {
-        $('#new-div').animate({"top":"100%"},100,'linear');
-      });
-      $('#hide-checklist').on('click', function(event)
-      {
-        setSection($('#one'), $('#two'));
-      });
+  }
+  $(document).ready(function(){
+    $('a').on('click', function(event)
+    {
+      var sectionId = $(this).attr("data-section"),
+      $toSlide= $("#container section#"+sectionId),
+      $fromSlide= $('.active');
+      setSection($toSlide, $fromSlide);
     });
-    </script>
-    <apex:includeScript value="{!URLFOR($Resource.RollCallAssets, 'fastclick/fastclick.js')}"/>
-    <title> Checker </title>
-    <style type="text/css">
-    .repaint { -webkit-animation: bugfix infinite 1s; }
-
-    @-webkit-keyframes bugfix {
-      from { fill: 0; }
-      to { fill: 0; }
-    }
-
-    body {
-      font-family: Source Sans Pro, sans-serif;
-      font-weight: 300;
-      margin: 0px;
-      padding: 0px;
-      height: 100%;
-      overflow: hidden;
-      background: #FFF;
-    }
-
-    *:focus {
-      outline: none;
-    }
-
-    p {
-      padding: 0px;
-      margin: 0px;
-    }
-
-    #container {
-      position: absolute;
-      top: 0px;
-      left: 0px;
-      right: 0px;
-      bottom: 0px;
-      overflow: hidden;
-      background: transparent;
-    }
-
-    #container section {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 100%;
-      overflow: scroll;
-      background: #fff;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    #new-div {
-      position: fixed;
-      z-index: 2;
-      width: 100%;
-      height: 100%;
-      top: 100%;
-      overflow: scroll;
-      background: #fff;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    #container section:nth-child(1) {
-      left: 0%;
-    }
-
-    #two, #three {
-      z-index: 2;
-    }
-
-    .spacer {
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      height: 75px;
-      width: 100%;
-    }
-
-    #navbar {
-      position: fixed;
-      z-index: 1;
-      width: 100%;
-      height: 75px;
-      top: 0px;
-      left: 0px;
-      background: #FFF;
-      border-bottom: 1px solid #cccccc;
-    }
-
-    .navbut {
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      float: left;
-      width: 50%;
-      height: 75px;
-      color: #999999;
-      text-align: center;
-      text-decoration: none;
-      box-shadow: -1px 0px 0px #cccccc;
-      background:  #FFF;
-    }
-
-    #new {
-      margin-top: 13px;
-      width: 30px;
-      height: 30px;
-    }
-
-    #newtag {
-      margin-top: -2px;
-    }
-
-    #pending {
-      display: none;
-      margin-top: 10px;
-      width: 30px;
-      height: 30px;
-    }
-
-    #pending-alt {
-      margin-top: 10px;
-      width: 30px;
-      height: 30px;
-    }
-
-    #pendingtag {
-      margin-top: -2px;
-    }
-
-    #complete {
-      margin-top: 5px;
-      width: 40px;
-      height: 40px;
-    }
-
-    #complete-alt {
-      display: none;
-      margin-top: 5px;
-      width: 40px;
-      height: 40px;
-    }
-
-    #completetag {
-      margin-top: -7px;
-    }
-
-    #newbut {
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      position: fixed;
-      color: #fff;
-      text-align: center;
-      text-decoration: none;
-      z-index: 1;
-      width: 100%;
-      height: 75px;
-      bottom: 0px;
-      left: 0px;
-      background: #8cd250;
-      border-top: 1px solid #cccccc;
-    }
-
-    #newbut:hover {
-      cursor: pointer;
-    }
-
-    .link {
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      display: block;
-      color: #4d4d4d;
-      text-decoration: none;
-      text-align: left;
-      font-size: 18px;
-      padding: 16px;
-      box-shadow: 0px -1px 0px #cccccc;
-      background: #FFF;
-      width: 100%;
-    }
-
-    .link:hover {
-      cursor: pointer;
-    }
-
-    .x {
-      position: absolute;
-      top: 0px;
-      right: 0px;
-      width: 20px;
-      height: 20px;
-      padding: 20px;
-    }
-
-    .x:hover {
-      cursor: pointer;
-    }
-
-    #hide-map {
-      background: #8cd250;
-    }
-
-    .checklist {
-      float: left;
-      width: 38px;
-      height: 38px;
-      margin-right: 16px;
-    }
-
-    .map {
-      float: left;
-      width: 38px;
-      height: 38px;
-      margin-right: 16px;
-      margin-top: 1px;
-    }
-
-    .blurb {
-      color: #999999;
-      margin-top: -2px;
-      font-size: 14px;
-    }
-
-    .last {
-      border-bottom: 1px solid #cccccc;
-    }
-
-    .arrow-right {
-      float: right;
-      margin-top: -25px;
-      width: 10px; 
-      height: 10px;
-      -webkit-transform: rotate(45deg);
-      border-top: 3px solid #cccccc;
-      border-right: 3px solid #cccccc;
-    }
-
-    .title {
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      font-weight: 400;
-      display: block;
-      color: #FFF;
-      text-decoration: none;
-      text-align: center;
-      font-size: 24px;
-      padding: 25px;
-      padding-bottom: 24px;
-      background: #333333;
-      width: 100%;
-    }
-
-    .question {
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      display: block;
-      color: #4d4d4d;
-      text-decoration: none;
-      text-align: left;
-      font-size: 18px;
-      padding: 16px;
-      padding-bottom: 24px;
-      box-shadow: 0px -1px 0px #cccccc;
-      background: #FFF;
-      width: 100%;
-    }
-
-    input, textarea, select {
-      font-family: Source Sans Pro, sans-serif;
-      font-weight: 300;
-      font-size: 18px;
-      color: #4d4d4d;
-      width: 80%;
-      margin-top: 16px;
-      padding: 4px;
-      padding-left: 10px;
-      outline: none;
-      border: 1px solid #999999;
-      margin-right: 20%;
-      max-width: 800px;
-      background: transparent;
-      border-radius: 5px;
-      -webkit-appearance: none;
-    }
-    textarea {
-      height: 150px;
-    }
-
-    select {
-      background: url({!$Resource.checklist_arrow}) no-repeat right;
-      background-size: 60px 60px;
-    }
-
-    .camera {
-      margin-top: 25px;
-      width: 38px;
-      height: 38px;
-    }
-
-    .camera-blurb {
-      position: relative;
-      font-weight: 400;
-      color: #999999;
-      left: 5px;
-      top: -12px;
-    }
-
-    .toggle-spacer {
-      height: 20px;
-      width: 1px;
-    }
-
-    .check-spacer {
-      height: 16px;
-      width: 1px;
-    }
-
-    .check-label {
-      position: relative;
-      top: -10px;
-      margin-left: 10px;
-    }
-
-    #yes-button {
-      font-weight: 400;
-      padding: 5px;
-      padding-right: 10px;
-      padding-left: 10px;
-      color: #b3b3b3;
-      background: #b3b3b3;
-      border: 1px solid #999999;
-      padding-right: 5px;
-      border-right: none;
-      border-top-left-radius: 5px;
-      border-bottom-left-radius: 5px;
-    }
-
-    #no-button {
-      font-weight: 400;
-      padding: 5px;
-      padding-right: 10px;
-      padding-left: 10px;
-      color: #FFF;
-      background: #f06060;
-      border: 1px solid #999999;
-      border-top-right-radius: 5px;
-      border-bottom-right-radius: 5px;
-    }
-
-    .yes-no {
-      display: none;
-    }
-
-    .yes-no:checked ~ #yes-button {
-      color: #FFF;
-      background: #8cd250;
-    }
-
-    .yes-no:checked ~ #no-button {
-      color: #b3b3b3;
-      background: #b3b3b3;
-    }
-
-    #pass-button {
-      font-weight: 400;
-      padding: 5px;
-      padding-right: 10px;
-      padding-left: 10px;
-      color: #b3b3b3;
-      background: #b3b3b3;
-      border: 1px solid #999999;
-      padding-right: 5px;
-      border-right: none;
-      border-top-left-radius: 5px;
-      border-bottom-left-radius: 5px;
-    }
-
-    #fail-button {
-      font-weight: 400;
-      padding: 5px;
-      padding-right: 10px;
-      padding-left: 10px;
-      color: #FFF;
-      background: #f06060;
-      border: 1px solid #999999;
-      border-top-right-radius: 5px;
-      border-bottom-right-radius: 5px;
-    }
-
-    #passfail {
-      display: none;
-    }
-
-    #passfail:checked ~ #pass-button {
-      color: #FFF;
-      background: #8cd250;
-    }
-
-    #passfail:checked ~ #fail-button {
-      color: #b3b3b3;
-      background: #b3b3b3;
-    }
-
-    input[type="number"] {
-      width: 80px;
-    }
-
-    input[type="range"] {
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      margin-top: 20px;
-      margin-bottom: 0px;
-      -webkit-appearance: none;
-      background-color: #FFF;
-      height: 5px;
-      border-radius: 5px;
-      border: 1px solid #999999;
-    }
-
-    input[type="range"]::-webkit-slider-thumb {
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      -webkit-appearance: none;
-      margin-bottom: 0px;
-      border-radius: 10px;
-      background-color: #FFF;
-      border: 1px solid #999999;
-      height: 20px;
-      width: 20px;
-    }
-
-    input[type="date"] {
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      height: 48px;
-    }
-
-    input[type="checkbox"] {
-      width: 30px;
-      height: 30px;
-      margin: 0px;
-      background: #FFF;
-    }
-
-    input[type="checkbox"]:checked {
-      background: url({!$Resource.checklist_check}) no-repeat center;
-      background-size: cover;
-      box-shadow: none;
-    }
-
-    input[type="radio"] {
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      width: 30px;
-      height: 30px;
-      border: 5px solid #FFF;
-      box-shadow: 0px 0px 0px 2px #999999;
-      border-radius: 15px;
-      margin: 0px;
-      background: #FFF;
-    }
-
-    input[type="radio"]:checked {
-      background: #8cd250;
-      box-shadow: 0px 0px 0px 2px #999999;
-    }
-
-    .submit {
-      float: left;
-      font-family: Source Sans Pro, sans-serif;
-      font-weight: 400;
-      max-width: 50%;
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      display: block;
-      color: #FFF;
-      text-decoration: none;
-      text-align: center;
-      font-size: 24px;
-      padding: 25px;
-      padding-bottom: 24px;
-      border-radius: 0px;
-      border: none;
-      margin: 0px;
-      background: #8cd250;
-      width: 100%;
-    }
-
-    .save {
-      float: left;
-      font-family: Source Sans Pro, sans-serif;
-      font-weight: 400;
-      max-width: 50%;
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      display: block;
-      color: #FFF;
-      text-decoration: none;
-      text-align: center;
-      font-size: 24px;
-      padding: 25px;
-      padding-bottom: 24px;
-      border-radius: 0px;
-      border: none;
-      margin: 0px;
-      background: #32aad2;
-      width: 50%;
-    }
-
-    .form-buttons {
-      font-family: Source Sans Pro, sans-serif;
-      font-weight: 400;
-      max-width: 100%;
-      box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      display: block;
-      color: #FFF;
-      text-decoration: none;
-      text-align: center;
-      font-size: 24px;
-      padding: 0pc;
-      border: none;
-      margin: 0px;
-      box-shadow: 0px -1px 0px #cccccc;
-      background: #8cd250;
-      width: 100%;
-    }
-
-    #conclusion {
-      text-align: center;
-    }
-
-    #return {
-      font-weight: 400;
-      text-align: center;
-      color: #FFF;
-      width: 100%;
-      background: #8cd250;
-      font-size: 24px;
-      padding: 25px;
-      padding-bottom: 24px;
-      border: none;
-      margin: 0px;
-      box-shadow: 0px -1px 0px #cccccc;
-    }
-
-    #hide {
-      display:none;
-    }
-
-    .rating input {
-      position: absolute;
-      filter: alpha(opacity=0);
-      -moz-opacity: 0;
-      -khtml-opacity: 0;
+    $('#newbut').on('click', function(event)
+    {
+      $('#new-div').animate({"top":"0%"},100,'linear');
+    });
+    $('#hide-new').on('click', function(event)
+    {
+      $('#new-div').animate({"top":"100%"},100,'linear');
+    });
+    $('#hide-checklist').on('click', function(event)
+    {
+      setSection($('#one'), $('#two'));
+    });
+  });
+  </script>
+  <apex:includeScript value="{!URLFOR($Resource.RollCallAssets, 'fastclick/fastclick.js')}"/>
+  <title> Checker </title>
+  <style type="text/css">
+  .repaint { -webkit-animation: bugfix infinite 1s; }
+
+  @-webkit-keyframes bugfix {
+    from { fill: 0; }
+    to { fill: 0; }
+  }
+
+  body {
+    font-family: Source Sans Pro, sans-serif;
+    font-weight: 300;
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    overflow: hidden;
+    background: #FFF;
+  }
+
+  *:focus {
+    outline: none;
+  }
+
+  p {
+    padding: 0px;
+    margin: 0px;
+  }
+
+  #container {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  #container section {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 100%;
+    overflow: scroll;
+    background: #fff;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #new-div {
+    position: fixed;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    top: 100%;
+    overflow: scroll;
+    background: #fff;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #container section:nth-child(1) {
+    left: 0%;
+  }
+
+  #two, #three {
+    z-index: 2;
+  }
+
+  .spacer {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 75px;
+    width: 100%;
+  }
+
+  #navbar {
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    height: 75px;
+    top: 0px;
+    left: 0px;
+    background: #FFF;
+    border-bottom: 1px solid #cccccc;
+  }
+
+  .navbut {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    float: left;
+    width: 50%;
+    height: 75px;
+    color: #999999;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: -1px 0px 0px #cccccc;
+    background:  #FFF;
+  }
+
+  #new {
+    margin-top: 13px;
+    width: 30px;
+    height: 30px;
+  }
+
+  #newtag {
+    margin-top: -2px;
+  }
+
+  #pending {
+    display: none;
+    margin-top: 10px;
+    width: 30px;
+    height: 30px;
+  }
+
+  #pending-alt {
+    margin-top: 10px;
+    width: 30px;
+    height: 30px;
+  }
+
+  #pendingtag {
+    margin-top: -2px;
+  }
+
+  #complete {
+    margin-top: 5px;
+    width: 40px;
+    height: 40px;
+  }
+
+  #complete-alt {
+    display: none;
+    margin-top: 5px;
+    width: 40px;
+    height: 40px;
+  }
+
+  #completetag {
+    margin-top: -7px;
+  }
+
+  #newbut {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    position: fixed;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    z-index: 1;
+    width: 100%;
+    height: 75px;
+    bottom: 0px;
+    left: 0px;
+    background: #8cd250;
+    border-top: 1px solid #cccccc;
+  }
+
+  #newbut:hover {
+    cursor: pointer;
+  }
+
+  .link {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    display: block;
+    color: #4d4d4d;
+    text-decoration: none;
+    text-align: left;
+    font-size: 18px;
+    padding: 16px;
+    border-bottom: 1px solid #cccccc;
+    background: #FFF;
+    width: 100%;
+  }
+
+  .link:hover {
+    cursor: pointer;
+  }
+
+  .x {
+    position: absolute;
+    z-index: 99;
+    opacity: 1;
+    top: 0px;
+    right: 0px;
+    width: 20px;
+    height: 20px;
+    padding: 20px;
+  }
+
+  .x-active {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-delay: 1.5s;
+    animation-delay: 1.5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-backface-visibility: visible !important;
+    -ms-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+    -webkit-animation-name: flipInY;
+    animation-name: flipInY;
+  }
+
+  .x:hover {
+    cursor: pointer;
+  }
+
+  #hide-map {
+    opacity: 0;
+    background: #8cd250;
+  }
+
+  .checklist {
+    float: left;
+    width: 38px;
+    height: 38px;
+    margin-right: 16px;
+  }
+
+  .map {
+    float: left;
+    width: 38px;
+    height: 38px;
+    margin-right: 16px;
+    margin-top: 1px;
+  }
+
+  .blurb {
+    color: #999999;
+    margin-top: -2px;
+    font-size: 14px;
+  }
+
+  .last {
+    border-bottom: 1px solid #cccccc;
+  }
+
+  .arrow-right {
+    float: right;
+    margin-top: -25px;
+    width: 10px; 
+    height: 10px;
+    -webkit-transform: rotate(45deg);
+    border-top: 3px solid #cccccc;
+    border-right: 3px solid #cccccc;
+  }
+
+  .title {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    font-weight: 400;
+    display: block;
+    color: #FFF;
+    text-decoration: none;
+    text-align: center;
+    font-size: 24px;
+    padding: 25px;
+    padding-bottom: 24px;
+    background: #333333;
+    width: 100%;
+  }
+
+  .question {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    display: block;
+    color: #4d4d4d;
+    text-decoration: none;
+    text-align: left;
+    font-size: 18px;
+    padding: 16px;
+    padding-bottom: 24px;
+    box-shadow: 0px -1px 0px #cccccc;
+    background: #FFF;
+    width: 100%;
+  }
+
+  input, textarea, select {
+    font-family: Source Sans Pro, sans-serif;
+    font-weight: 300;
+    font-size: 18px;
+    color: #4d4d4d;
+    width: 80%;
+    margin-top: 16px;
+    padding: 4px;
+    padding-left: 10px;
+    outline: none;
+    border: 1px solid #999999;
+    margin-right: 20%;
+    max-width: 800px;
+    background: transparent;
+    border-radius: 5px;
+    -webkit-appearance: none;
+  }
+  textarea {
+    height: 150px;
+  }
+
+  select {
+    background: url({!$Resource.checklist_arrow}) no-repeat right;
+    background-size: 60px 60px;
+  }
+
+  .camera {
+    margin-top: 25px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .camera-blurb {
+    position: relative;
+    font-weight: 400;
+    color: #999999;
+    left: 5px;
+    top: -12px;
+  }
+
+  .toggle-spacer {
+    height: 20px;
+    width: 1px;
+  }
+
+  .check-spacer {
+    height: 16px;
+    width: 1px;
+  }
+
+  .check-label {
+    position: relative;
+    top: -10px;
+    margin-left: 10px;
+  }
+
+  #yes-button {
+    font-weight: 400;
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    color: #b3b3b3;
+    background: #b3b3b3;
+    border: 1px solid #999999;
+    padding-right: 5px;
+    border-right: none;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  #no-button {
+    font-weight: 400;
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    color: #FFF;
+    background: #f06060;
+    border: 1px solid #999999;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  .yes-no {
+    display: none;
+  }
+
+  .yes-no:checked ~ #yes-button {
+    color: #FFF;
+    background: #8cd250;
+  }
+
+  .yes-no:checked ~ #no-button {
+    color: #b3b3b3;
+    background: #b3b3b3;
+  }
+
+  #pass-button {
+    font-weight: 400;
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    color: #b3b3b3;
+    background: #b3b3b3;
+    border: 1px solid #999999;
+    padding-right: 5px;
+    border-right: none;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  #fail-button {
+    font-weight: 400;
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+    color: #FFF;
+    background: #f06060;
+    border: 1px solid #999999;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  #passfail {
+    display: none;
+  }
+
+  #passfail:checked ~ #pass-button {
+    color: #FFF;
+    background: #8cd250;
+  }
+
+  #passfail:checked ~ #fail-button {
+    color: #b3b3b3;
+    background: #b3b3b3;
+  }
+
+  input[type="number"] {
+    width: 80px;
+  }
+
+  input[type="range"] {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    -webkit-appearance: none;
+    background-color: #FFF;
+    height: 5px;
+    border-radius: 5px;
+    border: 1px solid #999999;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-appearance: none;
+    margin-bottom: 0px;
+    border-radius: 10px;
+    background-color: #FFF;
+    border: 1px solid #999999;
+    height: 20px;
+    width: 20px;
+  }
+
+  input[type="date"] {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 48px;
+  }
+
+  input[type="checkbox"] {
+    width: 30px;
+    height: 30px;
+    margin: 0px;
+    background: #FFF;
+  }
+
+  input[type="checkbox"]:checked {
+    background: url({!$Resource.checklist_check}) no-repeat center;
+    background-size: cover;
+    box-shadow: none;
+  }
+
+  input[type="radio"] {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    width: 30px;
+    height: 30px;
+    border: 5px solid #FFF;
+    box-shadow: 0px 0px 0px 2px #999999;
+    border-radius: 15px;
+    margin: 0px;
+    background: #FFF;
+  }
+
+  input[type="radio"]:checked {
+    background: #8cd250;
+    box-shadow: 0px 0px 0px 2px #999999;
+  }
+
+  .submit {
+    float: left;
+    font-family: Source Sans Pro, sans-serif;
+    font-weight: 400;
+    max-width: 50%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    display: block;
+    color: #FFF;
+    text-decoration: none;
+    text-align: center;
+    font-size: 24px;
+    padding: 25px;
+    padding-bottom: 24px;
+    border-radius: 0px;
+    border: none;
+    margin: 0px;
+    background: #8cd250;
+    width: 100%;
+  }
+
+  .save {
+    float: left;
+    font-family: Source Sans Pro, sans-serif;
+    font-weight: 400;
+    max-width: 50%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    display: block;
+    color: #FFF;
+    text-decoration: none;
+    text-align: center;
+    font-size: 24px;
+    padding: 25px;
+    padding-bottom: 24px;
+    border-radius: 0px;
+    border: none;
+    margin: 0px;
+    background: #32aad2;
+    width: 50%;
+  }
+
+  .form-buttons {
+    font-family: Source Sans Pro, sans-serif;
+    font-weight: 400;
+    max-width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    display: block;
+    color: #FFF;
+    text-decoration: none;
+    text-align: center;
+    font-size: 24px;
+    padding: 0pc;
+    border: none;
+    margin: 0px;
+    box-shadow: 0px -1px 0px #cccccc;
+    background: #8cd250;
+    width: 100%;
+  }
+
+  #conclusion {
+    text-align: center;
+  }
+
+  #return {
+    font-weight: 400;
+    text-align: center;
+    color: #FFF;
+    width: 100%;
+    background: #8cd250;
+    font-size: 24px;
+    padding: 25px;
+    padding-bottom: 24px;
+    border: none;
+    margin: 0px;
+    box-shadow: 0px -1px 0px #cccccc;
+  }
+
+  #hide {
+    display:none;
+  }
+
+  .rating input {
+    position: absolute;
+    filter: alpha(opacity=0);
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 17px;
+  }
+
+  .rating span {
+    width: 24px;
+    height: 16px;
+    line-height: 16px;
+    padding: 1px 22px 1px 0; /* 1px FireFox fix */
+    background: url(http://goo.gl/SfoCPp) no-repeat -22px 0;
+  }
+
+  /* Change span immediately following the checked radio */
+
+  .rating input:checked + span {
+    background-position:-22px 0;
+  }
+
+  /* Reset all remaining stars back to default background.
+  This supersedes the above due to its ordering. */
+
+  .rating input:checked + span ~ span {
+    background-position:0 0;
+  }
+
+  .green_text {
+    color: #8cd250;
+  }
+
+  .active-tab {
+    border-bottom: 7px solid #8cd250;
+    color: #8cd250;
+  }
+
+  .flipbox {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  #back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #b3b3b3;
+  }
+
+  #back iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .error-invalid::after{
+    display: block;
+    color: #f06060;
+    padding-top: 10px;
+    content: "Invalid or required content";
+  }
+
+  .error-border {
+    border: 2px solid #f06060;
+    border-radius: 7px;
+  }
+
+  .animated {
+    -webkit-animation-duration: 2s;
+    animation-duration: 2s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+  }
+
+  @-webkit-keyframes flipInY {
+    0% {
+      -webkit-transform: rotateY(135deg);
+      transform: rotateY(135deg);
       opacity: 0;
-      cursor: pointer;
-      width: 17px;
     }
 
-    .rating span {
-      width: 24px;
-      height: 16px;
-      line-height: 16px;
-      padding: 1px 22px 1px 0; /* 1px FireFox fix */
-      background: url(http://goo.gl/SfoCPp) no-repeat -22px 0;
+    100% {
+      -webkit-transform: rotateY(0deg);
+      transform: rotateY(0deg);
+      opacity: 1;
+    }
+  }
+
+  @keyframes flipInY {
+    0% {
+      -webkit-transform: rotateY(135deg);
+      -ms-transform: rotateY(135deg);
+      transform: rotateY(135deg);
+      opacity: 0;
     }
 
-    /* Change span immediately following the checked radio */
+    100% {
+      -webkit-transform: rotateY(0deg);
+      -ms-transform: rotateY(0deg);
+      transform: rotateY(0deg);
+      opacity: 1;
+    }
+  }
 
-    .rating input:checked + span {
-      background-position:-22px 0;
+  .flipInY {
+    -webkit-backface-visibility: visible !important;
+    -ms-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+    -webkit-animation-name: flipInY;
+    animation-name: flipInY;
+  }
+
+  @-webkit-keyframes flipOutY {
+    0% {
+      -webkit-transform: rotateY(0deg);
+      transform: rotateY(0deg);
+      opacity: 1;
     }
 
-    /* Reset all remaining stars back to default background.
-    This supersedes the above due to its ordering. */
+    100% {
+      -webkit-transform: rotateY(-135deg);
+      transform: rotateY(-135deg);
+      opacity: 0;
+    }
+  }
 
-    .rating input:checked + span ~ span {
-      background-position:0 0;
+  @keyframes flipOutY {
+    0% {
+      -webkit-transform: rotateY(0deg);
+      -ms-transform: rotateY(0deg);
+      transform: rotateY(0deg);
+      opacity: 1;
     }
 
-    .green_text {
-      color: #8cd250;
+    100% {
+      -webkit-transform: rotateY(-135deg);
+      -ms-transform: rotateY(-135deg);
+      transform: rotateY(-135deg);
+      opacity: 0;
     }
+  }
 
-    .active-tab {
-      border-bottom: 7px solid #8cd250;
-      color: #8cd250;
-    }
+  .flipOutY {
+    -webkit-backface-visibility: visible !important;
+    -ms-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+    -webkit-animation-name: flipInY;
+    animation-name: flipInY;
+  }
+  </style>
+</head>
 
-    .flipbox {
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-
-    #back {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #b3b3b3;
-    }
-
-    #back iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    .error-invalid::after{
-      display: block;
-      color: #f06060;
-      padding-top: 10px;
-      content: "Invalid or required content";
-    }
-
-    .error-border {
-      border: 2px solid #f06060;
-      border-radius: 7px;
-    }
-    </style>
-  </head>
-
-  <body>
-    <div class="flipbox-container" ng-controller="PagesController">
-      <div class="flipbox">
-        <div id="navbar">
-          <!-- Currently no icons -->
-          <a class="navbut active-tab" id="pending-tab" data-section="one" href="#">
-            <p> <img id="pending" src="{!$Resource.checklist_pending}"></img> </p>
-            <p> <img id="pending-alt" src="{!$Resource.checklist_pending_alt}"></img> </p>
-            <p id="pendingtag"> Pending </p>
-          </a>
-          <a class="navbut" id="complete-tab" data-section="four" href="#">
-            <p> <img id="complete" src="{!$Resource.checklist_completed}"></img> </p>
-            <p> <img id="complete-alt" src="{!$Resource.checklist_completed_alt}"></img> </p>
-            <p id="completetag"> Complete </p>
-          </a>
-        </div>
-        <div id="newbut" href="#">
-          <p> <img id="new" src="{!$Resource.checklist_new}"></img> </p>
-          <p id="newtag"> New </p>
-        </div>
-        <div id="new-div">
-          <img class="x" id="hide-new" src="{!$Resource.checklist_x}"></img>
-          <div class="title"> New Checklist </div>
-          <a class="link" data-section="two" href="#" ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist)">
-            <p> {{checklist.Name}} </p>
-            <p class="blurb"> {{checklist.Description__c}} &nbsp; </p>
+<body>
+  <div id="main-page" ng-controller="PagesController">
+    <div>
+      <div id="navbar">
+        <!-- Currently no icons -->
+        <a class="navbut active-tab" id="pending-tab" data-section="one" href="#">
+          <p> <img id="pending" src="{!$Resource.checklist_pending}"></img> </p>
+          <p> <img id="pending-alt" src="{!$Resource.checklist_pending_alt}"></img> </p>
+          <p id="pendingtag"> Pending </p>
+        </a>
+        <a class="navbut" id="complete-tab" data-section="four" href="#">
+          <p> <img id="complete" src="{!$Resource.checklist_completed}"></img> </p>
+          <p> <img id="complete-alt" src="{!$Resource.checklist_completed_alt}"></img> </p>
+          <p id="completetag"> Complete </p>
+        </a>
+      </div>
+      <div id="newbut" href="#">
+        <p> <img id="new" src="{!$Resource.checklist_new}"></img> </p>
+        <p id="newtag"> New </p>
+      </div>
+      <div id="new-div">
+        <img class="x" id="hide-new" src="{!$Resource.checklist_x}"></img>
+        <div class="title"> New Checklist </div>
+        <a class="link" data-section="two" href="#" ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist)">
+          <p> {{checklist.Name}} </p>
+          <p class="blurb"> {{checklist.Description__c}} &nbsp; </p>
+          <div class="arrow-right"></div>
+        </a>
+      </div>
+      <div id="container">
+        <section id="one" class="active">
+          <div class="spacer"> </div>
+          <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
+            <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
+            <p> {{checklist.Checklist__r.Name}}</p>
+            <p class="blurb"> {{checklist.Checklist__r.Description__c}} &nbsp;</p>
             <div class="arrow-right"></div>
           </a>
-        </div>
-        <div id="container">
-          <section id="one" class="active">
-            <div class="spacer"> </div>
-            <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
-              <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
-              <p> {{checklist.Checklist__r.Name}}</p>
-              <p class="blurb"> {{checklist.Checklist__r.Description__c}} &nbsp;</p>
-              <div class="arrow-right"></div>
-            </a>
 
-            <div class="spacer"> </div>
-                <!--
-                <a class="link blue" data-section="two" href="#">
-                    <p> A very long checklist name like this because names like this are the best yea yea yea </p>
-                    <p class="blurb"> Item 5 MILLION THOUSAND THOUSAND FOREVER </p>
-                    <div class="arrow-right"></div>
-                  </a>-->
-                </section>
-                <section id="two">
-                  <form id="checklistForm" name="checklistForm" class="checklistForm" ng-submit="checklistForm.$valid  && submitForm()">
-                    <img class="x" id="hide-checklist" src="{!$Resource.checklist_x}"></img>
-                    <div class="title"> {{checklistName}}  </div>
-                    <div class="question" ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'">
-                      <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
-                       <p> {{checklistitem.Checklist_Item__r.Question__c}} </p>
-                       <p ng-switch-when="Yes/No" class="toggle-spacer"></p>
+          <div class="spacer"> </div>
+        </section>
+        <section id="two">
+          <form id="checklistForm" name="checklistForm" class="checklistForm" ng-submit="checklistForm.$valid  && submitForm()">
+            <img class="x" id="hide-checklist" src="{!$Resource.checklist_x}"></img>
+            <div class="title"> {{checklistName}}  </div>
+            <div class="question" ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'">
+              <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
+               <p> {{checklistitem.Checklist_Item__r.Question__c}} </p>
+               <p ng-switch-when="Yes/No" class="toggle-spacer"></p>
 
-                       <input class="yes-no" id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c"> </input>
-                       <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="yes-button"> Yes </label>
-                       <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="no-button"> No </label>
-                       <input id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-switch-when="Number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" class="h5-number"> </input>
-                       <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                       <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                       <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
+               <input class="yes-no" id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c"> </input>
+               <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="yes-button"> Yes </label>
+               <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="no-button"> No </label>
+               <input id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-switch-when="Number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" class="h5-number"> </input>
+               <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+               <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+               <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
 
-                       <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
-                       <!-- Multiple Values from Database -->
-                       <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Checklist_Item__r.Values[0]}}" max="{{checklistitem.Checklist_Item__r.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-                       <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
-                        {{checklistitem.Answer__c}}
-                      </div>
-                      <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c"    ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
-                      </select>
-                      <div  ng-switch-when="Multi-Select">
-                        <div ng-repeat="val in checklistitem.Checklist_Item__r.Values">
-                          <p class="check-spacer"></p>
-                          <input type="checkbox" name="{{val}}" ng-model="checklistitem.Checklist_Item__r.Values2[$index]"></input>
-                          <label class="check-label" value="{{val}}" > {{val}} </label>
-                        </div>
-                      </div>
-                      <p ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c">
-                        <img class="camera" src="{!$Resource.checklist_camera}"></img>
-                        <span class="camera-blurb"> + Photo </span>
-                      </p>
-                      <input type="file" class="photo" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
+               <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
+               <!-- Multiple Values from Database -->
+               <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Checklist_Item__r.Values[0]}}" max="{{checklistitem.Checklist_Item__r.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+               <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
+                {{checklistitem.Answer__c}}
+              </div>
+              <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c"    ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
+              </select>
+              <div  ng-switch-when="Multi-Select">
+                <div ng-repeat="val in checklistitem.Checklist_Item__r.Values">
+                  <p class="check-spacer"></p>
+                  <input type="checkbox" name="{{val}}" ng-model="checklistitem.Checklist_Item__r.Values2[$index]"></input>
+                  <label class="check-label" value="{{val}}" > {{val}} </label>
+                </div>
+              </div>
+              <p ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c">
+                <img class="camera" src="{!$Resource.checklist_camera}"></img>
+                <span class="camera-blurb"> + Photo </span>
+              </p>
+              <input type="file" class="photo" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
 
-                    </span>
-                  </div>
-                  <div class="form-buttons">
-                    <input class="save last" type="button" name="save" value="Save" ng-click="saveResponse()"></input>
-                    <input class="submit last" type="submit" name="submit" value="Submit"></input>
-                  </div>
-                </form>
-              </section>
-              <section id="three">
-                <div class="title"> {{checklistName}} </div>
-                <div class="question">
-                  <p id="conclusion"> You've just submitted a review of <span class="green_text"> {{checklistName}} </span>. </p>
-                </div>
-                <a class="link last" id="return" data-section="one" href="#"> Return </a>
-              </section>
-              <section id="four">
-                <div class="spacer"> </div>
-                <div class="link maplink" ng-click="revealMap()">
-                  <img class="map" src="{!$Resource.checklist_map}"></img>
-                  <p> View Map </p>
-                  <p class="blurb"> {{completedchecklistresponses.size}} Completed Locations </p>
-                </div>
-                <div id="googleMap" ng-show="showMapView">
-                </div>
-                <div class="link maplink" ng-repeat="checklist in completedchecklistresponses">
-                  <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
-                  <p> {{checklist.Checklist__r.Name}} </p>
-                  <p class="blurb"> {{checklist.Checklist__r.Description__c}} </p>
-                </div>
-                <div class="spacer"> </div>
-              </section>
-            </div>
+            </span>
           </div>
+          <div class="form-buttons">
+            <input class="save last" type="button" name="save" value="Save" ng-click="saveResponse()"></input>
+            <input class="submit last" type="submit" name="submit" value="Submit"></input>
+          </div>
+        </form>
+      </section>
+      <section id="three">
+        <div class="title"> {{checklistName}} </div>
+        <div class="question">
+          <p id="conclusion"> You've just submitted a review of <span class="green_text"> {{checklistName}} </span>. </p>
         </div>
-      </body>
+        <a class="link last" id="return" data-section="one" href="#"> Return </a>
+      </section>
+      <section id="four">
+        <div class="spacer"> </div>
+        <div class="link maplink" ng-click="revealMap()">
+          <img class="map" src="{!$Resource.checklist_map}"></img>
+          <p> View Map </p>
+          <p class="blurb"> {{completedchecklistresponses.size}} Completed Locations </p>
+        </div>
+        <div id="googleMap" ng-show="showMapView"></div>
+        <img class="x" id="hide-map" ng-show="showMapView" src="{!$Resource.checklist_x}" ng-click="showMapView = false;"></img>
+        <div class="link maplink" ng-repeat="checklist in completedchecklistresponses">
+          <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
+          <p> {{checklist.Checklist__r.Name}} </p>
+          <p class="blurb"> {{checklist.Checklist__r.Description__c}} </p>
+        </div>
+        <div class="spacer"> </div>
+      </section>
+    </div>
+  </div>
+</div>
+</body>
+<script>
 
-      <script>
+/* Fix text boxes on mobile. */
+window.onkeydown = function(e){
+  var $focused = $(':focus');
+  window.focus();
+  $focused.focus();
+}
 
-      /* Fix text boxes on mobile. */
-      window.onkeydown = function(e){
-        var $focused = $(':focus');
-        window.focus();
-        $focused.focus();
+/* Angular */
+var checklistApp = angular.module('checklistApp', []);
+var photoMap = {};
+
+
+
+var controllers = {};
+/** The main controller for Checklist. */
+controllers.PagesController = function ($scope) {
+  /** List of all Checklist types. */
+  $scope.checklists = {!Checklists};
+  /** List of Checklist Items. */
+  $scope.checklistitems;
+  /** List of Completed Checklist Responses. */
+  $scope.completedchecklistresponses;
+  /** List of Pending Checklist Responses. */
+  $scope.pendingchecklistresponses;
+  /** A map between a Checklist Response Item Id and an image. */
+  $scope.photoMap = {};
+  /** The Id of the current Checklist or Checklist Response being worked on. */
+  $scope.currentChecklistId;
+  /** The current latitude. */
+  $scope.latitude;
+  /** The current longitude. */
+  $scope.longitude;
+  /** Determines if the map should be showing. */
+  $scope.showMapView = false;
+
+  $scope.revealMap = function() {
+    console.log('click');
+    $scope.showMapView = true;
+    console.log(map);
+    map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+    google.maps.event.trigger(map, 'resize');
+    $("#googleMap").addClass("animated");
+    $("#googleMap").addClass("flipInY");
+    $(".x").addClass("x-active");
+    createMarkers();
+  }
+
+
+
+  /** Returns all the pending Checklist Responses. */
+  var getPendingChecklistResponses = function() {
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ChecklistExtension.pendingChecklists}',
+      function(result, event){
+        if (event.status) {
+          $scope.pendingchecklistresponses = result;
+          $scope.$apply();
+        } else if (event.type === 'exception') {
+          console.log('Exception: ' + event.message);
+        } else {
+          console.log('Error!');
+        }
+      },
+      {escape: true}
+      );
+  }
+
+  /** REturns all the complete Checklist Responses. */
+  var getCompletedChecklistResponses = function() {
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ChecklistExtension.completedChecklists}',
+      function(result, event){
+        if (event.status) {
+          $scope.completedchecklistresponses = result;
+          console.log($scope.completedchecklistresponses);
+          $scope.$apply();
+        } else if (event.type === 'exception') {
+          console.log('Exception: ' + event.message);
+        } else {
+          console.log('Error!');
+        }
+      },
+      {escape: true}
+      );
+  }
+
+  /* Initiate the list of pending and complete Checklist Responses. */
+  getPendingChecklistResponses();
+  getCompletedChecklistResponses();
+
+  /** Splits the Checklist Item's possible values if they are a certain type and returns the type. */
+  var valueSplitter = function(i) {
+    var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
+    if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
+      var values = $scope.checklistitems[i].Checklist_Item__r.Values__c;
+      if (values) {
+        $scope.checklistitems[i].Checklist_Item__r.Values = values.split(', ');
+        $scope.checklistitems[i].Checklist_Item__r.Values2 = [];
       }
+    }
+    return type;
+  }
 
-      /* Angular */
-      var checklistApp = angular.module('checklistApp', []);
-      var photoMap = {};
-
-
-
-      var controllers = {};
-      /** The main controller for Checklist. */
-      controllers.PagesController = function ($scope) {
-        /** List of all Checklist types. */
-        $scope.checklists = {!Checklists};
-        /** List of Checklist Items. */
-        $scope.checklistitems;
-        /** List of Completed Checklist Responses. */
-        $scope.completedchecklistresponses;
-        /** List of Pending Checklist Responses. */
-        $scope.pendingchecklistresponses;
-        /** A map between a Checklist Response Item Id and an image. */
-        $scope.photoMap = {};
-        /** The Id of the current Checklist or Checklist Response being worked on. */
-        $scope.currentChecklistId;
-        /** The current latitude. */
-        $scope.latitude;
-        /** The current longitude. */
-        $scope.longitude;
-        /** Determines if the map should be showing. */
-        $scope.showMapView = false;
-
-        $scope.revealMap = function() {
-          console.log('click');
-                    $scope.showMapView = true;
-          console.log(map);
-          map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
-          createMarkers();
-        }
-
-
-
-        /** Returns all the pending Checklist Responses. */
-        var getPendingChecklistResponses = function() {
-          Visualforce.remoting.Manager.invokeAction(
-            '{!$RemoteAction.ChecklistExtension.pendingChecklists}',
-            function(result, event){
-              if (event.status) {
-                $scope.pendingchecklistresponses = result;
-                $scope.$apply();
-              } else if (event.type === 'exception') {
-                console.log('Exception: ' + event.message);
-              } else {
-                console.log('Error!');
-              }
-            },
-            {escape: true}
-            );
-        }
-
-        /** REturns all the complete Checklist Responses. */
-        var getCompletedChecklistResponses = function() {
-          Visualforce.remoting.Manager.invokeAction(
-            '{!$RemoteAction.ChecklistExtension.completedChecklists}',
-            function(result, event){
-              if (event.status) {
-                $scope.completedchecklistresponses = result;
-                console.log($scope.completedchecklistresponses);
-                $scope.$apply();
-              } else if (event.type === 'exception') {
-                console.log('Exception: ' + event.message);
-              } else {
-                console.log('Error!');
-              }
-            },
-            {escape: true}
-            );
-        }
-
-        /* Initiate the list of pending and complete Checklist Responses. */
-        getPendingChecklistResponses();
-        getCompletedChecklistResponses();
-
-        /** Splits the Checklist Item's possible values if they are a certain type and returns the type. */
-        var valueSplitter = function(i) {
-          var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
-          if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
-            var values = $scope.checklistitems[i].Checklist_Item__r.Values__c;
-            if (values) {
-              $scope.checklistitems[i].Checklist_Item__r.Values = values.split(', ');
-              $scope.checklistitems[i].Checklist_Item__r.Values2 = [];
-            }
-          }
-          return type;
-        }
-
-        /** Sets up Checklist Items to edit a pending Checklist. */
-        var editChecklistItems = function() {
-          getLocation();
-          Visualforce.remoting.Manager.invokeAction(
-            '{!$RemoteAction.ChecklistExtension.editChecklistItems}',
-            $scope.currentChecklistId,
-            function(result, event){
-              if (event.status) {
-                if (result.length == 0) return;
-                $scope.checklistitems = result;
-                for (var i = 0; i < result.length; i++) {
-                  var type = valueSplitter(i);
-                  if (type == "Multi-Select") {
-                    if ($scope.checklistitems[i].Answer__c) {
-                      var ansArr = $scope.checklistitems[i].Answer__c.split(',');
-                      var boolArr = [];
-                      for (var j = 0; j < $scope.checklistitems[i].Checklist_Item__r.Values.length; j++) {
-                        if (ansArr.indexOf($scope.checklistitems[i].Checklist_Item__r.Values[j]) > -1) {
-                          boolArr[j] = true;
-                        } else {
-                          boolArr[j] = false;
-                        }
-                      }
-                      $scope.checklistitems[i].Checklist_Item__r.Values2 = boolArr;
-                    }
+  /** Sets up Checklist Items to edit a pending Checklist. */
+  var editChecklistItems = function() {
+    getLocation();
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ChecklistExtension.editChecklistItems}',
+      $scope.currentChecklistId,
+      function(result, event){
+        if (event.status) {
+          if (result.length == 0) return;
+          $scope.checklistitems = result;
+          for (var i = 0; i < result.length; i++) {
+            var type = valueSplitter(i);
+            if (type == "Multi-Select") {
+              if ($scope.checklistitems[i].Answer__c) {
+                var ansArr = $scope.checklistitems[i].Answer__c.split(',');
+                var boolArr = [];
+                for (var j = 0; j < $scope.checklistitems[i].Checklist_Item__r.Values.length; j++) {
+                  if (ansArr.indexOf($scope.checklistitems[i].Checklist_Item__r.Values[j]) > -1) {
+                    boolArr[j] = true;
+                  } else {
+                    boolArr[j] = false;
                   }
-                  if ($scope.checklistitems[i].Answer__c == "true") { 
-                    $scope.checklistitems[i].Answer__c = true;
-                  } else if ($scope.checklistitems[i].Answer__c == "false") {
-                    $scope.checklistitems[i].Answer__c = false;
-                  } else if (!isNaN($scope.checklistitems[i].Answer__c)) {
-                    $scope.checklistitems[i].Answer__c = parseInt($scope.checklistitems[i].Answer__c);
-                  }
-                  $scope.$apply();
                 }
-              } else if (event.type === 'exception') {
-                console.log('Exception: ' + event.message);
-              } else {
-                console.log('Error!');
+                $scope.checklistitems[i].Checklist_Item__r.Values2 = boolArr;
               }
-            },
-            {escape: true}
-            );
+            }
+            if ($scope.checklistitems[i].Answer__c == "true") { 
+              $scope.checklistitems[i].Answer__c = true;
+            } else if ($scope.checklistitems[i].Answer__c == "false") {
+              $scope.checklistitems[i].Answer__c = false;
+            } else if (!isNaN($scope.checklistitems[i].Answer__c)) {
+              $scope.checklistitems[i].Answer__c = parseInt($scope.checklistitems[i].Answer__c);
+            }
+            $scope.$apply();
+          }
+        } else if (event.type === 'exception') {
+          console.log('Exception: ' + event.message);
+        } else {
+          console.log('Error!');
+        }
+      },
+      {escape: true}
+      );
 }
 
 
@@ -1032,7 +1118,7 @@ function formHelper() {
 
 
 function photoHelper(checklist_response_id) {
-  alert(Object.keys($scope.photoMap).length);
+  /*alert(Object.keys($scope.photoMap).length);*/
   if (Object.keys($scope.photoMap).length > 0) {
     for (var key in $scope.photoMap) {
       Visualforce.remoting.Manager.invokeAction(
@@ -1044,7 +1130,7 @@ function photoHelper(checklist_response_id) {
           if (event.status) {
             console.log('success!');
             var attachment_id = result;
-            alert(result);
+            /*alert(result);*/
             console.log('attachment: https://c.na15.visual.force.com/' + attachment_id);
           } else if (event.type === 'exception') {
             console.log('Exception: ' + event.message);
@@ -1097,7 +1183,7 @@ $scope.saveResponse = function() {
     function(result, event){
       if (event.status) {
         photoHelper(result);
-        alert('photoHelper');
+        /*alert('photoHelper');*/
         getLocation();
       } else if (event.type === 'exception') {
         console.log('Exception: ' + event.message);
@@ -1160,74 +1246,74 @@ function handlePhoto(evt){
 
 function getLocation() {
   console.log('getLocation');
-    if (navigator.geolocation) {
-        console.log(navigator.geolocation.getCurrentPosition);
-        navigator.geolocation.getCurrentPosition(showPosition, showError);
-    } else {
-        alert("No locaiton");
-    }
+  if (navigator.geolocation) {
+    console.log(navigator.geolocation.getCurrentPosition);
+    navigator.geolocation.getCurrentPosition(showPosition, showError);
+  } else {
+    alert("No locaiton");
+  }
 }
 function showPosition(position) {
   console.log('showPosition');
-   $scope.latitude = position.coords.latitude;
-   $scope.longitude = position.coords.longitude; 
+  $scope.latitude = position.coords.latitude;
+  $scope.longitude = position.coords.longitude; 
 }
 
 function showError(error) {
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            alert("Please turn on locations in S1.")
-            break;
-        case error.POSITION_UNAVAILABLE:
-            alert("Location information is unavailable.")
-            break;
-        case error.TIMEOUT:
-            alert("The request to get user location timed out.")
-            break;
-        case error.UNKNOWN_ERROR:
-            alert("An unknown error occurred.")
-            break;
-    }
+  switch(error.code) {
+    case error.PERMISSION_DENIED:
+    alert("Please turn on locations in S1.")
+    break;
+    case error.POSITION_UNAVAILABLE:
+    alert("Location information is unavailable.")
+    break;
+    case error.TIMEOUT:
+    alert("The request to get user location timed out.")
+    break;
+    case error.UNKNOWN_ERROR:
+    alert("An unknown error occurred.")
+    break;
+  }
 }
 
 
 var mapInit = function() {
 }
 
-  var mapProp = {
-    center:new google.maps.LatLng(51.508742,-0.120850),
-    zoom:15,
-    mapTypeId:google.maps.MapTypeId.ROADMAP
-  }
+var mapProp = {
+  center:new google.maps.LatLng(51.508742,-0.120850),
+  zoom:15,
+  mapTypeId:google.maps.MapTypeId.ROADMAP
+}
 
-  var map;
+var map;
 
 google.maps.event.addDomListener(window, 'load', mapInit);
 
 var markers = [];
 
-  var createMarkers = function() {
-    var response;
-    clearMarkers();
-    for (var i = 0; i < $scope.completedchecklistresponses.length; i++) {
-      response = $scope.completedchecklistresponses[i];
-      var coordinates = new google.maps.LatLng(response.Location__Latitude__s, response.Location__Longitude__s);
-      var marker = new google.maps.Marker({
-        position: coordinates,
-        title: response.Checklist__r.Name
-      });
-      markers.push(marker);
-      marker.setMap(map);
-      map.panTo(coordinates);
-    }
+var createMarkers = function() {
+  var response;
+  clearMarkers();
+  for (var i = 0; i < $scope.completedchecklistresponses.length; i++) {
+    response = $scope.completedchecklistresponses[i];
+    var coordinates = new google.maps.LatLng(response.Location__Latitude__s, response.Location__Longitude__s);
+    var marker = new google.maps.Marker({
+      position: coordinates,
+      title: response.Checklist__r.Name
+    });
+    markers.push(marker);
+    marker.setMap(map);
+    map.panTo(coordinates);
   }
+}
 
-  var clearMarkers = function() {
-    for (var i = markers.length - 1; i >= 0; i--) {
-      markers[i].setMap(null);
-      markers.pop();
-    }
+var clearMarkers = function() {
+  for (var i = markers.length - 1; i >= 0; i--) {
+    markers[i].setMap(null);
+    markers.pop();
   }
+}
 }
 
 checklistApp.controller(controllers);
@@ -1275,10 +1361,10 @@ function getUrlVars() {
 
 </script>
 <style type="text/css">
-      html { height: 100% }
-      body { height: 100%; margin: 0; padding: 0 }
-      #googleMap { height: 100%; width: 100% }
-    </style>
+html { height: 100% }
+body { height: 100%; margin: 0; padding: 0 }
+#googleMap { position: absolute; left: 0; top: 0; height: 100%; width: 100%; z-index: 98;}
+</style>
 
 <script>
 /**
