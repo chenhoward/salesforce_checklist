@@ -409,6 +409,20 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.checklistId = document.getElementById('checklistId').value;
     if ($scope.checklistId) {
           $scope.newPage = false;
+          Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ChecklistAdminController.getChecklist}',
+            $scope.checklistId,
+            function(result, event) {
+            if (event.status) {
+                $scope.item = result;
+            } else if (event.type == 'exception') {
+            console.log('Exception');
+            } else {
+            console.log('Error!');
+            }
+            },
+            {escape: true}
+            );
     } else {
       $scope.newPage = true;
     }
