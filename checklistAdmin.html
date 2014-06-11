@@ -536,7 +536,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     }
     $scope.getChecklistItems = function() {
       var copy = {};
-      copy.Id = $scope.item.Id;
+      copy.Id = $scope.checklistId;
       Visualforce.remoting.Manager.invokeAction(
           '{!$RemoteAction.ChecklistAdminController.getChecklistItems}',
           copy,
