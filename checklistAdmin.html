@@ -2,7 +2,8 @@
 sidebar="true" 
 showheader="true"
 standardStylesheets="false"
-Controller="ChecklistAdminController"
+standardController="Checklist__c"
+extensions="ChecklistAdminController"
 applyHtmlTag="true"
 applyBodyTag="false"
 id="todo"
@@ -104,8 +105,11 @@ $(function() {
 </head>
 <body>
 <div id="admin-panel" ng-controller="AdminCtrl">
+    <input id="checklistId" value="{!Checklist__c.Id}" type="hidden"></input>
+
   <li> 
     <h1 id="checklist-edit"> Checklist Edit </h1>
+    {!Checklist__c.Id}
     <input type="button" value="New Checklist" ng-click="setNewPage(true)"></input>
     <input type="button" value="Edit Checklist" ng-click="setNewPage(false)"></input>
   </li>
@@ -162,7 +166,7 @@ $(function() {
                     </div>
                   </td>
                   <td class="data2Col last" colspan="3">
-                    <textarea cols="75" id="Description" maxlength="4000" name="Description" onchange="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onclick="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onkeydown="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onkeyup="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onmousedown="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" rows="6" tabindex="5" type="text" wrap="soft" ng-model="checklist.description"></textarea>
+                    <textarea cols="75" id="Description" maxlength="4000" name="Description" rows="6" tabindex="5" type="text" wrap="soft" ng-model="checklist.description"></textarea>
                   </td>
                 </tr>
               </tbody>
@@ -218,7 +222,7 @@ $(function() {
                   <div ng-show="showValues(item)">
                     <p> Input multiple values for your question below using a comma to separate each individual value. </p>
                     <label> Values: </label>
-                    <input type="text" ng-model="question.Values__c" name="Q1" ></input>
+                    <input type="text" ng-model="item.Values__c" name="Q1" ></input>
                     <br/>
                   </div>
                 </div>
@@ -402,6 +406,12 @@ $(function() {
 var checklistApp = angular.module('checklistApp', ['ui.sortable']);
 checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.newPage = true;
+    $scope.checklistId = document.getElementById('checklistId').value;
+    if ($scope.checklistId) {
+          $scope.newPage = false;
+    } else {
+      $scope.newPage = true;
+    }
     $scope.checklistIndex = 0;
     $scope.items = new Array();
     $scope.items[0] = new Object();
@@ -409,7 +419,6 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.checklist.name = 'Default Name';
     $scope.checklist.description = 'Default Description';
     $scope.checklists = {!CheckLists};
-    console.log($scope.checklists);
     var emptyDB = $scope.checklists.length == 0;
     $scope.checklists2 = $scope.checklists;
     $scope.item = $scope.checklists[0];
@@ -527,7 +536,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     }
     $scope.getChecklistItems = function() {
       var copy = {};
-      copy.Id = $scope.item.Id;
+      copy.Id = $scope.checklistId;
       Visualforce.remoting.Manager.invokeAction(
           '{!$RemoteAction.ChecklistAdminController.getChecklistItems}',
           copy,
