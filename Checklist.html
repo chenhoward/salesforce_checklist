@@ -141,7 +141,7 @@ id="todo"
     left: 0%;
   }
 
-  #two, #three {
+  #two, #three, #five {
     z-index: 2;
   }
 
@@ -902,7 +902,7 @@ id="todo"
         <div class="link maplink" ng-click="revealMap()">
           <img class="map" src="{!$Resource.checklist_map}"></img>
           <p> View Map </p>
-          <p class="blurb"> {{completedchecklistresponses.size}} Completed Locations </p>
+          <p class="blurb"> {{completedchecklistresponses.length}} Completed Checklists </p>
         </div>
         <div id="googleMap" ng-show="showMapView"></div>
         <img class="x" id="hide-map" ng-show="showMapView" src="{!$Resource.checklist_x}" ng-click="showMapView = false;"></img>
@@ -912,6 +912,13 @@ id="todo"
           <p class="blurb"> {{checklist.Checklist__r.Description__c}} </p>
         </div>
         <div class="spacer"> </div>
+      </section>
+      <section id="five">
+        <div class="title"> {{checklistName}} </div>
+        <div class="question">
+          <p id="conclusion"> You've just saved a review of <span class="green_text"> {{checklistName}} </span>. </p>
+        </div>
+        <a class="link last" id="return" data-section="one" href="#"> Return </a>
       </section>
     </div>
   </div>
@@ -1112,7 +1119,8 @@ function formHelper() {
       delete $scope.checklistitems[i].Checklist_Item__r.Values2;
     }
     if ($scope.checklistitems[i].Answer__c) {
-      $scope.checklistitems[i].Answer__c = escapeHtml($scope.checklistitems[i].Answer__c.trim());
+      $scope.checklistitems[i].Answer__c = escapeHtml($scope.checklistitems[i].Answer__c);
+
     }
   }
   delete $scope.checklistitems.attributes;
@@ -1192,7 +1200,7 @@ $scope.saveResponse = function() {
     {escape: true}
     );
   getPendingChecklistResponses();
-  setSection($('#container section#three'), $('.active'));
+  setSection($('#container section#five'), $('.active'));
 }
 
 /** Sets up Images and updates which Checklist Response that is currently being worked on. */

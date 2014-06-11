@@ -10,22 +10,32 @@ global with sharing class ChecklistExtension {
     /** Returns all pending Checklists. */
     @RemoteAction
     global static List<Checklist_Response__c> pendingChecklists() {
-       List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
-                                                Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending'];
+        if (!Schema.SObjectType.Checklist_Response__c.isAccessible()) {
+            return null;
+        }
+        List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
+                                                Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending' AND Responder__c=:UserInfo.getUserId()];
        return checklists;
     } 
 
     /** Returns all completed Checklists. */
     @RemoteAction
     global static List<Checklist_Response__c> completedChecklists() {
-       List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
-                                                Checklist__r.Id, Location__latitude__s, Location__longitude__s FROM Checklist_Response__c WHERE Status__c=:'Complete' AND CreatedByID=:UserInfo.getUserId()];
-       return checklists;
+        if (!Schema.SObjectType.Checklist_Response__c.isAccessible()) {
+            return null;
+        }
+        List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
+                                                Checklist__r.Id, Location__latitude__s, Location__longitude__s FROM Checklist_Response__c WHERE Status__c=:'Complete' AND Responder__c=:UserInfo.getUserId()];
+        return checklists;
     } 
 
     /** Returns Checklist Responses to a CHECKLIST. */
     @RemoteAction
     global static List<Checklist_Item_Response__c> getAllChecklistItems(Id checklist){
+        Boolean valid = Schema.SObjectType.Checklist_Item__c.isAccessible() && Schema.SObjectType.Checklist_Item_Response__c.isCreateable();
+        if (!valid) {
+            return null;
+        }
         List<Checklist_Item__c> to_return = [SELECT Id, Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c, Attach_Photo__c 
                 FROM Checklist_Item__c WHERE Checklist__c=:checklist AND isActive__c = True order by Order__c];
 
@@ -41,6 +51,13 @@ global with sharing class ChecklistExtension {
 
     /** Updates the RESPONSES to CHECKLISTRESPID and returns the Checklist Response. */
     public static Checklist_Response__c responseUpdate(String checklistRespId, List<Checklist_Item_Response__c> responses) {
+        Boolean valid = (Schema.SObjectType.Checklist_Response__c.isAccessible()
+            || Schema.SObjectType.Checklist_Item_Response__c.isCreateable())
+            && (Schema.SObjectType.Checklist_Item_Response__c.isUpdateable()
+            || Schema.SObjectType.Checklist_Item_Response__c.isCreateable());
+        if (!valid) {
+            return null;
+        }
         List<Checklist_Response__c> responseDB = [SELECT Id FROM Checklist_Response__c WHERE Id=:checklistRespId];
         Checklist_Response__c  response;
         Boolean newResponse = false;
@@ -68,11 +85,15 @@ global with sharing class ChecklistExtension {
     
     /** Saves a pending Checklist Response whose ID is CHECKLISTRESPONSEID containing RESPONSES. */
     @RemoteAction
-    global static Id saveResponses(String checklistRespId, List<Checklist_Item_Response__c> responses) {
-        if (responses == null || responses.size() == 0)
+    global static Id saveResponses(String checklistRespId,
+        List<Checklist_Item_Response__c> responses) {
+        if (responses == null || responses.size() == 0
+            || !Schema.SObjectType.Checklist_Response__c.isUpdateable()) {
             return null;
+        }
         Checklist_Response__c r = responseUpdate(checklistRespId, responses);
         r.Status__c = 'Pending';
+        r.Responder__c = UserInfo.getUserId();
         update r;
         return r.Id;
     }
@@ -80,21 +101,27 @@ global with sharing class ChecklistExtension {
     /** Completes a Checklist Response whose ID is CHECCKLISTRESPID containing RESPONSES. */
     @RemoteAction
     global static Id submitResponses(String checklistRespId, List<Checklist_Item_Response__c> responses, Double latitude, Double longitude) {
-        if (responses == null || responses.size() == 0)
+        if (responses == null || responses.size() == 0 || !Schema.SObjectType.Checklist_Response__c.isUpdateable())
             return null;
         Checklist_Response__c r = responseUpdate(checklistRespId, responses);
         r.Status__c = 'Complete';
         r.Location__latitude__s = latitude;
         r.Location__longitude__s = longitude;
+        r.Responder__c = UserInfo.getUserId();
         update r;
         return r.Id;
     }
 
+
+    /** Returns Checklist Item Responses to edit for CHECKLISTRESPONSE. */
     @RemoteAction
-    global static List<Checklist_Item_Response__c> editChecklistItems(Id checklist_response) {
+    global static List<Checklist_Item_Response__c> editChecklistItems(Id checklistResponse) {        
+        if(!Schema.SObjectType.Checklist_Item_Response__c.isAccessible()) {
+            return null;
+        }
         List<Checklist_Item_Response__c> to_return = [SELECT Id, Answer__c, Checklist_Item__c, Checklist_Item__r.Order__c, Checklist_Item__r.Question__c, Checklist_Item__r.Checklist__c,
                                                       Checklist_Item__r.Required__c, Checklist_Item__r.Type__c, Checklist_Item__r.Values__c, Checklist_Item__r.Attach_Photo__c
-                                                      FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:checklist_response 
+                                                      FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:checklistResponse 
                                                       order by Checklist_Item__r.Order__c];
 
         Map<Id, Checklist_Item_Response__c> checklistItemId2Resp = new Map<Id, Checklist_Item_Response__c>();
@@ -103,7 +130,7 @@ global with sharing class ChecklistExtension {
         }
         Id checklistId;
         if (to_return.size() == 0) {
-            Checklist_Response__c[] resp = [select Checklist__c from Checklist_Response__c where id = :checklist_response limit 1];
+            Checklist_Response__c[] resp = [select Checklist__c from Checklist_Response__c where id = :checklistResponse limit 1];
             if (resp.size() == 1) {
                 checklistId = resp[0].Checklist__c;
             }
@@ -119,7 +146,7 @@ global with sharing class ChecklistExtension {
             Checklist_Item_Response__c r = checklistItemId2Resp.get(item.Id);
             if (r == null) {
                 Checklist_Item_Response__c emptyResp = new Checklist_Item_Response__c(Checklist_Item__c = item.Id, 
-                  Checklist_Item__r = item, Checklist_Response__c = checklist_response);
+                  Checklist_Item__r = item, Checklist_Response__c = checklistResponse);
                 responses.add(emptyResp);                                                                               
             } else {
                 responses.add(r);
@@ -128,20 +155,17 @@ global with sharing class ChecklistExtension {
         return responses;
     }
 
+    /** Handle the BITPHOTO for the Response with id RESPONSEID to the Checklist Item with the Id CHECKLISTITEMID. */
     @RemoteAction
-    global static String lat_long(Id checklist_response) {
-        Checklist_Response__c response = [SELECT Location__c FROM Checklist_Response__c WHERE Id=: checklist_response];
-        return JSON.serialize(response);
-    }
-
-    @RemoteAction
-    global static Id photoRemotecall(Id checklist_item_id, Id response_id, Blob bitphoto) {
-        System.debug('swag');
-        System.debug(bitphoto);
-        if (checklist_item_id == null || response_id == null || bitphoto == null) {
+    global static Id photoRemotecall(Id checklistItemId, Id responseId, Blob bitphoto) {
+        Boolean valid = Schema.SObjectType.Checklist_Item_Response__c.isAccessible() && Schema.SObjectType.Attachment.isCreateable();
+        if (!valid) {
             return null;
         }
-        Checklist_Item_Response__c resp = [SELECT Id FROM Checklist_Item_Response__c WHERE Checklist_Item__c=:checklist_item_id AND Checklist_Response__c=:response_id];
+        if (checklistItemId == null || responseId == null || bitphoto == null) {
+            return null;
+        }
+        Checklist_Item_Response__c resp = [SELECT Id FROM Checklist_Item_Response__c WHERE Checklist_Item__c=:checklistItemId AND Checklist_Response__c=:responseId];
         List<Attachment> a = [SELECT Id FROM Attachment WHERE ParentId=:resp.Id];
         if (a.size() != 0) {
             for (Integer i=0; i<a.size(); i++) {
@@ -151,7 +175,6 @@ global with sharing class ChecklistExtension {
         Attachment attach = new Attachment();
         attach.Body = bitphoto;
         attach.Name = 'Photo for response: ' + resp.Id;
-        // attach.ContentType = ;
         attach.ParentID = resp.Id;
         insert attach;
         return attach.Id;
