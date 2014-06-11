@@ -18,7 +18,7 @@ id="todo"
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"></script>
 <style>
 h1 { padding: .2em; margin: 0; }
-#admin-panel ol { margin: 0 !important; padding: 0 !important; }
+#admin-panel ol { box-sizing: border-box; margin: 0 !important; padding: 0 15px !important; }
 .ui-widget-header {
   font-size: 24px;
   margin-left: -5px;
@@ -31,18 +31,12 @@ h1 { padding: .2em; margin: 0; }
 #checklist .pbSubsection {
   padding: 7px 12px !important;
 }
-#footer {
-  border-top: none;
-}
-#footer .pbBottomButtons {
-  margin: 0;
-}
 #admin-panel li {
   list-style-type: none;
   padding: 30px;
   margin: 15px 0 !important;
   color: #333333;
-  background: #FFFFFF;
+  background: #f0f0f0;
   border: 1px solid #CCCCCC;
   border-radius: 7px;
 }
@@ -54,9 +48,11 @@ h1 { padding: .2em; margin: 0; }
   width: 100%;
 }
 .sortable li {
+  overflow: auto;
   list-style-type: none;
   box-sizing: border-box;
   padding: 30px;
+  padding-bottom: 20px !important;
   width: 100%;
   margin-left: -10px;
 }
@@ -76,6 +72,21 @@ label {
 }
 .question {
   width: 400px;
+}
+.noTopMargin {
+  margin-top: 0;
+}
+.full {
+  float: left;
+  width: 100%;
+  padding-bottom: 1px;
+}
+.half {
+  float: left;
+  width: 40%;
+}
+.dlt {
+  float: right;
 }
 </style>
 <script>
@@ -109,7 +120,6 @@ $(function() {
           </div>
         </div>
       </div>
-      <div class="bDescription"> Drag and drop questions to re-order them. </div>
       <div class="bPageBlock brandSecondaryBrd bEditBlock secondaryPalette" id="checklist">
         <div class="pbHeader">
           <table border="0" cellpadding="0" cellspacing="0">
@@ -120,7 +130,6 @@ $(function() {
                 </td>
                 <td class="pbButton" id="topButtonRow">
                   <input type="submit" class="btn" value="Save" ng-click="newChecklist()"> </input>
-                  <input type="button" class="btn" value="Add Question" ng-click="addQuestion()"></input>
                   <input type="submit" class="btn" value="Cancel"> </input>
                 </td>
               </tr>
@@ -160,35 +169,6 @@ $(function() {
             </table>
           </div>
         </div>
-      </div>
-      <ol class="sortable" ui-sortable="true" ng-model="items">
-        <li ng-repeat="item in items">
-          <h1> Question {{$index + 1}} </h1>
-          <br/><br/>
-          <label> Type: </label>
-          <select ng-model="item.Type__c" ng-options="type for type in types" ng-required="true"></select>
-          <br/><br/>
-          <label> Question: </label>
-          <input type="text" ng-model="item.Question__c" name="Q1" ng-required="true"></input>
-          <br/><br/>
-          <label> Required: </label>
-          <input type="checkbox" ng-model="item.Required__c" name="O3"></input>
-          <br/><br/>
-          <label> Photo Attachment: </label>
-          <input type="checkbox" ng-model="item.Attach_Photo__c" name="O4"></input>
-          <br/>
-          <div ng-show="showValues(item)">
-            <p> Input multiple values for your question below using a comma to separate each individual value. </p>
-            <label> Values: </label>
-            <input type="text" ng-model="question.Values__c" name="Q1" ></input>
-            <br/>
-          </div>
-          <br/>
-          <input type='button' class="btn" value='Delete' ng-click='removeQuestion(item)'/>
-          <br/>
-        </li>
-      </ol>
-      <div class="bPageBlock brandSecondaryBrd bEditBlock secondaryPalette" id="footer">
         <div class="pbBottomButtons">
           <table border="0" cellpadding="0" cellspacing="0">
             <tbody>
@@ -198,8 +178,71 @@ $(function() {
                 </td>
                 <td class="pbButtonb" id="bottomButtonRow">
                   <input type="submit" class="btn" value="Save" ng-click="newChecklist()"> </input>
-                  <input type="button" class="btn" value="Add Question" ng-click="addQuestion()"></input>
                   <input type="submit" class="btn" value="Cancel"> </input>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="bPageBlock brandSecondaryBrd bEditBlock secondaryPalette" id="checklist">
+        <div class="pbHeader">
+          <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+              <tr> 
+                <td class="pbTitle" id="checklistTitle"> 
+                  <h2 class="mainTitle" style="font-size: 14px;">Checklist Items</h2>
+                </td>
+                <td class="pbButton" id="topButtonRow">
+                  <input type="button" class="btn" value="Add Item" ng-click="addQuestion()"></input>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pbBody">
+          <div class="pbSubsection">
+            <ol class="sortable" ui-sortable="true" ng-model="items">
+              <li ng-repeat="item in items">
+                <div class="full">
+                  <h1> Question {{$index + 1}} </h1>
+                  <span> Drag and drop to reorder! </span>
+                  <br/><br/>
+                </div>
+                <div class="half">
+                  <label> Type: </label>
+                  <select ng-model="item.Type__c" ng-options="type for type in types" ng-required="true"></select>
+                  <br/><br/>
+                  <label> Question: </label>
+                  <input type="text" ng-model="item.Question__c" name="Q1" ng-required="true"></input>
+                  <div ng-show="showValues(item)">
+                    <p> Input multiple values for your question below using a comma to separate each individual value. </p>
+                    <label> Values: </label>
+                    <input type="text" ng-model="question.Values__c" name="Q1" ></input>
+                    <br/>
+                  </div>
+                </div>
+                <div class="half">
+                  <label> Required: </label>
+                  <input type="checkbox" ng-model="item.Required__c" name="O3"></input>
+                  <br/><br/>
+                  <label> Photo Attachment: </label>
+                  <input type="checkbox" ng-model="item.Attach_Photo__c" name="O4"></input>
+                </div>
+                <input type='button' class="btn dlt" value='Delete' ng-click='removeQuestion(item)'/>
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="pbBottomButtons">
+          <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+              <tr>
+                <td class="pbTitle">
+                  &nbsp;
+                </td>
+                <td class="pbButtonb" id="bottomButtonRow">
+                  <input type="button" class="btn" value="Add Item" ng-click="addQuestion()"></input>
                 </td>
               </tr>
             </tbody>
@@ -219,7 +262,6 @@ $(function() {
           </div>
         </div>
       </div>
-      <div class="bDescription"> Drag and drop questions to re-order them. </div>
       <div class="bPageBlock brandSecondaryBrd bEditBlock secondaryPalette" id="checklist">
         <div class="pbHeader">
           <table border="0" cellpadding="0" cellspacing="0">
@@ -230,7 +272,6 @@ $(function() {
                 </td>
                 <td class="pbButton" id="topButtonRow">
                   <input type="submit" class="btn" value="Save" ng-click="editChecklist()"> </input>
-                  <input type="button" class="btn" value="Add Question" ng-click="addQuestionEdit()"></input>
                   <input type="submit" class="btn" value="Cancel"> </input>
                 </td>
               </tr>
@@ -270,35 +311,6 @@ $(function() {
             </table>
           </div>
         </div>
-      </div>
-      <ol class="sortable" ui-sortable="true" ng-model="questions">
-        <li ng-repeat="question in questions | filter:{isActive__c:'true'}" draggable="true" class="question">
-          <h1> Question {{$index + 1}} </h1>
-          <br/><br/>
-          <label> Type: </label>
-          <select ng-model="question.Type__c" ng-options="type for type in types" ng-required="true"></select>
-          <br/><br/>
-          <label> Question: </label>
-          <input type="text" ng-model="question.Question__c" ng-required="true"></input>
-          <br/><br/>
-          <input type="hidden" ng-model="question.Order__c" ng-required="question.isActive__c"></input>
-          <label> Required: </label>
-          <input type="checkbox" ng-model="question.Required__c"></input>
-          <br/><br/>
-          <label> Photo Attachment: </label>
-          <input type="checkbox" ng-model="question.Attach_Photo__c" name="O4"></input>
-          <br/><br/>
-          <div ng-show="showValues(question)">
-            <p> Input multiple values for your question below using a comma to separate each individual value. </p>
-            <label> Values: </label>
-            <input type="text" ng-model="question.Values__c" name="Q1" ></input>
-            <br/><br/>
-          </div>
-          <input type="button" value="Delete" ng-click="deleteChecklistItem(question)"></input>
-          <br/>
-        </li>
-      </ol>
-      <div class="bPageBlock brandSecondaryBrd bEditBlock secondaryPalette" id="footer">
         <div class="pbBottomButtons">
           <table border="0" cellpadding="0" cellspacing="0">
             <tbody>
@@ -308,8 +320,73 @@ $(function() {
                 </td>
                 <td class="pbButtonb" id="bottomButtonRow">
                   <input type="submit" class="btn" value="Save" ng-click="editChecklist()"> </input>
-                  <input type="button" class="btn" value="Add Question" ng-click="addQuestionEdit()"></input>
                   <input type="submit" class="btn" value="Cancel"> </input>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="bPageBlock brandSecondaryBrd bEditBlock secondaryPalette" id="checklist">
+        <div class="pbHeader">
+          <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+              <tr> 
+                <td class="pbTitle" id="checklistTitle"> 
+                  <h2 class="mainTitle" style="font-size: 14px;">Checklist Items</h2>
+                </td>
+                <td class="pbButton" id="topButtonRow">
+                  <input type="button" class="btn" value="Add Item" ng-click="addQuestionEdit()"></input>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pbBody">
+          <div class="pbSubsection">
+            <ol class="sortable" ui-sortable="true" ng-model="questions">
+              <li ng-repeat="question in questions | filter:{isActive__c:'true'}" draggable="true" class="question">
+                <div class="full">
+                  <h1> Question {{$index + 1}} </h1>
+                  <span> Drag and drop to reorder! </span>
+                  <br/><br/>
+                </div>
+                <div class="half">
+                  <label> Type: </label>
+                  <select ng-model="question.Type__c" ng-options="type for type in types" ng-required="true"></select>
+                  <br/><br/>
+                  <label> Question: </label>
+                  <input type="text" ng-model="question.Question__c" ng-required="true"></input>
+                  <div ng-show="showValues(question)">
+                    <p> Input multiple values for your question below using a comma to separate each individual value. </p>
+                    <label> Values: </label>
+                    <input type="text" ng-model="question.Values__c" name="Q1" ></input>
+                    <br/>
+                  </div>
+                </div>
+                <div class="half">
+                  <input type="hidden" ng-model="question.Order__c" ng-required="question.isActive__c"></input>
+                  <label> Required: </label>
+                  <input type="checkbox" ng-model="question.Required__c"></input>
+                  <br/><br/>
+                  <label> Photo Attachment: </label>
+                  <input type="checkbox" ng-model="question.Attach_Photo__c" name="O4"></input>
+                </div>
+                <input type="button" class="btn dlt" value="Delete" ng-click="deleteChecklistItem(question)"></input>
+                <br/>
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="pbBottomButtons">
+          <table border="0" cellpadding="0" cellspacing="0">
+            <tbody>
+              <tr>
+                <td class="pbTitle">
+                  &nbsp;
+                </td>
+                <td class="pbButton" id="bottomButtonRow">
+                  <input type="button" class="btn" value="Add Item" ng-click="addQuestionEdit()"></input>
                 </td>
               </tr>
             </tbody>
