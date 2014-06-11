@@ -105,8 +105,11 @@ $(function() {
 </head>
 <body>
 <div id="admin-panel" ng-controller="AdminCtrl">
+    <input id="checklistId" value="{!Checklist__c.Id}" type="hidden"></input>
+
   <li> 
     <h1 id="checklist-edit"> Checklist Edit </h1>
+    {!Checklist__c.Id}
     <input type="button" value="New Checklist" ng-click="setNewPage(true)"></input>
     <input type="button" value="Edit Checklist" ng-click="setNewPage(false)"></input>
   </li>
@@ -403,6 +406,12 @@ $(function() {
 var checklistApp = angular.module('checklistApp', ['ui.sortable']);
 checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.newPage = true;
+    $scope.checklistId = document.getElementById('checklistId').value;
+    if ($scope.checklistId) {
+          $scope.newPage = false;
+    } else {
+      $scope.newPage = true;
+    }
     $scope.checklistIndex = 0;
     $scope.items = new Array();
     $scope.items[0] = new Object();
