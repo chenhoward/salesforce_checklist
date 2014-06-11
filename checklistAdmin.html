@@ -2,7 +2,8 @@
 sidebar="true" 
 showheader="true"
 standardStylesheets="false"
-Controller="ChecklistAdminController"
+standardController="Checklist__c"
+extensions="ChecklistAdminController"
 applyHtmlTag="true"
 applyBodyTag="false"
 id="todo"
@@ -409,7 +410,6 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.checklist.name = 'Default Name';
     $scope.checklist.description = 'Default Description';
     $scope.checklists = {!CheckLists};
-    console.log($scope.checklists);
     var emptyDB = $scope.checklists.length == 0;
     $scope.checklists2 = $scope.checklists;
     $scope.item = $scope.checklists[0];

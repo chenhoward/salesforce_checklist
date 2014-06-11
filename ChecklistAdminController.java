@@ -1,6 +1,11 @@
 /** The controller for the Admin Page. */
 global with sharing class ChecklistAdminController {
 
+    public ChecklistAdminController(ApexPages.StandardController controller) {
+
+    }
+
+
     public static String getCheckLists() {
         return ChecklistExtension.getCheckLists();
     } 
