@@ -105,8 +105,10 @@ global with sharing class ChecklistExtension {
             return null;
         Checklist_Response__c r = responseUpdate(checklistRespId, responses);
         r.Status__c = 'Complete';
-        r.Location__latitude__s = latitude;
-        r.Location__longitude__s = longitude;
+        if (latitude != 0 && longitude != 0) {
+            r.Location__latitude__s = latitude;
+            r.Location__longitude__s = longitude;
+        }
         r.Responder__c = UserInfo.getUserId();
         update r;
         return r.Id;
