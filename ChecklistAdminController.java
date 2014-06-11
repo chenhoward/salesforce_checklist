@@ -11,6 +11,11 @@ global with sharing class ChecklistAdminController {
     } 
 
     @RemoteAction
+    global static Checklist__c getChecklist(ID checklistId) {
+        return ChecklistUtilities.findChecklist(checklistID);
+    }
+
+    @RemoteAction
     global static Checklist_Item__c[] getChecklistItems(Checklist__c checklist) {
         return ChecklistUtilities.findChecklistItems(checklist);
     }
