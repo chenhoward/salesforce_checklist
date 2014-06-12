@@ -16,7 +16,7 @@ public class ChecklistExtensionTest{
     }
 
     static testmethod void testPending() {
-	    listMaker('Pending');
+        listMaker('Pending');
         System.assertEquals(ChecklistExtension.pendingChecklists().size(), 1);
     }
 
@@ -28,5 +28,10 @@ public class ChecklistExtensionTest{
     static testmethod void testGetChecklistItems() {
         Id d= listMaker('Compete');
         System.assertEquals(ChecklistExtension.getAllChecklistItems(d).size(), 1);
+    }
+    
+    static testmethod void testEditChecklistItems() {
+        Id d = listMaker('Test');
+        System.assertEquals(ChecklistExtension.editChecklistItems(d).size(), 0);
     }
 }
