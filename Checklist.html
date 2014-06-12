@@ -940,7 +940,6 @@ id="todo"
           <p> View Map </p>
           <p class="blurb"> {{completedchecklistresponses.length}} Completed Checklists </p>
         </div>-->
-        <div id="googleMap" ng-show="showMapView"></div>
         <div class="link maplink" ng-repeat="checklist in completedchecklistresponses">
           <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
           <p> {{checklist.Checklist__r.Name}} </p>
@@ -955,6 +954,7 @@ id="todo"
         </div>
         <a class="link last" id="return" data-section="one" href="#"> Return </a>
       </section>
+      <div id="googleMap" ng-show="showMapView"></div>
       <div class="openmap" ng-click="revealMap()"></div>
     </div>
   </div>
@@ -1387,7 +1387,7 @@ function escapeHtml(string) {
 <style type="text/css">
 html { height: 100% }
 body { height: 100%; margin: 0; padding: 0 }
-#googleMap { position: absolute; left: 0; top: 0; height: 100%; width: 100%; z-index: 1;}
+#googleMap { position: fixed; left: 0; top: 0; height: 100%; width: 100%; z-index: 1;}
 </style>
 
 <script>
