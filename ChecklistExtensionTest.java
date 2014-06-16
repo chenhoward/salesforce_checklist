@@ -15,6 +15,13 @@ public class ChecklistExtensionTest{
         return checklist.Id;
     }
 
+    static Id itemMaker(ID d) {
+        Checklist_Item__c item = new Checklist_Item__c();
+        item.Checklist__c = d;
+        insert item;
+        return item.Id;
+    }
+ 
     static testmethod void testPending() {
         listMaker('Pending');
         System.assertEquals(ChecklistExtension.pendingChecklists().size(), 1);
@@ -33,5 +40,18 @@ public class ChecklistExtensionTest{
     static testmethod void testEditChecklistItems() {
         Id d = listMaker('Test');
         System.assertEquals(ChecklistExtension.editChecklistItems(d).size(), 0);
+    }
+    
+    static testmethod void testResponseUpdate() {
+        Id d = listMaker('Test');
+        Checklist_Response__c resp = new Checklist_Response__c();
+        resp.Checklist__c = d;
+        insert resp;
+        Checklist_Item_Response__c item = new Checklist_Item_Response__c();
+        item.Checklist_Item__c = itemMaker(d);
+        item.Checklist_Response__c = d;
+        List<Checklist_Item_Response__c> items = new List<Checklist_Item_Response__c>();
+        items.add(item);
+        ChecklistExtension.responseUpdate(resp.Id, items);
     }
 }
