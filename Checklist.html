@@ -1182,31 +1182,16 @@ function formHelper() {
 }
 
 
-function photoHelper(checklist_response_id) {
+function photoHelper(responseId) {
   if (Object.keys($scope.photoMap).length > 0) {
     for (var key in $scope.photoMap) {
-      Visualforce.remoting.Manager.invokeAction(
-        '{!$RemoteAction.ChecklistExtension.photoRemotecall}',
-        key,
-        checklist_response_id,
-        $scope.photoMap[key],
-        function(result, event){
-          if (event.status) {
-            var attachment_id = result;
-            console.log('attachment: https://c.na15.visual.force.com/' + attachment_id);
-          } else if (event.type === 'exception') {
-            console.log('Exception: ' + event.message);
-            alert('Exception' + event.message);
-          } else {
-            console.log('Error!');
-            alert('Error');
-          }
-        },
-        {escape: true}
-        );
+      var queryString = "SELECT Id FROM Checklist_Item_Response__c WHERE Checklist_Item__c = '" + key + "' AND Checklist_Response__c = '" + responseId + "'";
+      forcetkClient.query(queryString, function(response) {
+        forcetkClient.create('Attachment', {'Body' : $scope.photoMap[key], 'ParentId': response.records[0].Id, 'Name' : 'PhotoResponse'});
+      });
     }
   }
-};
+}
 
 /** Completes the current Checklist Response. */
 $scope.submitForm = function() {
