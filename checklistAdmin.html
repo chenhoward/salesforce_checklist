@@ -508,18 +508,23 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             },
             {escape: true}
             );
+        updateItems(copy);
+      } else {
+        console.log("Fix EditForm");
+      }};
+      var updateItems = function(copy) {
         for(var i = 0; i < $scope.questions.length; i++) {
           delete $scope.questions[i].$$hashKey;
           $scope.questions[i].Checklist__c = $scope.item.Id;
           $scope.questions[i].Order__c = i;
         }
-        console.log($scope.questions);
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistAdminController.updateChecklistItems}',
             $scope.questions,
             function(result, event) {
             if (event.status) {
             console.log('Updated everything items');
+            window.location.assign("/" + copy.Id);
             } else if (event.type == 'exception') {
             console.log('Exception');
             } else {
@@ -527,11 +532,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             }
             }, {escape: true}
             );
-            window.location.assign("/" + copy.Id);
-
-      } else {
-        console.log("Fix EditForm");
-      }};
+      }
     $scope.deleteChecklistItem = function(item) {
       console.log(item);
       item.isActive__c = false;
