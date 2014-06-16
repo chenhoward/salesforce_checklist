@@ -106,12 +106,6 @@ $(function() {
 <body>
 <div id="admin-panel" ng-controller="AdminCtrl">
     <input id="checklistId" value="{!Checklist__c.Id}" type="hidden"></input>
-
-  <li> 
-    <h1 id="checklist-edit"> Checklist Edit </h1>
-    <input type="button" value="New Checklist" ng-click="setNewPage(true)"></input>
-    <input type="button" value="Edit Checklist" ng-click="setNewPage(false)"></input>
-  </li>
   <div name="newPage" ng-show="newPage">
     <form name="newChecklistForm">
       <div class="bPageTitle">
@@ -448,26 +442,27 @@ checklistApp.controller("AdminCtrl", function ($scope) {
         $scope.items[i].Order__c = i;
       }
       if ($scope.newChecklistForm.$valid) {
-      for(var i = 0; i < $scope.items.length; i++) {
-        delete $scope.items[i].$$hashKey;
-        console.log($scope.items[i].Type__c);
-      }
-      Visualforce.remoting.Manager.invokeAction(
+        for(var i = 0; i < $scope.items.length; i++) {
+          delete $scope.items[i].$$hashKey;
+          console.log($scope.items[i].Type__c);
+        }
+        Visualforce.remoting.Manager.invokeAction(
           '{!$RemoteAction.ChecklistAdminController.createChecklistWithQuestions}',
           $scope.checklist.name,
           $scope.checklist.description,
           $scope.items,
           function(result, event) {
           if (event.status) {
-          console.log('Created everything');
+            console.log('Created everything');
           } else if (event.type == 'exception') {
-          console.log('Exception');
+            console.log('Exception');
           } else {
-          console.log('Error!');
+            console.log('Error!');
           }
-          },
-          {escape: true}
-          );
+        },
+        {escape: true}
+        );
+        location.reload();
       } else {
         console.log('Invalid New Checklist');
       }
@@ -509,6 +504,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
         for(var i = 0; i < $scope.questions.length; i++) {
           delete $scope.questions[i].$$hashKey;
           $scope.questions[i].Checklist__c = $scope.item.Id;
+          $scope.questions[i].Order__c = i;
         }
         console.log($scope.questions);
         Visualforce.remoting.Manager.invokeAction(
