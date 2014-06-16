@@ -964,6 +964,10 @@ id="todo"
 </body>
 <script>
 
+/** Set up forceTK. */
+var forcetkClient = new forcetk.Client();
+forcetkClient.setSessionToken('{!$Api.Session_ID}');
+
 /* Fix text boxes on mobile. */
 window.onkeydown = function(e){
   var $focused = $(':focus');
