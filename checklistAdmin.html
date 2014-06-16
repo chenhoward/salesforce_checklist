@@ -460,7 +460,6 @@ checklistApp.controller("AdminCtrl", function ($scope) {
           function(result, event) {
           if (event.status) {
           console.log('Created everything');
-          console.log("/" + result.Id);
           window.location.assign("/" + result.Id);
           } else if (event.type == 'exception') {
             console.log('Exception');
@@ -500,6 +499,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             function(result, event) {
             if (event.status) {
             console.log('Updated everything');
+
             } else if (event.type == 'exception') {
             console.log('Exception');
             } else {
@@ -527,6 +527,8 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             }
             }, {escape: true}
             );
+            window.location.assign("/" + copy.Id);
+
       } else {
         console.log("Fix EditForm");
       }};
