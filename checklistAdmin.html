@@ -460,6 +460,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
           function(result, event) {
           if (event.status) {
           console.log('Created everything');
+          console.log("/" + result.Id);
           window.location.assign("/" + result.Id);
           } else if (event.type == 'exception') {
             console.log('Exception');
@@ -469,7 +470,6 @@ checklistApp.controller("AdminCtrl", function ($scope) {
         },
         {escape: true}
         );
-        location.reload();
       } else {
         console.log('Invalid New Checklist');
       }
