@@ -133,7 +133,7 @@ $(function() {
                 </td>
                 <td class="pbButton" id="topButtonRow">
                   <input type="submit" class="btn" value="Save" ng-click="newChecklist()"> </input>
-                  <input type="submit" class="btn" value="Cancel"> </input>
+                  <input type="submit" class="btn" value="Cancel" onclick="goBack()"> </input>
                 </td>
               </tr>
             </tbody>
@@ -181,7 +181,7 @@ $(function() {
                 </td>
                 <td class="pbButtonb" id="bottomButtonRow">
                   <input type="submit" class="btn" value="Save" ng-click="newChecklist()"> </input>
-                  <input type="submit" class="btn" value="Cancel"> </input>
+                  <input type="submit" class="btn" value="Cancel" onclick="goBack()"> </input>
                 </td>
               </tr>
             </tbody>
@@ -275,7 +275,7 @@ $(function() {
                 </td>
                 <td class="pbButton" id="topButtonRow">
                   <input type="submit" class="btn" value="Save" ng-click="editChecklist()"> </input>
-                  <input type="submit" class="btn" value="Cancel"> </input>
+                  <input type="submit" class="btn" value="Cancel" onclick="goBack()"> </input>
                 </td>
               </tr>
             </tbody>
@@ -323,7 +323,7 @@ $(function() {
                 </td>
                 <td class="pbButtonb" id="bottomButtonRow">
                   <input type="submit" class="btn" value="Save" ng-click="editChecklist()"> </input>
-                  <input type="submit" class="btn" value="Cancel"> </input>
+                  <input type="submit" class="btn" value="Cancel" onclick="goBack()"> </input>
                 </td>
               </tr>
             </tbody>
@@ -401,6 +401,12 @@ $(function() {
 </div>
 </body>
 <script>
+
+/** To go back on the browser. */
+function goBack() {
+    window.history.back()
+}
+
 /* Angular */
 var checklistApp = angular.module('checklistApp', ['ui.sortable']);
 checklistApp.controller("AdminCtrl", function ($scope) {
