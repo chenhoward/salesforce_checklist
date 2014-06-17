@@ -157,29 +157,4 @@ global with sharing class ChecklistExtension {
         return responses;
     }
 
-    /** Handle the BITPHOTO for the Response with id RESPONSEID to the Checklist Item with the Id CHECKLISTITEMID. */
-    @RemoteAction
-    global static Id photoRemotecall(Id checklistItemId, Id responseId, Blob bitphoto) {
-        Boolean valid = Schema.SObjectType.Checklist_Item_Response__c.isAccessible() && Schema.SObjectType.Attachment.isCreateable();
-        if (!valid) {
-            return null;
-        }
-        if (checklistItemId == null || responseId == null || bitphoto == null) {
-            return null;
-        }
-        Checklist_Item_Response__c resp = [SELECT Id FROM Checklist_Item_Response__c WHERE Checklist_Item__c=:checklistItemId AND Checklist_Response__c=:responseId];
-        List<Attachment> a = [SELECT Id FROM Attachment WHERE ParentId=:resp.Id];
-        if (a.size() != 0) {
-            for (Integer i=0; i<a.size(); i++) {
-                delete a[i];
-            }
-        }
-        Attachment attach = new Attachment();
-        attach.Body = bitphoto;
-        attach.Name = 'Photo for response: ' + resp.Id;
-        attach.ParentID = resp.Id;
-        insert attach;
-        return attach.Id;
-    }
-
 }

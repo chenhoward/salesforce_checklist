@@ -127,7 +127,7 @@ $(function() {
                 </td>
                 <td class="pbButton" id="topButtonRow">
                   <input type="submit" class="btn" value="Save" ng-click="newChecklist()"> </input>
-                  <input type="submit" class="btn" value="Cancel"> </input>
+                  <input type="submit" class="btn" value="Cancel" onclick="goBack()"> </input>
                 </td>
               </tr>
             </tbody>
@@ -175,7 +175,7 @@ $(function() {
                 </td>
                 <td class="pbButtonb" id="bottomButtonRow">
                   <input type="submit" class="btn" value="Save" ng-click="newChecklist()"> </input>
-                  <input type="submit" class="btn" value="Cancel"> </input>
+                  <input type="submit" class="btn" value="Cancel" onclick="goBack()"> </input>
                 </td>
               </tr>
             </tbody>
@@ -269,7 +269,7 @@ $(function() {
                 </td>
                 <td class="pbButton" id="topButtonRow">
                   <input type="submit" class="btn" value="Save" ng-click="editChecklist()"> </input>
-                  <input type="submit" class="btn" value="Cancel"> </input>
+                  <input type="submit" class="btn" value="Cancel" onclick="goBack()"> </input>
                 </td>
               </tr>
             </tbody>
@@ -317,7 +317,7 @@ $(function() {
                 </td>
                 <td class="pbButtonb" id="bottomButtonRow">
                   <input type="submit" class="btn" value="Save" ng-click="editChecklist()"> </input>
-                  <input type="submit" class="btn" value="Cancel"> </input>
+                  <input type="submit" class="btn" value="Cancel" onclick="goBack()"> </input>
                 </td>
               </tr>
             </tbody>
@@ -395,6 +395,12 @@ $(function() {
 </div>
 </body>
 <script>
+
+/** To go back on the browser. */
+function goBack() {
+    window.history.back()
+}
+
 /* Angular */
 var checklistApp = angular.module('checklistApp', ['ui.sortable']);
 checklistApp.controller("AdminCtrl", function ($scope) {
@@ -453,7 +459,8 @@ checklistApp.controller("AdminCtrl", function ($scope) {
           $scope.items,
           function(result, event) {
           if (event.status) {
-            console.log('Created everything');
+          console.log('Created everything');
+          window.location.assign("/" + result.Id);
           } else if (event.type == 'exception') {
             console.log('Exception');
           } else {
@@ -462,7 +469,6 @@ checklistApp.controller("AdminCtrl", function ($scope) {
         },
         {escape: true}
         );
-        location.reload();
       } else {
         console.log('Invalid New Checklist');
       }
@@ -493,6 +499,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             function(result, event) {
             if (event.status) {
             console.log('Updated everything');
+
             } else if (event.type == 'exception') {
             console.log('Exception');
             } else {
@@ -501,18 +508,23 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             },
             {escape: true}
             );
+        updateItems(copy);
+      } else {
+        console.log("Fix EditForm");
+      }};
+      var updateItems = function(copy) {
         for(var i = 0; i < $scope.questions.length; i++) {
           delete $scope.questions[i].$$hashKey;
           $scope.questions[i].Checklist__c = $scope.item.Id;
           $scope.questions[i].Order__c = i;
         }
-        console.log($scope.questions);
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistAdminController.updateChecklistItems}',
             $scope.questions,
             function(result, event) {
             if (event.status) {
             console.log('Updated everything items');
+            window.location.assign("/" + copy.Id);
             } else if (event.type == 'exception') {
             console.log('Exception');
             } else {
@@ -520,9 +532,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             }
             }, {escape: true}
             );
-      } else {
-        console.log("Fix EditForm");
-      }};
+      }
     $scope.deleteChecklistItem = function(item) {
       console.log(item);
       item.isActive__c = false;
