@@ -1358,6 +1358,7 @@ controllers.PagesController = function ($scope, $timeout) {
   var createMarkers = function() {
     var response;
     clearMarkers();
+    boundary = new google.maps.LatLngBounds();
     for (var i = 0; i < $scope.completedchecklistresponses.length; i++) {
       response = $scope.completedchecklistresponses[i];
       var coordinates = new google.maps.LatLng(response.Location__Latitude__s, response.Location__Longitude__s);
@@ -1366,9 +1367,10 @@ controllers.PagesController = function ($scope, $timeout) {
         title: response.Checklist__r.Name
       });
       markers.push(marker);
+      boundary.extend(marker.position);
       marker.setMap(map);
-      map.panTo(coordinates);
     }
+    map.fitBounds(boundary)
   }
 
   var clearMarkers = function() {
