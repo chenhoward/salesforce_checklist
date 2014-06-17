@@ -286,13 +286,13 @@ id="todo"
     width: 50px;
     height: 50px;
     padding: 5px;
-    background: url('{!$Resource.checklist_map}');
+    background: url("{!URLFOR($Resource.ChecklistAssets, 'map-alt.svg')}");
     background-size: cover;
     background-color: #8cd250;
   }
 
   .openmap-active {
-    background: url('{!$Resource.checklist_list}');
+    background: url("{!URLFOR($Resource.ChecklistAssets, 'list.svg')}");
     background-size: cover;
     background-color: #8cd250;
   }
@@ -415,7 +415,7 @@ id="todo"
   }
 
   select {
-    background: url({!$Resource.checklist_arrow}) no-repeat right;
+    background: url("{!URLFOR($Resource.ChecklistAssets, 'arrow-bottom.png')}") no-repeat right;
     background-size: 60px 60px;
   }
 
@@ -593,7 +593,7 @@ id="todo"
   }
 
   input[type="checkbox"]:checked {
-    background: url({!$Resource.checklist_check}) no-repeat center;
+    background: url("{!URLFOR($Resource.ChecklistAssets, 'check.svg')}") no-repeat center;
     background-size: cover;
     box-shadow: none;
   }
@@ -868,22 +868,22 @@ id="todo"
     <div id="navbar">
       <!-- Currently no icons -->
       <a class="navbut active-tab" id="pending-tab" data-section="one" href="#">
-        <p> <img id="pending" src="{!$Resource.checklist_pending}"></img> </p>
-        <p> <img id="pending-alt" src="{!$Resource.checklist_pending_alt}"></img> </p>
+        <p> <img id="pending" src="{!URLFOR($Resource.ChecklistAssets, 'pending.svg')}"></img> </p>
+        <p> <img id="pending-alt" src="{!URLFOR($Resource.ChecklistAssets, 'pending-alt.svg')}"></img> </p>
         <p id="pendingtag"> Pending </p>
       </a>
       <a class="navbut" id="complete-tab" data-section="four" href="#">
-        <p> <img id="complete" src="{!$Resource.checklist_completed}"></img> </p>
-        <p> <img id="complete-alt" src="{!$Resource.checklist_completed_alt}"></img> </p>
+        <p> <img id="complete" src="{!URLFOR($Resource.ChecklistAssets, 'completed.svg')}"></img> </p>
+        <p> <img id="complete-alt" src="{!URLFOR($Resource.ChecklistAssets, 'completed-alt.svg')}"></img> </p>
         <p id="completetag"> Complete </p>
       </a>
     </div>
     <div id="newbut" href="#">
-      <p> <img id="new" src="{!$Resource.checklist_new}"></img> </p>
+      <p> <img id="new" src="{!URLFOR($Resource.ChecklistAssets, 'new.svg')}"></img> </p>
       <p id="newtag"> New </p>
     </div>
     <div id="new-div">
-      <img class="x" id="hide-new" src="{!$Resource.checklist_x}"></img>
+      <img class="x" id="hide-new" src="{!URLFOR($Resource.ChecklistAssets, 'x.svg')}"></img>
       <div class="title"> New Checklist </div>
       <a class="link" data-section="two" href="#" ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist)">
         <p> {{checklist.Name}} </p>
@@ -895,7 +895,7 @@ id="todo"
       <section id="one" class="active">
         <div class="spacer"> </div>
         <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
-          <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
+          <img class="checklist" src="{!URLFOR($Resource.ChecklistAssets, 'checklist.svg')}"></img>
           <p> {{checklist.Checklist__r.Name}}</p>
           <p class="blurb"> {{checklist.Checklist__r.Description__c}} &nbsp;</p>
           <div class="arrow-right"></div>
@@ -905,7 +905,7 @@ id="todo"
       </section>
       <section id="two">
         <form id="checklistForm" name="checklistForm" class="checklistForm" ng-submit="checklistForm.$valid  && submitForm()">
-          <img class="x" id="hide-checklist" src="{!$Resource.checklist_x}"></img>
+          <img class="x" id="hide-checklist" src="{!URLFOR($Resource.ChecklistAssets, 'x.svg')}"></img>
           <div class="title"> {{checklistName}}  </div>
           <div class="question" ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'">
             <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
