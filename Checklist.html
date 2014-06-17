@@ -1207,6 +1207,7 @@ controllers.PagesController = function ($scope, $timeout) {
   }
 
 
+  /** Creates photoes to attatch to the Checklist Response with id RESPONSEID. */
   function photoHelper(responseId) {
     if (Object.keys($scope.photoMap).length > 0) {
       for (var key in $scope.photoMap) {
@@ -1230,7 +1231,6 @@ controllers.PagesController = function ($scope, $timeout) {
       function(result, event){
         if (event.status) {
           photoHelper(result);
-          editChecklistItems();
         } else if (event.type === 'exception') {
           console.log('Exception: ' + event.message);
         } else {
