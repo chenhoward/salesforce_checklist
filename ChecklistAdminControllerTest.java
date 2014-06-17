@@ -11,7 +11,7 @@ public class ChecklistAdminControllerTest {
         System.assertEquals(test.Description__c, 'Description');
         test.Name = 'newName';
         ChecklistAdminController.updateChecklist(test);
-        test = ChecklistUtilities.findChecklist(test.ID);
+        test = ChecklistAdminController.getChecklist(test.ID);
         System.assertNotEquals(test, null);
         System.assertEquals(test.Name, 'newName');
         System.assertEquals(test.Description__c, 'Description');
