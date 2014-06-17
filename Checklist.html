@@ -1142,8 +1142,8 @@ controllers.PagesController = function ($scope, $timeout) {
             } else if (!isNaN($scope.checklistitems[i].Answer__c)) {
               $scope.checklistitems[i].Answer__c = parseInt($scope.checklistitems[i].Answer__c);
             }
-            $scope.$apply();
           }
+          $scope.$apply();
         } else if (event.type === 'exception') {
           console.log('Exception: ' + event.message);
         } else {
