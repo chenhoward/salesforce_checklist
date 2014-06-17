@@ -42,23 +42,11 @@ public class ChecklistExtensionTest{
         System.assertEquals(ChecklistExtension.editChecklistItems(d).size(), 0);
     }
     
-    static testmethod void testResponseUpdate() {
-        Id d = listMaker('Test');
-        Checklist_Response__c resp = new Checklist_Response__c();
-        resp.Checklist__c = d;
-        insert resp;
-        Checklist_Item_Response__c item = new Checklist_Item_Response__c();
-        item.Checklist_Item__c = itemMaker(d);
-        item.Checklist_Response__c = resp.Id;
-        List<Checklist_Item_Response__c> items = new List<Checklist_Item_Response__c>();
-        items.add(item);
-        ChecklistExtension.responseUpdate(resp.Id, items);
-    }
+ 
     
     static testmethod void testSaveResponse() {
         Id d = listMaker('Completed');
         Checklist_Response__c resp = [SELECT Id From Checklist_Response__c WHERE Checklist__c=:d];
-        System.debug(resp);
         Id i = itemMaker(d);
         List<Checklist_Item_Response__c> items = ChecklistExtension.getAllChecklistItems(d);
         items[0].Answer__c = 'Yes';
@@ -73,15 +61,16 @@ public class ChecklistExtensionTest{
     static testmethod void testSubmitResponse() {
         Id d = listMaker('Completed');
         Checklist_Response__c resp = [SELECT Id From Checklist_Response__c WHERE Checklist__c=:d];
-        System.debug(resp);
         Id i = itemMaker(d);
         List<Checklist_Item_Response__c> items = ChecklistExtension.getAllChecklistItems(d);
-        items[0].Answer__c = 'No';
-        items[0].Checklist_Response__c = resp.Id;
-        ChecklistExtension.submitResponses(resp.Id, items, 0, 1);
-        items = ChecklistExtension.editChecklistItems(resp.Id);
+        for (Integer j = 0; j < items.size(); j++) {
+            items[j].Answer__c = 'No';
+            items[j].Checklist_Response__c = resp.Id;
+        }
+        Id r = ChecklistExtension.submitResponses(d, items, 0, 1);
+        items = ChecklistExtension.editChecklistItems(r);
         System.assertEquals('No', items[0].Answer__c);
-        resp = [SELECT status__c, Location__latitude__s, Location__longitude__s From Checklist_Response__c WHERE Checklist__c=:d];
+        resp = [SELECT status__c, Location__latitude__s, Location__longitude__s From Checklist_Response__c WHERE Id=:r];
         System.assertEquals('Complete', resp.Status__c);
         System.assertEquals(0 , resp.Location__latitude__s);
         System.assertEquals(1, resp.Location__longitude__s);
