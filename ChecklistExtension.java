@@ -36,12 +36,12 @@ global with sharing class ChecklistExtension {
         if (!valid) {
             return null;
         }
-        List<Checklist_Item__c> to_return = [SELECT Id, Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c, Attach_Photo__c 
+        List<Checklist_Item__c> tempList = [SELECT Id, Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c, Attach_Photo__c 
                 FROM Checklist_Item__c WHERE Checklist__c=:checklist AND isActive__c = True order by Order__c];
 
         List<Checklist_Item_Response__c> responses = new List<Checklist_Item_Response__c>();
         
-        for (Checklist_Item__c item : to_return){
+        for (Checklist_Item__c item : tempList){
             Checklist_Item_Response__c resp = new Checklist_Item_Response__c(Checklist_Item__c = item.Id, 
                                                                              Checklist_Item__r = item);
             responses.add(resp);            
@@ -121,23 +121,23 @@ global with sharing class ChecklistExtension {
         if(!Schema.SObjectType.Checklist_Item_Response__c.isAccessible()) {
             return null;
         }
-        List<Checklist_Item_Response__c> to_return = [SELECT Id, Answer__c, Checklist_Item__c, Checklist_Item__r.Order__c, Checklist_Item__r.Question__c, Checklist_Item__r.Checklist__c,
+        List<Checklist_Item_Response__c> tempList = [SELECT Id, Answer__c, Checklist_Item__c, Checklist_Item__r.Order__c, Checklist_Item__r.Question__c, Checklist_Item__r.Checklist__c,
                                                       Checklist_Item__r.Required__c, Checklist_Item__r.Type__c, Checklist_Item__r.Values__c, Checklist_Item__r.Attach_Photo__c
                                                       FROM Checklist_Item_Response__c WHERE Checklist_Response__c=:checklistResponse 
                                                       order by Checklist_Item__r.Order__c];
 
         Map<Id, Checklist_Item_Response__c> checklistItemId2Resp = new Map<Id, Checklist_Item_Response__c>();
-        for (Checklist_Item_Response__c r : to_return){
+        for (Checklist_Item_Response__c r : tempList){
             checklistItemId2Resp.put(r.Checklist_Item__c, r);
         }
         Id checklistId;
-        if (to_return.size() == 0) {
+        if (tempList.size() == 0) {
             Checklist_Response__c[] resp = [select Checklist__c from Checklist_Response__c where id = :checklistResponse limit 1];
             if (resp.size() == 1) {
                 checklistId = resp[0].Checklist__c;
             }
         } else {
-            checklistId = to_return[0].Checklist_Item__r.Checklist__c;
+            checklistId = tempList[0].Checklist_Item__r.Checklist__c;
         }
 
         List<Checklist_Item_Response__c> responses = new List<Checklist_Item_Response__c>();
