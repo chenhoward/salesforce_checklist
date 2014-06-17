@@ -105,7 +105,7 @@ global with sharing class ChecklistExtension {
             return null;
         Checklist_Response__c r = responseUpdate(checklistRespId, responses);
         r.Status__c = 'Complete';
-        if (latitude != 0 && longitude != 0) {
+        if (latitude != 0 || longitude != 0) {
             r.Location__latitude__s = latitude;
             r.Location__longitude__s = longitude;
         }
