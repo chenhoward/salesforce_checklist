@@ -435,6 +435,24 @@ id="todo"
     top: -12px;
   }
 
+  .add-photo {
+    float: left;
+    position: relative;
+    top: -55px;
+    left: -38px;
+    opacity: 0;
+    width: 125px;
+  }
+
+  .photo-preview {
+    float: left;
+    position: relative;
+    top: -40px;
+    left: 125px;
+    width: 38px;
+    height: 38px;
+  }
+
   .toggle-spacer {
     height: 20px;
     width: 1px;
@@ -918,8 +936,10 @@ id="todo"
                 <img class="camera" src="{!$Resource.checklist_camera}"></img>
                 <span class="camera-blurb"> + Photo </span>
               </p>
-              <input type="file" class="photo" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
-
+              <div ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c">
+                <img class="photo-preview" id="photoPreview_{{checklistitem.Checklist_Item__c}}" src='{!$Resource.checklist_map}'></img>
+                <input type="file" class="photo add-photo" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*"></input>
+              </div>
             </span>
           </div>
           <div class="form-buttons">
@@ -1284,6 +1304,7 @@ function handlePhoto(evt){
       $(evt.target.id).attr('src',e.target.result);
       imageData = e.target.result.split(',')[1];
       var id = evt.target.id.substring(evt.target.id.length-18, evt.target.id.length);
+      $("#photoPreview_" + id).attr("src", "data:image/png;base64," + imageData);
       $scope.photoMap[id] = imageData;
     };
   })(file);
