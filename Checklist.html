@@ -278,7 +278,6 @@ id="todo"
     border-radius-bottom-left: 7px;
     height: 43px;
     width: 50%;
-
   }
 
   .openmap {
@@ -381,6 +380,7 @@ id="todo"
   }
 
   .question {
+    overflow: auto;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     display: block;
@@ -421,18 +421,40 @@ id="todo"
     background-size: 60px 60px;
   }
 
+  .magic-div {
+    position: relative;
+    width: 150px;
+    height: 38px;
+    margin-top: 15px;
+  }
+
   .camera {
-    margin-top: 25px;
+    position: absolute;
     width: 38px;
     height: 38px;
   }
 
   .camera-blurb {
-    position: relative;
+    position: absolute;
     font-weight: 400;
     color: #999999;
-    left: 5px;
-    top: -12px;
+    left: 48px;
+    top: 8px;
+  }
+
+  .add-photo {
+    position: absolute;
+    opacity: 0;
+    top: -20px;
+    width: 125px;
+    height: 35px;
+  }
+
+  .photo-preview {
+    position: absolute;
+    left: 125px;
+    width: 38px;
+    height: 38px;
   }
 
   .toggle-spacer {
@@ -914,12 +936,16 @@ id="todo"
                   <label class="check-label" value="{{val}}" > {{val}} </label>
                 </div>
               </div>
-              <p ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c">
-                <img class="camera" src="{!$Resource.checklist_camera}"></img>
-                <span class="camera-blurb"> + Photo </span>
-              </p>
-              <input type="file" class="photo" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c"></input>
-
+              <div class="magic-div" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c">
+                <p>
+                  <img class="camera" src="{!$Resource.checklist_camera}"></img>
+                  <span class="camera-blurb"> + Photo </span>
+                </p>
+                <div>
+                  <img class="photo-preview" id="photoPreview_{{checklistitem.Checklist_Item__c}}" src='{!$Resource.checklist_map}'></img>
+                  <input type="file" class="photo add-photo" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*"></input>
+                </div>
+              </div>
             </span>
           </div>
           <div class="form-buttons">
@@ -1284,6 +1310,7 @@ function handlePhoto(evt){
       $(evt.target.id).attr('src',e.target.result);
       imageData = e.target.result.split(',')[1];
       var id = evt.target.id.substring(evt.target.id.length-18, evt.target.id.length);
+      $("#photoPreview_" + id).attr("src", "data:image/png;base64," + imageData);
       $scope.photoMap[id] = imageData;
     };
   })(file);
