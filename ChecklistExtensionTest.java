@@ -49,7 +49,7 @@ public class ChecklistExtensionTest{
         insert resp;
         Checklist_Item_Response__c item = new Checklist_Item_Response__c();
         item.Checklist_Item__c = itemMaker(d);
-        item.Checklist_Response__c = d;
+        item.Checklist_Response__c = resp.Id;
         List<Checklist_Item_Response__c> items = new List<Checklist_Item_Response__c>();
         items.add(item);
         ChecklistExtension.responseUpdate(resp.Id, items);
