@@ -910,7 +910,8 @@ id="todo"
           <div class="title"> {{checklistName}}  </div>
           <div class="question" ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'">
             <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
-              <p> {{checklistitem.Checklist_Item__r.Question__c}} </p>
+              <p ng-show="!{{checklistitem.Checklist_Item__r.Required__c}}"> {{checklistitem.Checklist_Item__r.Question__c}} </p>
+              <p ng-show="{{checklistitem.Checklist_Item__r.Required__c}}"> {{checklistitem.Checklist_Item__r.Question__c}} * </p>
               <p ng-switch-when="Yes/No" class="toggle-spacer"></p>
 
               <input class="yes-no" id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c"> </input>
