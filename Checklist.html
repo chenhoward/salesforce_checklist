@@ -989,9 +989,11 @@ id="todo"
 </body>
 <script>
 
+/** Add fastclick. */
 $(function() {
     FastClick.attach(document.body);
 });
+
 /** Set up forceTK. */
 var forcetkClient = new forcetk.Client();
 forcetkClient.setSessionToken('{!$Api.Session_ID}');
@@ -1211,9 +1213,9 @@ controllers.PagesController = function ($scope, $timeout) {
   var photoHelper= function(responseId) {
     if (Object.keys($scope.photoMap).length > 0) {
       for (var key in $scope.photoMap) {
-        var queryString = "SELECT Id FROM Checklist_Item_Response__c WHERE Checklist_Item__c = '" + key + "' AND Checklist_Response__c = '" + responseId + "'";
+        var queryString = "SELECT Id, Checklist_Item__c FROM Checklist_Item_Response__c WHERE Checklist_Item__c = '" + key + "' AND Checklist_Response__c = '" + responseId + "'";
         forcetkClient.query(queryString, function(response) {
-          forcetkClient.create('Attachment', {'Body' : $scope.photoMap[key], 'ParentId': response.records[0].Id, 'Name' : 'PhotoResponse'});
+          forcetkClient.create('Attachment', {'Body' : $scope.photoMap[response.records[0].Checklist_Item__c], 'ParentId': response.records[0].Id, 'Name' : 'PhotoResponse'});
         });
       }
     }
