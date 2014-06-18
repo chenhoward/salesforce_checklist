@@ -1178,7 +1178,7 @@ controllers.PagesController = function ($scope, $timeout) {
   }
 
   /** Removes attributes from Checklist Items to allow it to be inserted into or updated in the database. */
-  function formHelper() {
+  var formHelper = function() {
     for(var i = 0; i < $scope.checklistitems.length; i++) {
       delete $scope.checklistitems[i].$$hashKey;
       var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
@@ -1208,7 +1208,7 @@ controllers.PagesController = function ($scope, $timeout) {
 
 
   /** Creates photoes to attatch to the Checklist Response with id RESPONSEID. */
-  function photoHelper(responseId) {
+  var photoHelper= function(responseId) {
     if (Object.keys($scope.photoMap).length > 0) {
       for (var key in $scope.photoMap) {
         var queryString = "SELECT Id FROM Checklist_Item_Response__c WHERE Checklist_Item__c = '" + key + "' AND Checklist_Response__c = '" + responseId + "'";
@@ -1269,7 +1269,7 @@ controllers.PagesController = function ($scope, $timeout) {
   }
 
   /** Sets up Images and updates which Checklist Response that is currently being worked on. */
-  function setupDetail(checklist_id) {
+  var setupDetail = function(checklist_id) {
     setTimeout(function(){
       setupPhoto();
     },2000);
@@ -1299,7 +1299,7 @@ controllers.PagesController = function ($scope, $timeout) {
   }
 
   /** When the EVT occurs, the image is stored into the photoMAP as a base64 string. */
-  function handlePhoto(evt){
+  var handlePhoto = function(evt){
     var file = evt.target.files[0];
     // replace above with actual file
     var reader = new FileReader();
@@ -1316,19 +1316,23 @@ controllers.PagesController = function ($scope, $timeout) {
     reader.readAsDataURL(file);
   }
 
-  function getLocation() {
+  /** Uses the navigator to get the geolocation. */
+  var getLocation = function() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition, showError);
     } else {
       alert("No locaiton");
     }
   }
-  function showPosition(position) {
+
+  /** Sets the current latitude and longitude to POSITION. */
+  var showPosition = function(position) {
     $scope.latitude = position.coords.latitude;
     $scope.longitude = position.coords.longitude; 
   }
 
-  function showError(error) {
+  /** Shows the ERROR. */
+  var showError = function(error) {
     switch(error.code) {
       case error.PERMISSION_DENIED:
       alert("Please turn on locations in S1.")
@@ -1355,6 +1359,7 @@ controllers.PagesController = function ($scope, $timeout) {
 
   var markers = [];
 
+  /** Creates markers for the map. */
   var createMarkers = function() {
     var response;
     clearMarkers();
@@ -1373,6 +1378,7 @@ controllers.PagesController = function ($scope, $timeout) {
     map.fitBounds(boundary)
   }
 
+  /** Clears the markers on the map. */
   var clearMarkers = function() {
     for (var i = markers.length - 1; i >= 0; i--) {
       markers[i].setMap(null);
@@ -1383,6 +1389,7 @@ controllers.PagesController = function ($scope, $timeout) {
 
 checklistApp.controller(controllers);
 
+/** A map of things to escape. */
 var entityMap = {
           "&": "&amp;",
           "<": "&lt;",
@@ -1391,7 +1398,8 @@ var entityMap = {
           "/": '&#x2F;'
         };
 
-function escapeHtml(string) {
+/** Escapes the dangerous characters from the entity map. */
+var escapeHtml = function(string) {
   return String(string).replace(/[&<>"\/]/g, function (s) {
     return entityMap[s];
   });
