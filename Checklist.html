@@ -909,16 +909,16 @@ applyBodyTag="false"
             <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
               <p ng-show="!{{checklistitem.Checklist_Item__r.Required__c}}"> {{checklistitem.Checklist_Item__r.Question__c}} </p>
               <p ng-show="{{checklistitem.Checklist_Item__r.Required__c}}"> {{checklistitem.Checklist_Item__r.Question__c}} * </p>
-              <p ng-switch-when="Yes/No" class="toggle-spacer"></p>
-
-              <input class="yes-no" id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c"> </input>
-              <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="yes-button"> Yes </label>
-              <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="no-button"> No </label>
+              <div ng-switch-when="Yes/No"> 
+                <p class="toggle-spacer"></p>
+                <input class="yes-no" id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-model="checklistitem.Answer__c"> </input>
+                <label class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="yes-button"> Yes </label>
+                <label class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="no-button"> No </label>  
+              </div>
               <input ng-switch-when="Number" id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" class="h5-number"> </input>
               <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
               <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
               <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
-
               <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
               <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Checklist_Item__r.Values[0]}}" max="{{checklistitem.Checklist_Item__r.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
               <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
