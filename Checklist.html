@@ -929,7 +929,7 @@ applyBodyTag="false"
               <div ng-switch-when="Multi-Select">
                 <div ng-repeat="val in checklistitem.Checklist_Item__r.Values">
                   <p class="check-spacer"></p>
-                  <input type="checkbox" name="{{val}}" ng-model="checklistitem.Checklist_Item__r.Values2[$index]"></input>
+                  <input type="checkbox" checklist-value="val" checklist-model="checklistitem.Checklist_Item__r.selectedValues"></input>
                   <label class="check-label" value="{{val}}" > {{val}} </label>
                 </div>
               </div>
@@ -986,6 +986,107 @@ applyBodyTag="false"
 </body>
 <script>
 
+/** Checklist Directive */
+/**
+ * Checklist-model
+ * AngularJS directive for list of checkboxes
+ */
+
+angular.module('checklist-model', [])
+.directive('checklistModel', ['$parse', '$compile', function($parse, $compile) {
+  // contains
+  function contains(arr, item) {
+    if (angular.isArray(arr)) {
+      for (var i = 0; i < arr.length; i++) {
+        if (angular.equals(arr[i], item)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  // add
+  function add(arr, item) {
+    arr = angular.isArray(arr) ? arr : [];
+    for (var i = 0; i < arr.length; i++) {
+      if (angular.equals(arr[i], item)) {
+        return arr;
+      }
+    }    
+    arr.push(item);
+    return arr;
+  }  
+
+  // remove
+  function remove(arr, item) {
+    if (angular.isArray(arr)) {
+      for (var i = 0; i < arr.length; i++) {
+        if (angular.equals(arr[i], item)) {
+          arr.splice(i, 1);
+          break;
+        }
+      }
+    }
+    return arr;
+  }
+
+  // http://stackoverflow.com/a/19228302/1458162
+  function postLinkFn(scope, elem, attrs) {
+    // compile with `ng-model` pointing to `checked`
+    $compile(elem)(scope);
+
+    // getter / setter for original model
+    var getter = $parse(attrs.checklistModel);
+    var setter = getter.assign;
+
+    // value added to list
+    var value = $parse(attrs.checklistValue)(scope.$parent);
+
+    // watch UI checked change
+    scope.$watch('checked', function(newValue, oldValue) {
+      if (newValue === oldValue) { 
+        return;
+      } 
+      var current = getter(scope.$parent);
+      if (newValue === true) {
+        setter(scope.$parent, add(current, value));
+      } else {
+        setter(scope.$parent, remove(current, value));
+      }
+    });
+
+    // watch original model change
+    scope.$parent.$watch(attrs.checklistModel, function(newArr, oldArr) {
+      scope.checked = contains(newArr, value);
+    }, true);
+  }
+
+  return {
+    restrict: 'A',
+    priority: 1000,
+    terminal: true,
+    scope: true,
+    compile: function(tElement, tAttrs) {
+      if (tElement[0].tagName !== 'INPUT' || tAttrs.type !== 'checkbox') {
+        throw 'checklist-model should be applied to `input[type="checkbox"]`.';
+      }
+
+      if (!tAttrs.checklistValue) {
+        throw 'You should provide `checklist-value`.';
+      }
+
+      // exclude recursion
+      tElement.removeAttr('checklist-model');
+      
+      // local scope var storing individual checkbox model
+      tElement.attr('ng-model', 'checked');
+
+      return postLinkFn;
+    }
+  };
+}]);
+
 /** Add fastclick. */
 $(function() {
     FastClick.attach(document.body);
@@ -1003,7 +1104,7 @@ window.onkeydown = function(e){
 }
 
 /* Angular */
-var checklistApp = angular.module('checklistApp', []);
+var checklistApp = angular.module('checklistApp', ["checklist-model"]);
 var photoMap = {};
 
 var controllers = {};
@@ -1104,8 +1205,7 @@ controllers.PagesController = function ($scope, $timeout) {
       var values = $scope.checklistitems[i].Checklist_Item__r.Values__c;
       if (values) {
         $scope.checklistitems[i].Checklist_Item__r.Values = values.split(', ');
-        $scope.checklistitems[i].Answer__c = $scope.checklistitems[i].Checklist_Item__r.Values[0];
-        $scope.checklistitems[i].Checklist_Item__r.Values2 = [];
+        $scope.checklistitems[i].Checklist_Item__r.selectedValues = [];
       }
     }
     return type;
@@ -1123,19 +1223,8 @@ controllers.PagesController = function ($scope, $timeout) {
           $scope.checklistitems = result;
           for (var i = 0; i < result.length; i++) {
             var type = valueSplitter(i);
-            if (type == "Multi-Select") {
-              if ($scope.checklistitems[i].Answer__c) {
-                var ansArr = $scope.checklistitems[i].Answer__c.split(',');
-                var boolArr = [];
-                for (var j = 0; j < $scope.checklistitems[i].Checklist_Item__r.Values.length; j++) {
-                  if (ansArr.indexOf($scope.checklistitems[i].Checklist_Item__r.Values[j]) > -1) {
-                    boolArr[j] = true;
-                  } else {
-                    boolArr[j] = false;
-                  }
-                }
-                $scope.checklistitems[i].Checklist_Item__r.Values2 = boolArr;
-              }
+            if (type == "Multi-Select" && $scope.checklistitems[i].Answer__c) {
+              $scope.checklistitems[i].Checklist_Item__r.selectedValues = $scope.checklistitems[i].Answer__c.split(',');
             }
             if ($scope.checklistitems[i].Answer__c == "true") { 
               $scope.checklistitems[i].Answer__c = true;
@@ -1185,20 +1274,13 @@ controllers.PagesController = function ($scope, $timeout) {
       delete $scope.checklistitems[i].$$hashKey;
       var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
       if (type == "Multi-Select") {
-        if ($scope.checklistitems[i].Checklist_Item__r.Values2.length != 0) {
-          var answer = [];
-          for (var j = 0; j < $scope.checklistitems[i].Checklist_Item__r.Values.length; j++) {
-            if ($scope.checklistitems[i].Checklist_Item__r.Values2[j]) {
-              answer.push($scope.checklistitems[i].Checklist_Item__r.Values[j]);
-            }
-          }
-          $scope.checklistitems[i].Answer__c = answer.join();
-          $scope.checklistitems[i].Checklist_Item__r.Values2;
+        if ($scope.checklistitems[i].Checklist_Item__r.selectedValues.length != 0) {
+          $scope.checklistitems[i].Answer__c = $scope.checklistitems[i].Checklist_Item__r.selectedValues.join();
         }
       }
       if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
         delete $scope.checklistitems[i].Checklist_Item__r.Values;
-        delete $scope.checklistitems[i].Checklist_Item__r.Values2;
+        delete $scope.checklistitems[i].Checklist_Item__r.selectedValues;
       }
       if ($scope.checklistitems[i].Answer__c) {
         $scope.checklistitems[i].Answer__c = escapeHtml($scope.checklistitems[i].Answer__c);
