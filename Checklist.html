@@ -870,7 +870,7 @@ applyBodyTag="false"
         <p> <img id="pending-alt" src="{!URLFOR($Resource.ChecklistAssets, 'pending-alt.svg')}"></img> </p>
         <p id="pendingtag"> Pending </p>
       </a>
-      <a class="navbut" id="complete-tab" data-section="four" href="#">
+      <a class="navbut" id="complete-tab" data-section="four" href="#" ng-click="getCompletedChecklistResponses()">
         <p> <img id="complete" src="{!URLFOR($Resource.ChecklistAssets, 'completed.svg')}"></img> </p>
         <p> <img id="complete-alt" src="{!URLFOR($Resource.ChecklistAssets, 'completed-alt.svg')}"></img> </p>
         <p id="completetag"> Complete </p>
@@ -1091,9 +1091,11 @@ controllers.PagesController = function ($scope, $timeout) {
     );
   }
 
+  /** Bind function to angular. */
+  $scope.getCompletedChecklistResponses = getCompletedChecklistResponses;
+
   /* Initiate the list of pending and complete Checklist Responses. */
   getPendingChecklistResponses();
-  getCompletedChecklistResponses();
 
   /** Splits the Checklist Item's possible values if they are a certain type and returns the type. */
   var valueSplitter = function(i) {
