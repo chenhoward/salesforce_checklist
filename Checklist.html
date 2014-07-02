@@ -15,6 +15,7 @@ id="todo"
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"> </script>
   <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"/>
   <apex:includeScript value="{!URLFOR($Resource.ChecklistAssets, 'forceTK/forceTK.js')}"/>
+  <apex:includeScript value="{!URLFOR($Resource.ChecklistAssets, 'fastclick/fastclick.js')}"/>
   <script language="javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
   <script>
   Visualforce.remoting.timeout = 120000;
@@ -75,8 +76,10 @@ id="todo"
       setSection($('#one'), $('#two'));
     });
   });
+  window.addEventListener('load', function() {
+    FastClick.attach(document.body);
+  }, false);
   </script>
-  <apex:includeScript value="{!URLFOR($Resource.RollCallAssets, 'fastclick/fastclick.js')}"/>
   <title> Checker </title>
   <style type="text/css">
   .repaint { -webkit-animation: bugfix infinite 1s; }
@@ -937,11 +940,11 @@ id="todo"
               </div>
               <div class="magic-div" ng-show="checklistitem.Checklist_Item__r.Attach_Photo__c">
                 <p>
-                  <img class="camera" src="{!$Resource.checklist_camera}"></img>
+                  <img class="camera" src="{!URLFOR($Resource.ChecklistAssets, 'camera.svg')}"></img>
                   <span class="camera-blurb"> + Photo </span>
                 </p>
                 <div>
-                  <img class="photo-preview" id="photoPreview_{{checklistitem.Checklist_Item__c}}" src='{!$Resource.checklist_map}'></img>
+                  <img class="photo-preview" id="photoPreview_{{checklistitem.Checklist_Item__c}}" src="{!URLFOR($Resource.ChecklistAssets, 'map.svg')}"></img>
                   <input type="file" class="photo add-photo" id="photoFile_{{checklistitem.Checklist_Item__c}}" accept="image/*"></input>
                 </div>
               </div>
@@ -968,7 +971,7 @@ id="todo"
           <p class="blurb"> {{completedchecklistresponses.length}} Completed Checklists </p>
         </div>-->
         <div class="link maplink" ng-repeat="checklist in completedchecklistresponses">
-          <img class="checklist" src="{!$Resource.checklist_checklist}"></img>
+          <img class="checklist" src="{!URLFOR($Resource.ChecklistAssets, 'checklist.svg')}"></img>
           <p> {{checklist.Checklist__r.Name}} </p>
           <p class="blurb"> {{checklist.Checklist__r.Description__c}} </p>
         </div>
