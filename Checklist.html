@@ -6,10 +6,10 @@ standardController="Checklist_Response__c"
 extensions="ChecklistExtension"
 applyHtmlTag="false"
 applyBodyTag="false"
-id="todo"
 >
 <html ng-app="checklistApp">
 <head>
+  <title> Checker </title>
   <apex:stylesheet value="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400"/>
   <meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1, user-scalable=no"/>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"> </script>
@@ -17,9 +17,6 @@ id="todo"
   <apex:includeScript value="{!URLFOR($Resource.ChecklistAssets, 'forceTK/forceTK.js')}"/>
   <apex:includeScript value="{!URLFOR($Resource.ChecklistAssets, 'fastclick/fastclick.js')}"/>
   <script language="javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
-  <script>
-  Visualforce.remoting.timeout = 120000;
-  </script>
   <script type="text/javascript">
   function setSection(to, from)
   {
@@ -875,7 +872,7 @@ id="todo"
         <p> <img id="pending-alt" src="{!URLFOR($Resource.ChecklistAssets, 'pending-alt.svg')}"></img> </p>
         <p id="pendingtag"> Pending </p>
       </a>
-      <a class="navbut" id="complete-tab" data-section="four" href="#">
+      <a class="navbut" id="complete-tab" data-section="four" href="#" ng-click="getCompletedChecklistResponses()">
         <p> <img id="complete" src="{!URLFOR($Resource.ChecklistAssets, 'completed.svg')}"></img> </p>
         <p> <img id="complete-alt" src="{!URLFOR($Resource.ChecklistAssets, 'completed-alt.svg')}"></img> </p>
         <p id="completetag"> Complete </p>
@@ -912,29 +909,29 @@ id="todo"
           <div class="title"> {{checklistName}}  </div>
           <div class="question" ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'">
             <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
-              <p> {{checklistitem.Checklist_Item__r.Question__c}} </p>
-              <p ng-switch-when="Yes/No" class="toggle-spacer"></p>
-
-              <input class="yes-no" id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-switch-when="Yes/No" ng-model="checklistitem.Answer__c"> </input>
-              <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="yes-button"> Yes </label>
-              <label ng-switch-when="Yes/No" class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="no-button"> No </label>
-              <input id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-switch-when="Number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" class="h5-number"> </input>
+              <p ng-show="!{{checklistitem.Checklist_Item__r.Required__c}}"> {{checklistitem.Checklist_Item__r.Question__c}} </p>
+              <p ng-show="{{checklistitem.Checklist_Item__r.Required__c}}"> {{checklistitem.Checklist_Item__r.Question__c}} * </p>
+              <div ng-switch-when="Yes/No"> 
+                <p class="toggle-spacer"></p>
+                <input class="yes-no" id="form_yes/no_{{checklistitem.Checklist_Item__c}}" type="checkbox" ng-model="checklistitem.Answer__c"> </input>
+                <label class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="yes-button"> Yes </label>
+                <label class="switch repaint" for="form_yes/no_{{checklistitem.Checklist_Item__c}}" id="no-button"> No </label>  
+              </div>
+              <input ng-switch-when="Number" id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" class="h5-number"> </input>
               <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
               <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
               <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
-
               <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
-              <!-- Multiple Values from Database -->
               <input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Checklist_Item__r.Values[0]}}" max="{{checklistitem.Checklist_Item__r.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
               <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
                 {{checklistitem.Answer__c}}
               </div>
-              <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Picklist" ng-model="checklistitem.Answer__c"    ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values"> 
+              <select id="form_date_{{checklistitem.Checklist_Item__c}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" ng-options="val for val in checklistitem.Checklist_Item__r.Values" ng-switch-when="Picklist" >
               </select>
               <div ng-switch-when="Multi-Select">
                 <div ng-repeat="val in checklistitem.Checklist_Item__r.Values">
                   <p class="check-spacer"></p>
-                  <input type="checkbox" name="{{val}}" ng-model="checklistitem.Checklist_Item__r.Values2[$index]"></input>
+                  <input type="checkbox" checklist-value="val" checklist-model="checklistitem.Checklist_Item__r.selectedValues"></input>
                   <label class="check-label" value="{{val}}" > {{val}} </label>
                 </div>
               </div>
@@ -991,6 +988,112 @@ id="todo"
 </body>
 <script>
 
+/** Checklist Directive */
+/**
+ * Checklist-model
+ * AngularJS directive for list of checkboxes
+ */
+
+angular.module('checklist-model', [])
+.directive('checklistModel', ['$parse', '$compile', function($parse, $compile) {
+  // contains
+  function contains(arr, item) {
+    if (angular.isArray(arr)) {
+      for (var i = 0; i < arr.length; i++) {
+        if (angular.equals(arr[i], item)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  // add
+  function add(arr, item) {
+    arr = angular.isArray(arr) ? arr : [];
+    for (var i = 0; i < arr.length; i++) {
+      if (angular.equals(arr[i], item)) {
+        return arr;
+      }
+    }
+    arr.push(item);
+    return arr;
+  }
+
+  // remove
+  function remove(arr, item) {
+    if (angular.isArray(arr)) {
+      for (var i = 0; i < arr.length; i++) {
+        if (angular.equals(arr[i], item)) {
+          arr.splice(i, 1);
+          break;
+        }
+      }
+    }
+    return arr;
+  }
+
+  // http://stackoverflow.com/a/19228302/1458162
+  function postLinkFn(scope, elem, attrs) {
+    // compile with `ng-model` pointing to `checked`
+    $compile(elem)(scope);
+
+    // getter / setter for original model
+    var getter = $parse(attrs.checklistModel);
+    var setter = getter.assign;
+
+    // value added to list
+    var value = $parse(attrs.checklistValue)(scope.$parent);
+
+    // watch UI checked change
+    scope.$watch('checked', function(newValue, oldValue) {
+      if (newValue === oldValue) { 
+        return;
+      } 
+      var current = getter(scope.$parent);
+      if (newValue === true) {
+        setter(scope.$parent, add(current, value));
+      } else {
+        setter(scope.$parent, remove(current, value));
+      }
+    });
+
+    // watch original model change
+    scope.$parent.$watch(attrs.checklistModel, function(newArr, oldArr) {
+      scope.checked = contains(newArr, value);
+    }, true);
+  }
+
+  return {
+    restrict: 'A',
+    priority: 1000,
+    terminal: true,
+    scope: true,
+    compile: function(tElement, tAttrs) {
+      if (tElement[0].tagName !== 'INPUT' || tAttrs.type !== 'checkbox') {
+        throw 'checklist-model should be applied to `input[type="checkbox"]`.';
+      }
+
+      if (!tAttrs.checklistValue) {
+        throw 'You should provide `checklist-value`.';
+      }
+
+      // exclude recursion
+      tElement.removeAttr('checklist-model');
+      
+      // local scope var storing individual checkbox model
+      tElement.attr('ng-model', 'checked');
+
+      return postLinkFn;
+    }
+  };
+}]);
+
+/** Add fastclick. */
+$(function() {
+    FastClick.attach(document.body);
+});
+
 /** Set up forceTK. */
 var forcetkClient = new forcetk.Client();
 forcetkClient.setSessionToken('{!$Api.Session_ID}');
@@ -1003,7 +1106,7 @@ window.onkeydown = function(e){
 }
 
 /* Angular */
-var checklistApp = angular.module('checklistApp', []);
+var checklistApp = angular.module('checklistApp', ["checklist-model"]);
 var photoMap = {};
 
 var controllers = {};
@@ -1091,9 +1194,11 @@ controllers.PagesController = function ($scope, $timeout) {
     );
   }
 
+  /** Bind function to angular. */
+  $scope.getCompletedChecklistResponses = getCompletedChecklistResponses;
+
   /* Initiate the list of pending and complete Checklist Responses. */
   getPendingChecklistResponses();
-  getCompletedChecklistResponses();
 
   /** Splits the Checklist Item's possible values if they are a certain type and returns the type. */
   var valueSplitter = function(i) {
@@ -1102,7 +1207,7 @@ controllers.PagesController = function ($scope, $timeout) {
       var values = $scope.checklistitems[i].Checklist_Item__r.Values__c;
       if (values) {
         $scope.checklistitems[i].Checklist_Item__r.Values = values.split(', ');
-        $scope.checklistitems[i].Checklist_Item__r.Values2 = [];
+        $scope.checklistitems[i].Checklist_Item__r.selectedValues = [];
       }
     }
     return type;
@@ -1120,19 +1225,8 @@ controllers.PagesController = function ($scope, $timeout) {
           $scope.checklistitems = result;
           for (var i = 0; i < result.length; i++) {
             var type = valueSplitter(i);
-            if (type == "Multi-Select") {
-              if ($scope.checklistitems[i].Answer__c) {
-                var ansArr = $scope.checklistitems[i].Answer__c.split(',');
-                var boolArr = [];
-                for (var j = 0; j < $scope.checklistitems[i].Checklist_Item__r.Values.length; j++) {
-                  if (ansArr.indexOf($scope.checklistitems[i].Checklist_Item__r.Values[j]) > -1) {
-                    boolArr[j] = true;
-                  } else {
-                    boolArr[j] = false;
-                  }
-                }
-                $scope.checklistitems[i].Checklist_Item__r.Values2 = boolArr;
-              }
+            if (type == "Multi-Select" && $scope.checklistitems[i].Answer__c) {
+              $scope.checklistitems[i].Checklist_Item__r.selectedValues = $scope.checklistitems[i].Answer__c.split(',');
             }
             if ($scope.checklistitems[i].Answer__c == "true") { 
               $scope.checklistitems[i].Answer__c = true;
@@ -1141,8 +1235,8 @@ controllers.PagesController = function ($scope, $timeout) {
             } else if (!isNaN($scope.checklistitems[i].Answer__c)) {
               $scope.checklistitems[i].Answer__c = parseInt($scope.checklistitems[i].Answer__c);
             }
-            $scope.$apply();
           }
+          $scope.$apply();
         } else if (event.type === 'exception') {
           console.log('Exception: ' + event.message);
         } else {
@@ -1177,25 +1271,18 @@ controllers.PagesController = function ($scope, $timeout) {
   }
 
   /** Removes attributes from Checklist Items to allow it to be inserted into or updated in the database. */
-  function formHelper() {
+  var formHelper = function() {
     for(var i = 0; i < $scope.checklistitems.length; i++) {
       delete $scope.checklistitems[i].$$hashKey;
       var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
       if (type == "Multi-Select") {
-        if ($scope.checklistitems[i].Checklist_Item__r.Values2.length != 0) {
-          var answer = [];
-          for (var j = 0; j < $scope.checklistitems[i].Checklist_Item__r.Values.length; j++) {
-            if ($scope.checklistitems[i].Checklist_Item__r.Values2[j]) {
-              answer.push($scope.checklistitems[i].Checklist_Item__r.Values[j]);
-            }
-          }
-          $scope.checklistitems[i].Answer__c = answer.join();
-          $scope.checklistitems[i].Checklist_Item__r.Values2;
+        if ($scope.checklistitems[i].Checklist_Item__r.selectedValues.length != 0) {
+          $scope.checklistitems[i].Answer__c = $scope.checklistitems[i].Checklist_Item__r.selectedValues.join();
         }
       }
       if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
         delete $scope.checklistitems[i].Checklist_Item__r.Values;
-        delete $scope.checklistitems[i].Checklist_Item__r.Values2;
+        delete $scope.checklistitems[i].Checklist_Item__r.selectedValues;
       }
       if ($scope.checklistitems[i].Answer__c) {
         $scope.checklistitems[i].Answer__c = escapeHtml($scope.checklistitems[i].Answer__c);
@@ -1206,12 +1293,13 @@ controllers.PagesController = function ($scope, $timeout) {
   }
 
 
-  function photoHelper(responseId) {
+  /** Creates photoes to attatch to the Checklist Response with id RESPONSEID. */
+  var photoHelper= function(responseId) {
     if (Object.keys($scope.photoMap).length > 0) {
       for (var key in $scope.photoMap) {
-        var queryString = "SELECT Id FROM Checklist_Item_Response__c WHERE Checklist_Item__c = '" + key + "' AND Checklist_Response__c = '" + responseId + "'";
+        var queryString = "SELECT Id, Checklist_Item__c FROM Checklist_Item_Response__c WHERE Checklist_Item__c = '" + key + "' AND Checklist_Response__c = '" + responseId + "'";
         forcetkClient.query(queryString, function(response) {
-          forcetkClient.create('Attachment', {'Body' : $scope.photoMap[key], 'ParentId': response.records[0].Id, 'Name' : 'PhotoResponse'});
+          forcetkClient.create('Attachment', {'Body' : $scope.photoMap[response.records[0].Checklist_Item__c], 'ParentId': response.records[0].Id, 'Name' : 'PhotoResponse'});
         });
       }
     }
@@ -1229,7 +1317,6 @@ controllers.PagesController = function ($scope, $timeout) {
       function(result, event){
         if (event.status) {
           photoHelper(result);
-          editChecklistItems();
         } else if (event.type === 'exception') {
           console.log('Exception: ' + event.message);
         } else {
@@ -1268,7 +1355,7 @@ controllers.PagesController = function ($scope, $timeout) {
   }
 
   /** Sets up Images and updates which Checklist Response that is currently being worked on. */
-  function setupDetail(checklist_id) {
+  var setupDetail = function(checklist_id) {
     setTimeout(function(){
       setupPhoto();
     },2000);
@@ -1298,7 +1385,7 @@ controllers.PagesController = function ($scope, $timeout) {
   }
 
   /** When the EVT occurs, the image is stored into the photoMAP as a base64 string. */
-  function handlePhoto(evt){
+  var handlePhoto = function(evt){
     var file = evt.target.files[0];
     // replace above with actual file
     var reader = new FileReader();
@@ -1315,19 +1402,23 @@ controllers.PagesController = function ($scope, $timeout) {
     reader.readAsDataURL(file);
   }
 
-  function getLocation() {
+  /** Uses the navigator to get the geolocation. */
+  var getLocation = function() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition, showError);
     } else {
       alert("No locaiton");
     }
   }
-  function showPosition(position) {
+
+  /** Sets the current latitude and longitude to POSITION. */
+  var showPosition = function(position) {
     $scope.latitude = position.coords.latitude;
     $scope.longitude = position.coords.longitude; 
   }
 
-  function showError(error) {
+  /** Shows the ERROR. */
+  var showError = function(error) {
     switch(error.code) {
       case error.PERMISSION_DENIED:
       alert("Please turn on locations in S1.")
@@ -1354,9 +1445,11 @@ controllers.PagesController = function ($scope, $timeout) {
 
   var markers = [];
 
+  /** Creates markers for the map. */
   var createMarkers = function() {
     var response;
     clearMarkers();
+    boundary = new google.maps.LatLngBounds();
     for (var i = 0; i < $scope.completedchecklistresponses.length; i++) {
       response = $scope.completedchecklistresponses[i];
       var coordinates = new google.maps.LatLng(response.Location__Latitude__s, response.Location__Longitude__s);
@@ -1365,11 +1458,13 @@ controllers.PagesController = function ($scope, $timeout) {
         title: response.Checklist__r.Name
       });
       markers.push(marker);
+      boundary.extend(marker.position);
       marker.setMap(map);
-      map.panTo(coordinates);
     }
+    map.fitBounds(boundary)
   }
 
+  /** Clears the markers on the map. */
   var clearMarkers = function() {
     for (var i = markers.length - 1; i >= 0; i--) {
       markers[i].setMap(null);
@@ -1380,6 +1475,7 @@ controllers.PagesController = function ($scope, $timeout) {
 
 checklistApp.controller(controllers);
 
+/** A map of things to escape. */
 var entityMap = {
           "&": "&amp;",
           "<": "&lt;",
@@ -1388,7 +1484,8 @@ var entityMap = {
           "/": '&#x2F;'
         };
 
-function escapeHtml(string) {
+/** Escapes the dangerous characters from the entity map. */
+var escapeHtml = function(string) {
   return String(string).replace(/[&<>"\/]/g, function (s) {
     return entityMap[s];
   });
