@@ -10,11 +10,11 @@ applyBodyTag="false"
 <html ng-app="checklistApp">
 <head>
   <title> Checker </title>
-  <apex:stylesheet value="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400"/>
   <meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1, user-scalable=no"/>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"> </script>
   <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"/>
   <apex:includeScript value="{!URLFOR($Resource.ChecklistAssets, 'forceTK/forceTK.js')}"/>
+  <apex:stylesheet value="{!URLFOR($Resource.ChecklistAssets, 'fonts/proximanova.css')}"/>
   <apex:includeScript value="{!URLFOR($Resource.ChecklistAssets, 'fastclick/fastclick.js')}"/>
   <script language="javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
   <script type="text/javascript">
@@ -87,7 +87,7 @@ applyBodyTag="false"
   }
 
   body {
-    font-family: Source Sans Pro, sans-serif;
+    font-family: ProximaNova, sans-serif;
     font-weight: 300;
     margin: 0px;
     padding: 0px;
@@ -364,7 +364,7 @@ applyBodyTag="false"
   .title {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
-    font-weight: 400;
+    font-weight: 500;
     display: block;
     color: #FFF;
     text-decoration: none;
@@ -393,7 +393,7 @@ applyBodyTag="false"
   }
 
   input, textarea, select {
-    font-family: Source Sans Pro, sans-serif;
+    font-family: ProximaNova, sans-serif;
     font-weight: 300;
     font-size: 18px;
     color: #4d4d4d;
@@ -434,7 +434,7 @@ applyBodyTag="false"
 
   .camera-blurb {
     position: absolute;
-    font-weight: 400;
+    font-weight: 500;
     color: #999999;
     left: 48px;
     top: 8px;
@@ -472,7 +472,7 @@ applyBodyTag="false"
   }
 
   #yes-button {
-    font-weight: 400;
+    font-weight: 500;
     padding: 5px;
     padding-right: 10px;
     padding-left: 10px;
@@ -486,7 +486,7 @@ applyBodyTag="false"
   }
 
   #no-button {
-    font-weight: 400;
+    font-weight: 500;
     padding: 5px;
     padding-right: 10px;
     padding-left: 10px;
@@ -512,7 +512,7 @@ applyBodyTag="false"
   }
 
   #pass-button {
-    font-weight: 400;
+    font-weight: 500;
     padding: 5px;
     padding-right: 10px;
     padding-left: 10px;
@@ -526,7 +526,7 @@ applyBodyTag="false"
   }
 
   #fail-button {
-    font-weight: 400;
+    font-weight: 500;
     padding: 5px;
     padding-right: 10px;
     padding-left: 10px;
@@ -643,8 +643,8 @@ applyBodyTag="false"
 
   .submit {
     float: left;
-    font-family: Source Sans Pro, sans-serif;
-    font-weight: 400;
+    font-family: ProximaNova, sans-serif;
+    font-weight: 500;
     max-width: 50%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -664,8 +664,8 @@ applyBodyTag="false"
 
   .save {
     float: left;
-    font-family: Source Sans Pro, sans-serif;
-    font-weight: 400;
+    font-family: ProximaNova, sans-serif;
+    font-weight: 500;
     max-width: 50%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -684,8 +684,8 @@ applyBodyTag="false"
   }
 
   .form-buttons {
-    font-family: Source Sans Pro, sans-serif;
-    font-weight: 400;
+    font-family: ProximaNova, sans-serif;
+    font-weight: 500;
     max-width: 100%;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -707,7 +707,7 @@ applyBodyTag="false"
   }
 
   #return {
-    font-weight: 400;
+    font-weight: 500;
     text-align: center;
     color: #FFF;
     width: 100%;
