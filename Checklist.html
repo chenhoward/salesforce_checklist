@@ -990,7 +990,7 @@ applyBodyTag="false"
         <div class="link maplink" ng-repeat="checklist in completedchecklistresponses">
           <img class="checklist" src="{!URLFOR($Resource.ChecklistAssets, 'checklist.svg')}"></img>
           <p class="shorten"> {{checklist.Checklist__r.Name}} </p>
-          <p class="blurb shorten"> {{checklist.Checklist__r.Description__c}} </p>
+          <p class="blurb shorten"> {{checklist.LastModifiedDate | date:'medium'}} </p>
         </div>
         <div class="spacer"> </div>
       </section>
