@@ -703,32 +703,35 @@ applyBodyTag="false"
   }
 
   #hide {
-    display:none;
+    display: none;
   }
 
   .rating input {
     position: absolute;
+    z-index: 1;
     filter: alpha(opacity=0);
     -moz-opacity: 0;
     -khtml-opacity: 0;
     opacity: 0;
     cursor: pointer;
-    width: 17px;
-    height: 50px;
+    width: 40px;
+    height: 80px;
     padding-top: 15px;
-    margin-top: -15px;
+    margin-top: -30px !important;
   }
 
   .rating span {
+    position: relative;
+    z-index: 0;
     width: 24px;
-    height: 16px;
-    line-height: 16px;
-    padding: 1px 22px 1px 0; /* 1px FireFox fix */
-    background: url({!URLFOR($Resource.ChecklistAssets, 'stars.png')}) no-repeat -22px 0;
+    height: 80px;
+    top: -20px;
+    padding: 1px 40px 20px 0; /* 1px FireFox fix */
+    background: url({!URLFOR($Resource.ChecklistAssets, 'stars.svg')}) no-repeat -40px 0;
   }
 
   .rating input:checked + span {
-    background-position:-22px 0;
+    background-position:-40px 0;
   }
 
   .rating input:checked + span ~ span {
@@ -934,7 +937,7 @@ applyBodyTag="false"
               <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
               <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
               <div class="rating repaint" id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating">
-                <br/>
+                <br/><br/>
                 <input type="radio" name="rating_{{checklistitem.Checklist_Item__c}}" ng-model="checklistitem.Answer__c" value="0" checked="true"/><span id="hide"></span>
                 <input type="radio" name="rating_{{checklistitem.Checklist_Item__c}}" ng-model="checklistitem.Answer__c" value="1"/><span></span>
                 <input type="radio" name="rating_{{checklistitem.Checklist_Item__c}}" ng-model="checklistitem.Answer__c" value="2"/><span></span>
