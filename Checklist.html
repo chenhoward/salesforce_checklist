@@ -1222,12 +1222,16 @@ controllers.PagesController = function ($scope, $timeout) {
 
   /** Splits the Checklist Item's possible values if they are a certain type and returns the type. */
   var valueSplitter = function(i) {
-    var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
+    var item = $scope.checklistitems[i];
+    var type = item.Checklist_Item__r.Type__c;
     if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
-      var values = $scope.checklistitems[i].Checklist_Item__r.Values__c;
+      if (!item.Answer__c) {
+        item.Answer__c = 0;
+      }
+      var values = item.Checklist_Item__r.Values__c;
       if (values) {
-        $scope.checklistitems[i].Checklist_Item__r.Values = values.split(', ');
-        $scope.checklistitems[i].Checklist_Item__r.selectedValues = [];
+        item.Checklist_Item__r.Values = values.split(', ');
+        item.Checklist_Item__r.selectedValues = [];
       }
     }
     return type;
