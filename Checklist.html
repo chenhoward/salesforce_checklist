@@ -341,6 +341,13 @@ applyBodyTag="false"
     margin-top: 1px;
   }
 
+  .shorten {
+    width: 77%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .blurb {
     color: #999999;
     margin-top: -2px;
@@ -412,6 +419,7 @@ applyBodyTag="false"
 
   textarea {
     height: 150px;
+    padding-top: 10px;
   }
 
   select {
@@ -706,6 +714,9 @@ applyBodyTag="false"
     opacity: 0;
     cursor: pointer;
     width: 17px;
+    height: 50px;
+    padding-top: 15px;
+    margin-top: -15px;
   }
 
   .rating span {
@@ -896,8 +907,8 @@ applyBodyTag="false"
         <div class="spacer"> </div>
         <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
           <img class="checklist" src="{!URLFOR($Resource.ChecklistAssets, 'checklist.svg')}"></img>
-          <p> {{checklist.Checklist__r.Name}}</p>
-          <p class="blurb"> {{checklist.Checklist__r.Description__c}} &nbsp;</p>
+          <p class="shorten"> {{checklist.Checklist__r.Name}}</p>
+          <p class="blurb shorten"> {{checklist.Checklist__r.Description__c}} &nbsp;</p>
           <div class="arrow-right"></div>
         </a>
 
@@ -978,8 +989,8 @@ applyBodyTag="false"
         </div>-->
         <div class="link maplink" ng-repeat="checklist in completedchecklistresponses">
           <img class="checklist" src="{!URLFOR($Resource.ChecklistAssets, 'checklist.svg')}"></img>
-          <p> {{checklist.Checklist__r.Name}} </p>
-          <p class="blurb"> {{checklist.Checklist__r.Description__c}} </p>
+          <p class="shorten"> {{checklist.Checklist__r.Name}} </p>
+          <p class="blurb shorten"> {{checklist.Checklist__r.Description__c}} </p>
         </div>
         <div class="spacer"> </div>
       </section>
