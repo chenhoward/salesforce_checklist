@@ -950,12 +950,12 @@ applyBodyTag="false"
               <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
               <div class="rating repaint" id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating">
                 <br/>
-                <input type="radio" name="rating" value="0" checked="true" /><span id="hide"></span>
-                <input type="radio" name="rating" value="1" /><span></span>
-                <input type="radio" name="rating" value="2" /><span></span>
-                <input type="radio" name="rating" value="3" /><span></span>
-                <input type="radio" name="rating" value="4" /><span></span>
-                <input type="radio" name="rating" value="5" /><span></span>
+                <input type="radio" name="rating" ng-model="checklistitem.Answer__c" value="0" checked="true" /><span id="hide"></span>
+                <input type="radio" name="rating" ng-model="checklistitem.Answer__c" value="1" /><span></span>
+                <input type="radio" name="rating" ng-model="checklistitem.Answer__c" value="2" /><span></span>
+                <input type="radio" name="rating" ng-model="checklistitem.Answer__c" value="3" /><span></span>
+                <input type="radio" name="rating" ng-model="checklistitem.Answer__c" value="4" /><span></span>
+                <input type="radio" name="rating" ng-model="checklistitem.Answer__c" value="5" /><span></span>
               </div>
               <!--<input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Checklist_Item__r.Values[0]}}" max="{{checklistitem.Checklist_Item__r.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
               <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">
