@@ -615,32 +615,6 @@ applyBodyTag="false"
     box-shadow: 0px 0px 0px 2px #999999;
   }
 
-  .rating input {
-    position: absolute;
-    filter: alpha(opacity=0);
-    -moz-opacity: 0;
-    -khtml-opacity: 0;
-    opacity: 0;
-    cursor: pointer;
-    width: 17px;
-  }
-   
-  .rating span {
-    width: 24px;
-    height: 16px;
-    line-height: 16px;
-    padding: 1px 22px 1px 0; /* 1px FireFox fix */
-    background: url({!URLFOR($Resource.ChecklistAssets, 'stars.png')}) no-repeat -22px 0;
-  }
-   
-  .rating input:checked + span {
-    background-position:-22px 0;
-  }
-   
-  .rating input:checked + span ~ span {
-    background-position:0 0;
-  }
-
   .submit {
     float: left;
     font-family: ProximaNova, sans-serif;
@@ -950,12 +924,12 @@ applyBodyTag="false"
               <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
               <div class="rating repaint" id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating">
                 <br/>
-                <input type="radio" name="rating" ng-model="checklistitem.Answer__c" value="0" checked="true" /><span id="hide"></span>
-                <input type="radio" name="rating" ng-model="checklistitem.Answer__c" value="1" /><span></span>
-                <input type="radio" name="rating" ng-model="checklistitem.Answer__c" value="2" /><span></span>
-                <input type="radio" name="rating" ng-model="checklistitem.Answer__c" value="3" /><span></span>
-                <input type="radio" name="rating" ng-model="checklistitem.Answer__c" value="4" /><span></span>
-                <input type="radio" name="rating" ng-model="checklistitem.Answer__c" value="5" /><span></span>
+                <input type="radio" name="rating_{{checklistitem.Checklist_Item__c}}" ng-model="checklistitem.Answer__c" value="0" checked="true"/><span id="hide"></span>
+                <input type="radio" name="rating_{{checklistitem.Checklist_Item__c}}" ng-model="checklistitem.Answer__c" value="1"/><span></span>
+                <input type="radio" name="rating_{{checklistitem.Checklist_Item__c}}" ng-model="checklistitem.Answer__c" value="2"/><span></span>
+                <input type="radio" name="rating_{{checklistitem.Checklist_Item__c}}" ng-model="checklistitem.Answer__c" value="3"/><span></span>
+                <input type="radio" name="rating_{{checklistitem.Checklist_Item__c}}" ng-model="checklistitem.Answer__c" value="4"/><span></span>
+                <input type="radio" name="rating_{{checklistitem.Checklist_Item__c}}" ng-model="checklistitem.Answer__c" value="5"/><span></span>
               </div>
               <!--<input id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating" min="{{checklistitem.Checklist_Item__r.Values[0]}}" max="{{checklistitem.Checklist_Item__r.Values[1]}}" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
               <div ng-show="checklistitem.Checklist_Item__r.Type__c=='Rating'">

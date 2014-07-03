@@ -481,10 +481,10 @@ checklistApp.controller("AdminCtrl", function ($scope) {
       $scope.questions.push(item);
     }
     $scope.removeQuestion = function(item) {
-      $scope.items.splice($scope.items.indexOf($scope.item), 1);
+      $scope.items.splice($scope.items.indexOf(item), 1);
     }
     $scope.showValues = function(item) {
-      return (item.Type__c == 'Rating') || (item.Type__c == 'Picklist') || (item.Type__c == 'Multi-Select');
+      return (item.Type__c == 'Picklist') || (item.Type__c == 'Multi-Select');
     }
     $scope.editChecklist = function() {
       if ($scope.editPage.$valid) {
