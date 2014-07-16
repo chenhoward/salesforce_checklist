@@ -117,6 +117,7 @@ $(function() {
               <tr> 
                 <td class="pbTitle" id="checklistTitle"> 
                   <h2 class="mainTitle" style="font-size: 14px;">Checklist Items</h2>
+                  <span style="color: red"> Drag and drop to reorder! </span>
                 </td>
                 <td class="pbButton" id="topButtonRow">
                   <input type="button" class="btn" value="Add Item" ng-click="addQuestion()"></input>
@@ -131,7 +132,6 @@ $(function() {
               <li ng-repeat="item in items">
                 <div class="full">
                   <h1> Question {{$index + 1}} </h1>
-                  <span> Drag and drop to reorder! </span>
                   <br/><br/>
                 </div>
                 <div class="half">
@@ -141,7 +141,7 @@ $(function() {
                   <label> Required: </label>
                   <input type="checkbox" ng-model="item.Required__c" name="O3"></input>
                   <br/><br/>
-                  <label> Photo Attachment: </label>
+                  <label> Allow Photo? </label>
                   <input type="checkbox" ng-model="item.Attach_Photo__c" name="O4"></input>
                   <div ng-show="showValues(item)">
                     <p> Input multiple values for your question below using a comma to separate each individual value. </p>
