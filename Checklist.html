@@ -150,7 +150,7 @@ applyBodyTag="false"
 
 /** Add fastclick. */
 $(function() {
-    FastClick.attach(document.body);
+  FastClick.attach(document.body);
 });
 
 /** Set up forceTK. */
@@ -190,33 +190,6 @@ controllers.PagesController = function ($scope, $timeout) {
   /** Determines if the map should be showing. */
   $scope.showMapView = false;
 
-  /** Reveals the map on the screen. */
-  $scope.revealMap = function() {
-    var hideMap = function() {
-      $scope.showMapView = false;
-    }
-
-    if ($scope.showMapView == false) {
-      document.getElementById('googleMap').style.display="block";
-      $scope.showMapView = true;
-      map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
-      google.maps.event.trigger(map, 'resize');
-      $("#googleMap").removeClass("animated");
-      $("#googleMap").removeClass("flipOutY");
-      $("#googleMap").addClass("animated");
-      $("#googleMap").addClass("flipInY");
-      $(".openmap").addClass("openmap-active");
-      createMarkers();
-    } else {
-      $("#googleMap").removeClass("animated");
-      $("#googleMap").removeClass("flipInY");
-      $("#googleMap").addClass("animated");
-      $("#googleMap").addClass("flipOutY");
-      $timeout(hideMap, 800);
-      $(".openmap").removeClass("openmap-active");
-    }
-  }
-
   /** Returns all the pending Checklist Responses. */
   var getPendingChecklistResponses = function() {
     Visualforce.remoting.Manager.invokeAction(
@@ -232,7 +205,7 @@ controllers.PagesController = function ($scope, $timeout) {
         }
       },
       {escape: true}
-    );
+      );
   }
 
   /** Returns all the complete Checklist Responses. */
@@ -250,7 +223,7 @@ controllers.PagesController = function ($scope, $timeout) {
         }
       },
       {escape: true}
-    );
+      );
   }
 
   /** Bind function to angular. */
@@ -307,149 +280,149 @@ controllers.PagesController = function ($scope, $timeout) {
         }
       },
       {escape: true}
-    );
-  }
-
-  /** Gets Checklist Items to create a new Checklist Response. */
-  var getChecklistItems = function() {
-    getLocation();
-    Visualforce.remoting.Manager.invokeAction(
-      '{!$RemoteAction.ChecklistExtension.getAllChecklistItems}',
-      $scope.currentChecklistId,
-      function(result, event){
-        if (event.status) {
-          $scope.checklistitems = result;
-          for (var i = 0; i < $scope.checklistitems.length; i++) {
-            valueSplitter(i);
-          }
-          $scope.$apply();
-        } else if (event.type === 'exception') {
-          console.log('Exception: ' + event.message);
-        } else {
-          console.log('Error!');
-        }
-      },
-      {escape: true}
-    );
-  }
-
-  /** Removes attributes from Checklist Items to allow it to be inserted into or updated in the database. */
-  var formHelper = function() {
-    for(var i = 0; i < $scope.checklistitems.length; i++) {
-      delete $scope.checklistitems[i].$$hashKey;
-      var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
-      if (type == "Multi-Select") {
-        if ($scope.checklistitems[i].Checklist_Item__r.selectedValues.length != 0) {
-          $scope.checklistitems[i].Answer__c = $scope.checklistitems[i].Checklist_Item__r.selectedValues.join();
-        }
-      }
-      if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
-        delete $scope.checklistitems[i].Checklist_Item__r.Values;
-        delete $scope.checklistitems[i].Checklist_Item__r.selectedValues;
-      }
-      if ($scope.checklistitems[i].Answer__c) {
-        $scope.checklistitems[i].Answer__c = escapeHtml($scope.checklistitems[i].Answer__c);
-
-      }
-    }
-    delete $scope.checklistitems.attributes;
-  }
-
-
-  /** Creates photoes to attatch to the Checklist Response with id RESPONSEID. */
-  var photoHelper= function(responseId) {
-    if (Object.keys($scope.photoMap).length > 0) {
-      for (var key in $scope.photoMap) {
-        var queryString = "SELECT Id, Checklist_Item__c FROM Checklist_Item_Response__c WHERE Checklist_Item__c = '" + key + "' AND Checklist_Response__c = '" + responseId + "'";
-        forcetkClient.query(queryString, function(response) {
-          forcetkClient.create('Attachment', {'Body' : $scope.photoMap[response.records[0].Checklist_Item__c], 'ParentId': response.records[0].Id, 'Name' : 'PhotoResponse'});
-        });
-      }
-    }
-  }
-
-  /** Completes the current Checklist Response. */
-  $scope.submitForm = function() {
-    formHelper();
-    Visualforce.remoting.Manager.invokeAction(
-      '{!$RemoteAction.ChecklistExtension.submitResponses}',
-      $scope.currentChecklistId,
-      $scope.checklistitems,
-      $scope.latitude,
-      $scope.longitude,
-      function(result, event){
-        if (event.status) {
-          photoHelper(result);
-        } else if (event.type === 'exception') {
-          console.log('Exception: ' + event.message);
-        } else {
-          console.log('Error!');
-        }
-      },
-      {escape: true}
       );
-    getPendingChecklistResponses();
-    getCompletedChecklistResponses();
-    setSection($('#container section#three'), $('.active'));
-  }
+}
 
-  /** Saves the current Checklist Response as a pending response. */
-  $scope.saveResponse = function() {
-    var that = this;
-    formHelper();
-    Visualforce.remoting.Manager.invokeAction(
-      '{!$RemoteAction.ChecklistExtension.saveResponses}',
-      $scope.currentChecklistId,
-      $scope.checklistitems,
-      function(result, event){
-        if (event.status) {
-          photoHelper(result);
-          getLocation();
-        } else if (event.type === 'exception') {
-          console.log('Exception: ' + event.message);
-        } else {
-          console.log('Error!');
+/** Gets Checklist Items to create a new Checklist Response. */
+var getChecklistItems = function() {
+  getLocation();
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ChecklistExtension.getAllChecklistItems}',
+    $scope.currentChecklistId,
+    function(result, event){
+      if (event.status) {
+        $scope.checklistitems = result;
+        for (var i = 0; i < $scope.checklistitems.length; i++) {
+          valueSplitter(i);
         }
-      },
-      {escape: true}
+        $scope.$apply();
+      } else if (event.type === 'exception') {
+        console.log('Exception: ' + event.message);
+      } else {
+        console.log('Error!');
+      }
+    },
+    {escape: true}
     );
-    getPendingChecklistResponses();
-    setSection($('#container section#five'), $('.active'));
-  }
+}
 
-  /** Sets up Images and updates which Checklist Response that is currently being worked on. */
-  var setupDetail = function(checklist_id) {
-    setTimeout(function(){
-      setupPhoto();
-    },2000);
-    $scope.currentChecklistId = checklist_id;
-  }
+/** Removes attributes from Checklist Items to allow it to be inserted into or updated in the database. */
+var formHelper = function() {
+  for(var i = 0; i < $scope.checklistitems.length; i++) {
+    delete $scope.checklistitems[i].$$hashKey;
+    var type = $scope.checklistitems[i].Checklist_Item__r.Type__c;
+    if (type == "Multi-Select") {
+      if ($scope.checklistitems[i].Checklist_Item__r.selectedValues.length != 0) {
+        $scope.checklistitems[i].Answer__c = $scope.checklistitems[i].Checklist_Item__r.selectedValues.join();
+      }
+    }
+    if (type == "Picklist" || type == "Rating" || type == "Multi-Select") {
+      delete $scope.checklistitems[i].Checklist_Item__r.Values;
+      delete $scope.checklistitems[i].Checklist_Item__r.selectedValues;
+    }
+    if ($scope.checklistitems[i].Answer__c) {
+      $scope.checklistitems[i].Answer__c = escapeHtml($scope.checklistitems[i].Answer__c);
 
-  /** Sets up the page for creating a Checklist Response for CHECKLIST. */
-  $scope.goToCreateDetailPage = function(checklist) {
-    $scope.checklistName = checklist.Name;
-    setupDetail(checklist.Id);
-    getChecklistItems();
+    }
   }
+  delete $scope.checklistitems.attributes;
+}
 
-  /** Sets up the page for updating a Checklist Response CHECKLIST. */
-  $scope.goToEditDetailPage = function(checklistResponse) {
-    $scope.checklistName = checklistResponse.Checklist__r.Name;
-    setSection($('#two'), $('#one'));
-    setupDetail(checklistResponse.Id);
-    editChecklistItems();
+
+/** Creates photoes to attatch to the Checklist Response with id RESPONSEID. */
+var photoHelper= function(responseId) {
+  if (Object.keys($scope.photoMap).length > 0) {
+    for (var key in $scope.photoMap) {
+      var queryString = "SELECT Id, Checklist_Item__c FROM Checklist_Item_Response__c WHERE Checklist_Item__c = '" + key + "' AND Checklist_Response__c = '" + responseId + "'";
+      forcetkClient.query(queryString, function(response) {
+        forcetkClient.create('Attachment', {'Body' : $scope.photoMap[response.records[0].Checklist_Item__c], 'ParentId': response.records[0].Id, 'Name' : 'PhotoResponse'});
+      });
+    }
   }
+}
 
-  /** Attatches an event handler to every photo input. */
-  var setupPhoto = function(){
-    $(".photo").each(function(key,value) {
-      $("#" + value.id).change(handlePhoto);
-    })
-  }
+/** Completes the current Checklist Response. */
+$scope.submitForm = function() {
+  formHelper();
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ChecklistExtension.submitResponses}',
+    $scope.currentChecklistId,
+    $scope.checklistitems,
+    $scope.latitude,
+    $scope.longitude,
+    function(result, event){
+      if (event.status) {
+        photoHelper(result);
+      } else if (event.type === 'exception') {
+        console.log('Exception: ' + event.message);
+      } else {
+        console.log('Error!');
+      }
+    },
+    {escape: true}
+    );
+  getPendingChecklistResponses();
+  getCompletedChecklistResponses();
+  setSection($('#container section#three'), $('.active'));
+}
 
-  /** When the EVT occurs, the image is stored into the photoMAP as a base64 string. */
-  var handlePhoto = function(evt){
-    var file = evt.target.files[0];
+/** Saves the current Checklist Response as a pending response. */
+$scope.saveResponse = function() {
+  var that = this;
+  formHelper();
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ChecklistExtension.saveResponses}',
+    $scope.currentChecklistId,
+    $scope.checklistitems,
+    function(result, event){
+      if (event.status) {
+        photoHelper(result);
+        getLocation();
+      } else if (event.type === 'exception') {
+        console.log('Exception: ' + event.message);
+      } else {
+        console.log('Error!');
+      }
+    },
+    {escape: true}
+    );
+  getPendingChecklistResponses();
+  setSection($('#container section#five'), $('.active'));
+}
+
+/** Sets up Images and updates which Checklist Response that is currently being worked on. */
+var setupDetail = function(checklist_id) {
+  setTimeout(function(){
+    setupPhoto();
+  },2000);
+  $scope.currentChecklistId = checklist_id;
+}
+
+/** Sets up the page for creating a Checklist Response for CHECKLIST. */
+$scope.goToCreateDetailPage = function(checklist) {
+  $scope.checklistName = checklist.Name;
+  setupDetail(checklist.Id);
+  getChecklistItems();
+}
+
+/** Sets up the page for updating a Checklist Response CHECKLIST. */
+$scope.goToEditDetailPage = function(checklistResponse) {
+  $scope.checklistName = checklistResponse.Checklist__r.Name;
+  setSection($('#two'), $('#one'));
+  setupDetail(checklistResponse.Id);
+  editChecklistItems();
+}
+
+/** Attatches an event handler to every photo input. */
+var setupPhoto = function(){
+  $(".photo").each(function(key,value) {
+    $("#" + value.id).change(handlePhoto);
+  })
+}
+
+/** When the EVT occurs, the image is stored into the photoMAP as a base64 string. */
+var handlePhoto = function(evt){
+  var file = evt.target.files[0];
     // replace above with actual file
     var reader = new FileReader();
     reader.onload = (function(theFile) {
@@ -534,18 +507,46 @@ controllers.PagesController = function ($scope, $timeout) {
       markers.pop();
     }
   }
+
+  /** Reveals the map on the screen. */
+  $scope.revealMap = function() {
+    var hideMap = function() {
+      $scope.showMapView = false;
+    }
+
+    if ($scope.showMapView == false) {
+      document.getElementById('googleMap').style.display="block";
+      $scope.showMapView = true;
+      map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
+      google.maps.event.trigger(map, 'resize');
+      $("#googleMap").removeClass("animated");
+      $("#googleMap").removeClass("flipOutY");
+      $("#googleMap").addClass("animated");
+      $("#googleMap").addClass("flipInY");
+      $(".openmap").addClass("openmap-active");
+      createMarkers();
+    } else {
+      $("#googleMap").removeClass("animated");
+      $("#googleMap").removeClass("flipInY");
+      $("#googleMap").addClass("animated");
+      $("#googleMap").addClass("flipOutY");
+      $timeout(hideMap, 800);
+      $(".openmap").removeClass("openmap-active");
+    }
+  }
+
 }
 
 checklistApp.controller(controllers);
 
 /** A map of things to escape. */
 var entityMap = {
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': '&quot;',
-          "/": '&#x2F;'
-        };
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': '&quot;',
+  "/": '&#x2F;'
+};
 
 /** Escapes the dangerous characters from the entity map. */
 var escapeHtml = function(string) {
