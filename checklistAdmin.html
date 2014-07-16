@@ -138,23 +138,24 @@ $(function() {
                   <label> Type: </label>
                   <select ng-model="item.Type__c" ng-options="type for type in types" ng-required="true"></select>
                   <br/><br/>
-                  <label> Question: </label>
-                  <input type="text" ng-model="item.Question__c" name="Q1" ng-required="true"></input>
-                  <div ng-show="showValues(item)">
-                    <p> Input multiple values for your question below using a comma to separate each individual value. </p>
-                    <label> Values: </label>
-                    <input type="text" ng-model="item.Values__c" name="Q1" ></input>
-                    <br/>
-                  </div>
-                </div>
-                <div class="half">
                   <label> Required: </label>
                   <input type="checkbox" ng-model="item.Required__c" name="O3"></input>
                   <br/><br/>
                   <label> Photo Attachment: </label>
                   <input type="checkbox" ng-model="item.Attach_Photo__c" name="O4"></input>
+                  <div ng-show="showValues(item)">
+                    <p> Input multiple values for your question below using a comma to separate each individual value. </p>
+                    <label> Values: </label>
+                    <input type="text" ng-model="item.Values__c" name="Q1" style="width: 500px;"></input>
+                    <br/>
+                  </div>
                 </div>
-                <input type='button' class="btn dlt" value='Delete' ng-click='removeQuestion(item)'/>
+                <div class="half">
+                  <label> Question: </label>
+                  <br/>
+                  <textarea cols="60" rows="5" ng-model="item.Question__c" name="Q1" ng-required="true"></textarea>
+                </div>
+                <input type='button' class="btn dlt" value='Delete' ng-click='removeQuestion(item)' style="margin-top: -25px"/>
               </li>
             </ol>
           </div>
@@ -280,24 +281,25 @@ $(function() {
                   <label> Type: </label>
                   <select ng-model="question.Type__c" ng-options="type for type in types" ng-required="true"></select>
                   <br/><br/>
-                  <label> Question: </label>
-                  <input type="text" ng-model="question.Question__c" ng-required="true"></input>
-                  <div ng-show="showValues(question)">
-                    <p> Input multiple values for your question below using a comma to separate each individual value. </p>
-                    <label> Values: </label>
-                    <input type="text" ng-model="question.Values__c" name="Q1" ></input>
-                    <br/>
-                  </div>
-                </div>
-                <div class="half">
                   <input type="hidden" ng-model="question.Order__c" ng-required="question.isActive__c"></input>
                   <label> Required: </label>
                   <input type="checkbox" ng-model="question.Required__c"></input>
                   <br/><br/>
                   <label> Photo Attachment: </label>
                   <input type="checkbox" ng-model="question.Attach_Photo__c" name="O4"></input>
+                  <div ng-show="showValues(question)">
+                    <p> Input multiple values for your question below using a comma to separate each individual value. </p>
+                    <label> Values: </label>
+                    <input type="text" ng-model="question.Values__c" name="Q1" style="width: 500px;"></input>
+                    <br/>
+                  </div>
                 </div>
-                <input type="button" class="btn dlt" value="Delete" ng-click="deleteChecklistItem(question)"></input>
+                <div class="half">
+                  <label> Question: </label>
+                  <br/>
+                  <textarea cols="60" rows="5" ng-model="question.Question__c" ng-required="true"></textarea>
+                </div>
+                <input type="button" class="btn dlt" value="Delete" ng-click="deleteChecklistItem(question)" style="margin-top: -25px"></input>
                 <br/>
               </li>
             </ol>
