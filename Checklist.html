@@ -56,8 +56,8 @@ applyBodyTag="false"
         <p style="text-align: center; margin-top: 100px; color: #999" ng-show="pendingchecklistresponses.length == 0"> You have no pending checklists. </p>
         <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
           <img class="checklist" src="{!URLFOR($Resource.ChecklistAssets, 'checklist.svg')}"></img>
-          <p class="shorten"> {{checklist.Checklist__r.Name}}</p>
-          <p class="blurb shorten"> {{checklist.Checklist__r.Description__c}} &nbsp;</p>
+          <p class="shorten"> {{checklist.Name}}</p>
+          <p class="blurb shorten"> {{checklist.Checklist__r.Name}} &nbsp;</p>
           <div class="arrow-right"></div>
         </a>
 
@@ -130,8 +130,8 @@ applyBodyTag="false"
         <p style="text-align: center; margin-top: 100px; color: #999" ng-show= "completedchecklistresponses.length == 0"> You have no completed checklists. </p>
         <div class="link maplink" ng-repeat="checklist in completedchecklistresponses">
           <img class="checklist" src="{!URLFOR($Resource.ChecklistAssets, 'checklist.svg')}"></img>
-          <p class="shorten"> {{checklist.Checklist__r.Name}} </p>
-          <p class="blurb shorten"> {{checklist.LastModifiedDate | date:'MMM d, y h:mm a'}} </p>
+          <p class="shorten"> {{checklist.Name}} </p>
+          <p class="blurb shorten"> {{checklist.Checklist__r.Name}} </p>
         </div>
         <div class="spacer"> </div>
       </section>
