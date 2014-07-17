@@ -1,7 +1,7 @@
 <apex:page docType="html-5.0"
 sidebar="true" 
 showheader="true"
-standardStylesheets="false"
+standardStylesheets="true"
 standardController="Checklist__c"
 extensions="ChecklistAdminController"
 applyHtmlTag="true"
@@ -397,7 +397,7 @@ $(function() {
 var checklistApp = angular.module('checklistApp', ['ui.sortable']);
 checklistApp.controller("AdminCtrl", function ($scope) {
     /** True if we are on the new page. */
-    $scope.newPage = true;
+    $scope.newPage;
     /** The Id of the current checklist. */
     $scope.checklistId = document.getElementById('checklistId').value;
     /** If there is an Id we get the checklist. */
@@ -428,12 +428,10 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.items[0] = new Object();
     /** A new Checklist. */
     $scope.checklist = new Object();
-    $scope.checklist.name = 'Default Name';
-    $scope.checklist.description = 'Default Description';
+    //$scope.checklist.name = 'Default Name';
+    //$scope.checklist.description = 'Default Description';
     /** All checklists in the database. */
-    $scope.checklists = {!CheckLists};
-    /** True if no checklists are in the databse. */
-    var emptyDB = $scope.checklists.length == 0;
+ 
     /** Types of questions. */
     $scope.types = ['Yes/No', 'Number', 'Text', 'Date','Long Text', 'Rating', 'Picklist', 'Multi-Select'];
     /** True if item has Id. */
@@ -589,9 +587,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
           );
     };
 
-    if (!emptyDB) {
-        $scope.getChecklistItems();
-    }
+    $scope.getChecklistItems();
 });
 
 /** To go back on the browser. */
