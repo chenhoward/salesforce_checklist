@@ -474,7 +474,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
 
     /** Adds a item for an edit question. */
     $scope.addItemEdit = function() {
-      var item = {isActive__c : true, Order__c: $scope.questionCount() + 1}
+      var item = {isActive__c : true, Order__c: $scope.itemCount() + 1}
       $scope.items.push(item);
     }
 
@@ -512,7 +512,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
       }};
 
       /** Updates the items in COPY. */
-      var updateItems = function(copy) {
+      var updateItems = function(checklist) {
         for(var i = 0; i < $scope.items.length; i++) {
           delete $scope.items[i].$$hashKey;
           $scope.items[i].Checklist__c = $scope.checklist.Id;
@@ -524,7 +524,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             function(result, event) {
             if (event.status) {
             console.log('Updated everything items');
-            window.location.assign("/" + copy.Id);
+            window.location.assign("/" + checklist.Id);
             } else if (event.type == 'exception') {
             console.log('Exception');
             } else {
@@ -547,7 +547,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     }
 
     /** Returns the number of questions that are active. */
-    $scope.questionCount = function() {
+    $scope.itemCount = function() {
       var count = 0;
       for (var i = 0; i < $scope.items.length; i++) {
         if ($scope.items[i].isActive__c) {
