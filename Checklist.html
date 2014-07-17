@@ -35,9 +35,9 @@ applyBodyTag="false"
         <p id="completetag"> Complete </p>
       </a>
     </div>
-    <div id="newbut" href="#">
+    <div id="newbut" href="#" ng-show="canCreate">
       <p> <img id="new" src="{!URLFOR($Resource.ChecklistAssets, 'new.svg')}"></img> </p>
-      <p id="newtag"> New </p>
+      <p id="newtag"> New {{canCreate}}</p>
     </div>
     <div id="new-div">
       <img class="x" id="hide-new" src="{!URLFOR($Resource.ChecklistAssets, 'x.svg')}"></img>
@@ -52,7 +52,7 @@ applyBodyTag="false"
     <div id="container">
       <section id="one" class="active">
         <div class="spacer"> </div>
-        <p style="text-align: center; margin-top: 100px; color: #999" ng-show="pendingchecklistresponses.length == 0"> You have no pending checklists. </p>
+        <p style="text-align: center; margin-top: 100px; color: #999" ng-show="pendingchecklistresponses.length == 0 || !pendingchecklistresponses"> You have no pending checklists. </p>
         <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
           <img class="checklist" src="{!URLFOR($Resource.ChecklistAssets, 'checklist.svg')}"></img>
           <p class="shorten"> {{checklist.Name}}</p>
@@ -126,7 +126,7 @@ applyBodyTag="false"
       </section>
       <section id="four">
         <div class="spacer"> </div>
-        <p style="text-align: center; margin-top: 100px; color: #999" ng-show= "completedchecklistresponses.length == 0"> You have no completed checklists. </p>
+        <p style="text-align: center; margin-top: 100px; color: #999" ng-show= "completedchecklistresponses.length == 0 || !completedchecklistresponses"> You have no completed checklists. </p>
         <div class="link maplink" ng-repeat="checklist in completedchecklistresponses">
           <img class="checklist" src="{!URLFOR($Resource.ChecklistAssets, 'checklist.svg')}"></img>
           <p class="shorten"> {{checklist.Name}} </p>
@@ -142,7 +142,7 @@ applyBodyTag="false"
         <a class="link last" id="return" data-section="one" href="#"> Return </a>
       </section>
       <div id="googleMap" ng-show="showMapView"></div>
-      <div class="openmap" ng-click="revealMap()" ng-show="completedchecklistresponses.length != 0"></div>
+      <div class="openmap" ng-click="revealMap()" ng-show="completedchecklistresponses.length > 0"></div>
     </div>
   </div>
 </body>
@@ -191,6 +191,21 @@ controllers.PagesController = function ($scope, $timeout) {
   $scope.longitude = 0;
   /** Determines if the map should be showing. */
   $scope.showMapView = false;
+  /** Determines if user can create new responses. */
+  $scope.canCreate = Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ChecklistExtension.canCreate}',
+      function(result, event){
+        if (event.status) {
+          $scope.canCreate = result;
+          $scope.$apply();
+        } else if (event.type === 'exception') {
+          console.log('Exception: ' + event.message);
+        } else {
+          console.log('Error!');
+        }
+      },
+      {escape: true}
+      );
 
   /** Returns all the pending Checklist Responses. */
   var getPendingChecklistResponses = function() {
