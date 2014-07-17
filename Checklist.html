@@ -202,9 +202,9 @@ controllers.PagesController = function ($scope, $timeout) {
           $scope.pendingchecklistresponses = result;
           $scope.$apply();
         } else if (event.type === 'exception') {
-          console.log('Exception: ' + event.message);
+          alert('Exception: ' + event.message);
         } else {
-          console.log('Error!');
+          alert('Error!');
         }
       },
       {escape: true}
@@ -220,9 +220,9 @@ controllers.PagesController = function ($scope, $timeout) {
           $scope.completedchecklistresponses = result;
           $scope.$apply();
         } else if (event.type === 'exception') {
-          console.log('Exception: ' + event.message);
+          alert('Exception: ' + event.message);
         } else {
-          console.log('Error!');
+          alert('Error!');
         }
       },
       {escape: true}
@@ -278,9 +278,9 @@ controllers.PagesController = function ($scope, $timeout) {
           }
           $scope.$apply();
         } else if (event.type === 'exception') {
-          console.log('Exception: ' + event.message);
+          alert('Exception: ' + event.message);
         } else {
-          console.log('Error!');
+          alert('Error!');
         }
       },
       {escape: true}
@@ -301,9 +301,9 @@ var getChecklistItems = function() {
         }
         $scope.$apply();
       } else if (event.type === 'exception') {
-        console.log('Exception: ' + event.message);
+        alert('Exception: ' + event.message);
       } else {
-        console.log('Error!');
+        alert('Error!');
       }
     },
     {escape: true}
