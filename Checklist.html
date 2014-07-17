@@ -113,7 +113,11 @@ applyBodyTag="false"
           </div>
           <div class="form-buttons">
             <input class="save last" type="button" name="save" value="Save" ng-click="saveResponse()"></input>
-            <input class="submit last" type="submit" name="submit" value="Submit"></input>
+            <!-- SPINNER LOADING PLACE -->
+            <input class="submit last" type="submit" name="submit" value="Submit" ng-show="true"></input>
+            <div class="submit last" style="padding-bottom: 19px" ng-show="false">
+              <img src="{!URLFOR($Resource.ChecklistAssets, 'spinner.gif')}" width="28px" height="28px"></img>
+            </div>
           </div>
         </form>
       </section>
