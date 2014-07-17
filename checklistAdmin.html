@@ -189,7 +189,7 @@ $(function() {
                     </tbody>
                   </table>
                 </div>
-                <input type='button' class="btn dlt" value='Delete' ng-click='removeQuestion(item)' style="margin-top: -120px"/>
+                <input type='button' class="btn dlt" value='Delete' ng-click='removeItem(item)' style="margin-top: -120px"/>
               </li>
             </ol>
           </div>
@@ -467,19 +467,19 @@ checklistApp.controller("AdminCtrl", function ($scope) {
       }
     }
 
-    /** Adds a question to the current checklist. */
+    /** Adds an item to the current checklist. */
     $scope.addItem = function() {
       $scope.items.push(new Object());
     }
 
-    /** Adds a question for an edit question. */
+    /** Adds a item for an edit question. */
     $scope.addItemEdit = function() {
       var item = {isActive__c : true, Order__c: $scope.questionCount() + 1}
       $scope.items.push(item);
     }
 
     /** Removes ITEM from the current checklist. */
-    $scope.removeQuestion = function(item) {
+    $scope.removeItem = function(item) {
       $scope.items.splice($scope.items.indexOf(item), 1);
     }
 
@@ -491,13 +491,9 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     /** Edits the checklist. */
     $scope.editChecklist = function() {
       if ($scope.editPage.$valid) {
-        var copy = {};
-        copy.Id = $scope.checklist.Id;
-        copy.Name = $scope.checklist.Name;
-        copy.Description__c = $scope.checklist.Description__c;
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistAdminController.updateChecklist}',
-            copy,
+            $scope.checklist,
             function(result, event) {
             if (event.status) {
             console.log('Updated everything');
@@ -510,7 +506,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             },
             {escape: true}
             );
-        updateItems(copy);
+        updateItems($scope.checklist);
       } else {
         console.log("Fix EditForm");
       }};
