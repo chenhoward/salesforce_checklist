@@ -13,8 +13,8 @@ global with sharing class ChecklistExtension {
         if (!Schema.SObjectType.Checklist_Response__c.isAccessible()) {
             return null;
         }
-        List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
-                                                Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending' AND Responder__c=:UserInfo.getUserId()];
+        List<Checklist_Response__c> checklists = [SELECT Id, Name, Checklist__r.Name, Checklist__r.Description__c, 
+                                                Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending' AND Responder__c=:UserInfo.getUserId() ORDER BY LastModifiedDate DESC];
        return checklists;
     } 
 
@@ -24,8 +24,8 @@ global with sharing class ChecklistExtension {
         if (!Schema.SObjectType.Checklist_Response__c.isAccessible()) {
             return null;
         }
-        List<Checklist_Response__c> checklists = [SELECT Id, Checklist__r.Name, Checklist__r.Description__c, 
-                                                Checklist__r.Id, Location__latitude__s, Location__longitude__s, LastModifiedDate FROM Checklist_Response__c WHERE Status__c=:'Complete' AND Responder__c=:UserInfo.getUserId()];
+        List<Checklist_Response__c> checklists = [SELECT Id, Name, Checklist__r.Name, Checklist__r.Description__c, 
+                                                Checklist__r.Id, Location__latitude__s, Location__longitude__s, LastModifiedDate FROM Checklist_Response__c WHERE Status__c=:'Complete' AND Responder__c=:UserInfo.getUserId() ORDER BY LastModifiedDate DESC];
         return checklists;
     } 
 
