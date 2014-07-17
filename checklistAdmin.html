@@ -218,7 +218,7 @@ $(function() {
           <div class="content">
             <div class="pageTitleIcon" title="Products"></div>
             <h1 class="pageType">Checklist Edit<span class="titleSeparatingColon">:</span></h1>
-            <h2 class="pageDescription">{{item.Name}}</h2>
+            <h2 class="pageDescription">{{checklist.Name}}</h2>
           </div>
         </div>
       </div>
@@ -250,7 +250,7 @@ $(function() {
                     <div class="requiredInput">
                       <div class="requiredBlock">
                       </div>
-                      <input id="Name" maxlength="255" size="20" tabindex="1" type="text" ng-model="item.Name" name="formName" ng-required="true"/>
+                      <input id="Name" maxlength="255" size="20" tabindex="1" type="text" ng-model="checklist.Name" name="formName" ng-required="true"/>
                     </div>
                   </td>
                 </tr>
@@ -264,7 +264,7 @@ $(function() {
                     </div>
                   </td>
                   <td class="data2Col last" colspan="3">
-                    <textarea cols="75" id="Description" maxlength="4000" name="Description" onchange="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onclick="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onkeydown="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onkeyup="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onmousedown="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" rows="6" tabindex="5" type="text" wrap="soft" ng-model="item.Description__c" ng-required="true"></textarea>
+                    <textarea cols="75" id="Description" maxlength="4000" name="Description" onchange="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onclick="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onkeydown="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onkeyup="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onmousedown="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" rows="6" tabindex="5" type="text" wrap="soft" ng-model="checklist.Description__c" ng-required="true"></textarea>
                   </td>
                 </tr>
               </tbody>
@@ -396,6 +396,8 @@ $(function() {
 /* Angular */
 var checklistApp = angular.module('checklistApp', ['ui.sortable']);
 checklistApp.controller("AdminCtrl", function ($scope) {
+    /** The Checklist that we are working on. */
+    $scope.checklist;
     /** True if we are on the new page. */
     $scope.newPage;
     /** The Id of the current checklist. */
@@ -408,7 +410,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             $scope.checklistId,
             function(result, event) {
             if (event.status) {
-                $scope.item = result;
+                $scope.checklist = result;
             } else if (event.type == 'exception') {
             console.log('Exception');
             } else {
@@ -419,6 +421,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             );
     } else {
       $scope.newPage = true;
+      $scope.checklist = {};
     }
     /** Questions for the edit view. */
     $scope.questions;
@@ -426,8 +429,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.items = new Array();
     /** An empty first question for the new view. */
     $scope.items[0] = new Object();
-    /** A new Checklist. */
-    $scope.checklist = new Object();
+    
     //$scope.checklist.name = 'Default Name';
     //$scope.checklist.description = 'Default Description';
     /** All checklists in the database. */
@@ -494,11 +496,10 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     /** Edits the checklist. */
     $scope.editChecklist = function() {
       if ($scope.editPage.$valid) {
-        delete $scope.item.attributes;
         var copy = {};
-        copy.Id = $scope.item.Id;
-        copy.Name = $scope.item.Name;
-        copy.Description__c = $scope.item.Description__c;
+        copy.Id = $scope.checklist.Id;
+        copy.Name = $scope.checklist.Name;
+        copy.Description__c = $scope.checklist.Description__c;
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistAdminController.updateChecklist}',
             copy,
@@ -523,7 +524,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
       var updateItems = function(copy) {
         for(var i = 0; i < $scope.questions.length; i++) {
           delete $scope.questions[i].$$hashKey;
-          $scope.questions[i].Checklist__c = $scope.item.Id;
+          $scope.questions[i].Checklist__c = $scope.checklist.Id;
           $scope.questions[i].Order__c = i;
         }
         Visualforce.remoting.Manager.invokeAction(
@@ -544,7 +545,6 @@ checklistApp.controller("AdminCtrl", function ($scope) {
 
     /** Deletes the ITEM. */
     $scope.deleteChecklistItem = function(item) {
-      console.log(item);
       item.isActive__c = false;
       if(!$scope.inDB(item)) {
         console.log("new");
