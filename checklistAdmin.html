@@ -13,9 +13,9 @@ id="todo"
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1, user-scalable=no"/>
 <meta name="viewport" content="initial-scale = 1.0, user-scalable = no"/>
-<apex:includeScript value="//code.jquery.com/jquery-1.10.2.js"/>
-<apex:includeScript value="//code.jquery.com/ui/1.10.4/jquery-ui.js"/>
-<apex:includeScript value="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"/>
+<apex:includeScript value="//code.jquery.com/jquery-1.10.2.min.js"/>
+<apex:includeScript value="//code.jquery.com/ui/1.10.4/jquery-ui.min.js"/>
+<apex:includeScript value="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"/>
 <apex:includeScript value="{!URLFOR($Resource.ChecklistAssets, 'UISortable.js')}"/>
 <apex:stylesheet value="{!URLFOR($Resource.ChecklistAssets, 'adminStyle.css')}"/>
 <script>
@@ -436,14 +436,13 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     }
     /** Creates a new checklist. */
     $scope.newChecklist = function() {
-      console.log($scope.checklist);
+
       for (var i = 0; i < $scope.items.length; i++) {
         $scope.items[i].Order__c = i;
       }
       if ($scope.newChecklistForm.$valid) {
         for(var i = 0; i < $scope.items.length; i++) {
           delete $scope.items[i].$$hashKey;
-          console.log($scope.items[i].Type__c);
         }
         Visualforce.remoting.Manager.invokeAction(
           '{!$RemoteAction.ChecklistAdminController.createChecklistWithQuestions}',
@@ -523,7 +522,6 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             $scope.items,
             function(result, event) {
             if (event.status) {
-            console.log('Updated everything items');
             window.location.assign("/" + checklist.Id);
             } else if (event.type == 'exception') {
             console.log('Exception');
