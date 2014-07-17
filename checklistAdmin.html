@@ -305,8 +305,8 @@ $(function() {
         <div class="pbBody">
           <div class="pbSubsection">
             <span style="color: red"> Drag and drop to reorder! </span>
-            <ol class="sortable" ui-sortable="true" ng-model="questions">
-              <li ng-repeat="question in questions | filter:{isActive__c:'true'}" draggable="true" class="question">
+            <ol class="sortable" ui-sortable="true" ng-model="items">
+              <li ng-repeat="question in items | filter:{isActive__c:'true'}" draggable="true" class="question">
                 <div class="full">
                   <h1> Question {{$index + 1}} </h1>
                   <br/><br/>
@@ -402,6 +402,8 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.newPage;
     /** The Id of the current checklist. */
     $scope.checklistId = document.getElementById('checklistId').value;
+    /** Items for the new view. */
+    $scope.items;
     /** If there is an Id we get the checklist. */
     if ($scope.checklistId) {
           $scope.newPage = false;
@@ -422,17 +424,8 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     } else {
       $scope.newPage = true;
       $scope.checklist = {};
+      $scope.items = [{}];
     }
-    /** Questions for the edit view. */
-    $scope.questions;
-    /** Items for the new view. */
-    $scope.items = new Array();
-    /** An empty first question for the new view. */
-    $scope.items[0] = new Object();
-    
-    //$scope.checklist.name = 'Default Name';
-    //$scope.checklist.description = 'Default Description';
-    /** All checklists in the database. */
  
     /** Types of questions. */
     $scope.types = ['Yes/No', 'Number', 'Text', 'Date','Long Text', 'Rating', 'Picklist', 'Multi-Select'];
@@ -480,7 +473,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     /** Adds a question for an edit question. */
     $scope.addQuestionEdit = function() {
       var item = {isActive__c : true, Order__c: $scope.questionCount() + 1, Question__c : "New Question"}
-      $scope.questions.push(item);
+      $scope.items.push(item);
     }
 
     /** Removes ITEM from the current checklist. */
@@ -522,14 +515,14 @@ checklistApp.controller("AdminCtrl", function ($scope) {
 
       /** Updates the items in COPY. */
       var updateItems = function(copy) {
-        for(var i = 0; i < $scope.questions.length; i++) {
-          delete $scope.questions[i].$$hashKey;
-          $scope.questions[i].Checklist__c = $scope.checklist.Id;
-          $scope.questions[i].Order__c = i;
+        for(var i = 0; i < $scope.items.length; i++) {
+          delete $scope.items[i].$$hashKey;
+          $scope.items[i].Checklist__c = $scope.checklist.Id;
+          $scope.items[i].Order__c = i;
         }
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistAdminController.updateChecklistItems}',
-            $scope.questions,
+            $scope.items,
             function(result, event) {
             if (event.status) {
             console.log('Updated everything items');
@@ -548,9 +541,9 @@ checklistApp.controller("AdminCtrl", function ($scope) {
       item.isActive__c = false;
       if(!$scope.inDB(item)) {
         console.log("new");
-        var index = $scope.questions.indexOf(item);
+        var index = $scope.items.indexOf(item);
         if (index > -1) {
-          $scope.questions.splice(index, 1);
+          $scope.items.splice(index, 1);
         }
       }
     }
@@ -558,8 +551,8 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     /** Returns the number of questions that are active. */
     $scope.questionCount = function() {
       var count = 0;
-      for (var i = 0; i < $scope.questions.length; i++) {
-        if ($scope.questions[i].isActive__c) {
+      for (var i = 0; i < $scope.items.length; i++) {
+        if ($scope.items[i].isActive__c) {
           count++;
         }
       }
@@ -575,7 +568,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
           copy,
           function(result, event) {
           if(event.status) {
-          $scope.questions = result;
+          $scope.items = result;
           $scope.$apply();
           } else if (event.type == 'exception') {
           console.log('Exception');
