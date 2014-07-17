@@ -134,28 +134,62 @@ $(function() {
                   <h1> Question {{$index + 1}} </h1>
                   <br/><br/>
                 </div>
-                <div class="half">
-                  <label> Type: </label>
-                  <select ng-model="item.Type__c" ng-options="type for type in types" ng-required="true"></select>
-                  <br/><br/>
-                  <label> Required: </label>
-                  <input type="checkbox" ng-model="item.Required__c" name="O3"></input>
-                  <br/><br/>
-                  <label> Allow Photo? </label>
-                  <input type="checkbox" ng-model="item.Attach_Photo__c" name="O4"></input>
-                  <div ng-show="showValues(item)">
-                    <p> Input multiple values for your question below using a comma to separate each individual value. </p>
-                    <label> Values: </label>
-                    <input type="text" ng-model="item.Values__c" name="Q1" style="width: 500px;"></input>
-                    <br/>
-                  </div>
+                <div>
+                  <table class="detailList" border="0" cellpadding="0" cellspacing="0">
+                    <tbody>
+                      <input type="hidden" ng-model="item.Order__c" ng-required="question.isActive__c"></input>
+                      <tr>
+                        <td class="labelCol requiredInput">
+                          <label for="Name"><span class="requiredMark">*</span>Type</label>
+                        </td>
+                        <td class="data2Col" colspan="3">
+                          <select ng-model="item.Type__c" ng-options="type for type in types" ng-required="true"></select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="labelCol requiredInput">
+                          <label for="Name">Required?</label>
+                        </td>
+                        <td class="data2Col" colspan="3">
+                          <input type="checkbox" ng-model="item.Required__c" name="O3"></input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="labelCol requiredInput">
+                          <label for="Name">Allow Photo?</label>
+                        </td>
+                        <td class="data2Col" colspan="3">
+                          <input type="checkbox" ng-model="item.Attach_Photo__c" name="O4"></input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="labelCol last">
+                          <label for="Description">Question</label>
+                          <div class="textCounterOuter">
+                            <div class="textCounterMiddle">
+                              <div class="textCounter" id="Description_counter">4000 remaining</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="data2Col last" colspan="3">
+                          <div class="requiredBlock">
+                          </div>
+                          <textarea cols="75" rows="6" maxlength="4000" ng-model="item.Question__c" tabindex="5" type="text" wrap="soft" name="Q1" ng-required="true"></textarea>
+                        </td>
+                      </tr>
+                      <tr ng-show="showValues(item)">
+                        <td class="labelCol requiredInput">
+                          <label for="Name">Values:</label>
+                        </td>
+                        <td class="data2Col" colspan="3">
+                          <input type="text" ng-model="item.Values__c" name="Q1" style="width: 500px;"></input>
+                          <p> Input multiple values for your question above using a comma to separate each individual value. </p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-                <div class="half">
-                  <label> Question: </label>
-                  <br/>
-                  <textarea cols="60" rows="5" ng-model="item.Question__c" name="Q1" ng-required="true"></textarea>
-                </div>
-                <input type='button' class="btn dlt" value='Delete' ng-click='removeQuestion(item)' style="margin-top: -25px"/>
+                <input type='button' class="btn dlt" value='Delete' ng-click='removeQuestion(item)'/>
               </li>
             </ol>
           </div>
@@ -277,29 +311,62 @@ $(function() {
                   <span> Drag and drop to reorder! </span>
                   <br/><br/>
                 </div>
-                <div class="half">
-                  <label> Type: </label>
-                  <select ng-model="question.Type__c" ng-options="type for type in types" ng-required="true"></select>
-                  <br/><br/>
-                  <input type="hidden" ng-model="question.Order__c" ng-required="question.isActive__c"></input>
-                  <label> Required: </label>
-                  <input type="checkbox" ng-model="question.Required__c"></input>
-                  <br/><br/>
-                  <label> Photo Attachment: </label>
-                  <input type="checkbox" ng-model="question.Attach_Photo__c" name="O4"></input>
-                  <div ng-show="showValues(question)">
-                    <p> Input multiple values for your question below using a comma to separate each individual value. </p>
-                    <label> Values: </label>
-                    <input type="text" ng-model="question.Values__c" name="Q1" style="width: 500px;"></input>
-                    <br/>
-                  </div>
+                <div>
+                  <table class="detailList" border="0" cellpadding="0" cellspacing="0">
+                    <tbody>
+                      <input type="hidden" ng-model="question.Order__c" ng-required="question.isActive__c"></input>
+                      <tr>
+                        <td class="labelCol requiredInput">
+                          <label for="Name"><span class="requiredMark">*</span>Type</label>
+                        </td>
+                        <td class="data2Col" colspan="3">
+                          <select ng-model="question.Type__c" ng-options="type for type in types" ng-required="true"></select>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="labelCol requiredInput">
+                          <label for="Name">Required?</label>
+                        </td>
+                        <td class="data2Col" colspan="3">
+                          <input type="checkbox" ng-model="question.Required__c"></input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="labelCol requiredInput">
+                          <label for="Name">Allow Photo?</label>
+                        </td>
+                        <td class="data2Col" colspan="3">
+                          <input type="checkbox" ng-model="question.Attach_Photo__c" name="O4"></input>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="labelCol last">
+                          <label for="Description">Question</label>
+                          <div class="textCounterOuter">
+                            <div class="textCounterMiddle">
+                              <div class="textCounter" id="Description_counter">4000 remaining</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="data2Col last" colspan="3">
+                          <div class="requiredBlock">
+                          </div>
+                          <textarea cols="75" rows="6" maxlength="4000" ng-model="question.Question__c" tabindex="5" type="text" wrap="soft" name="Q1" ng-required="true"></textarea>
+                        </td>
+                      </tr>
+                      <tr ng-show="showValues(question)">
+                        <td class="labelCol requiredInput">
+                          <label for="Name">Values:</label>
+                        </td>
+                        <td class="data2Col" colspan="3">
+                          <input type="text" ng-model="question.Values__c" name="Q1" style="width: 500px;"></input>
+                          <p> Input multiple values for your question above using a comma to separate each individual value. </p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
-                <div class="half">
-                  <label> Question: </label>
-                  <br/>
-                  <textarea cols="60" rows="5" ng-model="question.Question__c" ng-required="true"></textarea>
-                </div>
-                <input type="button" class="btn dlt" value="Delete" ng-click="deleteChecklistItem(question)" style="margin-top: -25px"></input>
+                <input type="button" class="btn dlt" value="Delete" ng-click="deleteChecklistItem(question)"></input>
                 <br/>
               </li>
             </ol>
