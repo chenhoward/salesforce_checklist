@@ -43,6 +43,7 @@ applyBodyTag="false"
     <div id="new-div">
       <img class="x" id="hide-new" src="{!URLFOR($Resource.ChecklistAssets, 'x.svg')}"></img>
       <div class="title"> New Checklist </div>
+      <p style="text-align: center; margin-top: 100px; color: #999"> You have no checklist types. </p>
       <a class="link" data-section="two" href="#" ng-repeat="checklist in checklists | orderBy: 'Name'" ng-click="goToCreateDetailPage(checklist)">
         <p> {{checklist.Name}} </p>
         <p class="blurb"> {{checklist.Description__c}} &nbsp; </p>
@@ -52,6 +53,7 @@ applyBodyTag="false"
     <div id="container">
       <section id="one" class="active">
         <div class="spacer"> </div>
+        <p style="text-align: center; margin-top: 100px; color: #999"> You have no pending checklists. </p>
         <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
           <img class="checklist" src="{!URLFOR($Resource.ChecklistAssets, 'checklist.svg')}"></img>
           <p class="shorten"> {{checklist.Checklist__r.Name}}</p>
@@ -125,6 +127,7 @@ applyBodyTag="false"
       </section>
       <section id="four">
         <div class="spacer"> </div>
+        <p style="text-align: center; margin-top: 100px; color: #999"> You have no completed checklists. </p>
         <div class="link maplink" ng-repeat="checklist in completedchecklistresponses">
           <img class="checklist" src="{!URLFOR($Resource.ChecklistAssets, 'checklist.svg')}"></img>
           <p class="shorten"> {{checklist.Checklist__r.Name}} </p>
