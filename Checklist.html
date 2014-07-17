@@ -24,7 +24,7 @@ applyBodyTag="false"
 <body>
   <div id="main-page" ng-controller="PagesController">
     <div id="navbar">
-      <a class="navbut active-tab" id="pending-tab" data-section="one" href="#">
+      <a class="navbut active-tab" id="pending-tab" data-section="one" href="#" ng-click="getPendingChecklistResponses()">
         <p> <img id="pending" src="{!URLFOR($Resource.ChecklistAssets, 'pending.svg')}"></img> </p>
         <p> <img id="pending-alt" src="{!URLFOR($Resource.ChecklistAssets, 'pending-alt.svg')}"></img> </p>
         <p id="pendingtag"> Pending </p>
@@ -35,7 +35,7 @@ applyBodyTag="false"
         <p id="completetag"> Complete </p>
       </a>
     </div>
-    <div id="newbut" href="#" ng-show="canCreate">
+    <div id="newbut" href="#" ng-show="{!$ObjectType.Checklist_Response__c.createable}">
       <p> <img id="new" src="{!URLFOR($Resource.ChecklistAssets, 'new.svg')}"></img> </p>
       <p id="newtag"> New </p>
     </div>
@@ -120,7 +120,7 @@ applyBodyTag="false"
       <section id="three">
         <div class="title"> {{checklistName}} </div>
         <div class="question">
-          <p id="conclusion"> You've just submitted a review of <span class="green_text"> {{checklistName}} </span>. </p>
+          <p id="conclusion"> You've just completed a <span class="green_text"> {{checklistName}} </span>. </p>
         </div>
         <a class="link last" id="return" data-section="one" href="#"> Return </a>
       </section>
@@ -137,7 +137,7 @@ applyBodyTag="false"
       <section id="five">
         <div class="title"> {{checklistName}} </div>
         <div class="question">
-          <p id="conclusion"> You've just saved a review of <span class="green_text"> {{checklistName}} </span>. </p>
+          <p id="conclusion"> You've just saved a <span class="green_text"> {{checklistName}} </span>. </p>
         </div>
         <a class="link last" id="return" data-section="one" href="#"> Return </a>
       </section>
@@ -192,20 +192,6 @@ controllers.PagesController = function ($scope, $timeout) {
   /** Determines if the map should be showing. */
   $scope.showMapView = false;
   /** Determines if user can create new responses. */
-  $scope.canCreate = Visualforce.remoting.Manager.invokeAction(
-      '{!$RemoteAction.ChecklistExtension.canCreate}',
-      function(result, event){
-        if (event.status) {
-          $scope.canCreate = result;
-          $scope.$apply();
-        } else if (event.type === 'exception') {
-          console.log('Exception: ' + event.message);
-        } else {
-          console.log('Error!');
-        }
-      },
-      {escape: true}
-      );
 
   /** Returns all the pending Checklist Responses. */
   var getPendingChecklistResponses = function() {
@@ -245,6 +231,7 @@ controllers.PagesController = function ($scope, $timeout) {
 
   /** Bind function to angular. */
   $scope.getCompletedChecklistResponses = getCompletedChecklistResponses;
+  $scope.getPendingChecklistResponses = getPendingChecklistResponses;
 
   /* Initiate the list of pending and complete Checklist Responses. */
   getPendingChecklistResponses();
@@ -460,7 +447,7 @@ var handlePhoto = function(evt){
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition, showError);
     } else {
-      alert("No locaiton");
+      alert("No location");
     }
   }
 
