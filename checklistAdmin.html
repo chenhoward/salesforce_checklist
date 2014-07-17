@@ -117,7 +117,6 @@ $(function() {
               <tr> 
                 <td class="pbTitle" id="checklistTitle"> 
                   <h2 class="mainTitle" style="font-size: 14px;">Checklist Items</h2>
-                  <span style="color: red"> Drag and drop to reorder! </span>
                 </td>
                 <td class="pbButton" id="topButtonRow">
                   <input type="button" class="btn" value="Add Item" ng-click="addQuestion()"></input>
@@ -128,6 +127,7 @@ $(function() {
         </div>
         <div class="pbBody">
           <div class="pbSubsection">
+            <span style="color: red"> Drag and drop to reorder! </span>
             <ol class="sortable" ui-sortable="true" ng-model="items">
               <li ng-repeat="item in items">
                 <div class="full">
@@ -182,14 +182,14 @@ $(function() {
                           <label for="Name">Values:</label>
                         </td>
                         <td class="data2Col" colspan="3">
-                          <input type="text" ng-model="item.Values__c" name="Q1" style="width: 500px;"></input>
-                          <p> Input multiple values for your question above using a comma to separate each individual value. </p>
+                          <input type="text" ng-model="item.Values__c" name="Q1" style="width: 400px;"></input>
+                          <p> Input comma-separated list of possible values. </p>
                         </td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
-                <input type='button' class="btn dlt" value='Delete' ng-click='removeQuestion(item)'/>
+                <input type='button' class="btn dlt" value='Delete' ng-click='removeQuestion(item)' style="margin-top: -120px"/>
               </li>
             </ol>
           </div>
@@ -304,11 +304,11 @@ $(function() {
         </div>
         <div class="pbBody">
           <div class="pbSubsection">
+            <span style="color: red"> Drag and drop to reorder! </span>
             <ol class="sortable" ui-sortable="true" ng-model="questions">
               <li ng-repeat="question in questions | filter:{isActive__c:'true'}" draggable="true" class="question">
                 <div class="full">
                   <h1> Question {{$index + 1}} </h1>
-                  <span> Drag and drop to reorder! </span>
                   <br/><br/>
                 </div>
                 <div>
@@ -359,14 +359,14 @@ $(function() {
                           <label for="Name">Values:</label>
                         </td>
                         <td class="data2Col" colspan="3">
-                          <input type="text" ng-model="question.Values__c" name="Q1" style="width: 500px;"></input>
-                          <p> Input multiple values for your question above using a comma to separate each individual value. </p>
+                          <input type="text" ng-model="question.Values__c" name="Q1" style="width: 400px;"></input>
+                          <p> Input comma-separated list of possible values. </p>
                         </td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
-                <input type="button" class="btn dlt" value="Delete" ng-click="deleteChecklistItem(question)"></input>
+                <input type="button" class="btn dlt" value="Delete" ng-click="deleteChecklistItem(question)" style="margin-top: -120px"></input>
                 <br/>
               </li>
             </ol>
