@@ -53,7 +53,7 @@ applyBodyTag="false"
     <div id="container">
       <section id="one" class="active">
         <div class="spacer"> </div>
-        <p style="text-align: center; margin-top: 100px; color: #999"> You have no pending checklists. </p>
+        <p style="text-align: center; margin-top: 100px; color: #999" ng-show="pendingchecklistresponses.length == 0"> You have no pending checklists. </p>
         <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
           <img class="checklist" src="{!URLFOR($Resource.ChecklistAssets, 'checklist.svg')}"></img>
           <p class="shorten"> {{checklist.Checklist__r.Name}}</p>
