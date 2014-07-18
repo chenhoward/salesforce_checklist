@@ -28,7 +28,7 @@ global class ChecklistUtilities {
     /** Queries the database for a Checklist with the ID LISTID. */
     global static Checklist__c findChecklist(ID listID) {
         Checklist__c[] checklist;
-        if (Schema.SObjectType.Checklist__c.isAccessable()) {
+        if (Schema.SObjectType.Checklist__c.isAccessible()) {
             checklist = [SELECT ID, Name, Description__c FROM Checklist__c WHERE ID=:listID];
         }
         if (checklist.size() == 0) {
@@ -42,7 +42,7 @@ global class ChecklistUtilities {
          for(Checklist_Item__c item: checklistItems) {
              item.Checklist__c = checklist.ID;
          }
-         if (Schema.SObjectType.Checklist_Item__c.isCreatable()){
+         if (Schema.SObjectType.Checklist_Item__c.isCreateable()){
              insert checklistItems;
          }
          return checklistItems;
@@ -50,7 +50,7 @@ global class ChecklistUtilities {
 
     /** Queries the database for a list of Checklist items. */
     global static Checklist_Item__c[] findChecklistItems(Checklist__c checklist) {
-        if (Schema.SObjectType.Checklist_Item__c.isAccessable) {
+        if (Schema.SObjectType.Checklist_Item__c.isAccessible()) {
             Checklist_Item__c[] checklistItems= [SELECT Checklist__c, Order__c, Question__c, Required__C, Type__c, Values__c, isActive__c, Attach_Photo__c
             FROM Checklist_Item__c WHERE Checklist__c=:checklist.ID ORDER BY Order__c ASC];
             return checklistItems;
@@ -60,7 +60,7 @@ global class ChecklistUtilities {
 
     /** Updates the CHECKLIST. */
     global static Checklist__c updateChecklist(Checklist__c checklist) {
-        if (Schema.SObjectType.Checklist__c.isUpdatable()) {
+        if (Schema.SObjectType.Checklist__c.isUpdateable()) {
             update checklist;
         }
         return checklist;
@@ -68,7 +68,7 @@ global class ChecklistUtilities {
 
     /** Update the CHECKLISTITEMS */
     global static Checklist_Item__c[] updateChecklistItems(Checklist_Item__c[] checklistItems) {
-        if (Schema.SObjectType.Checklist_Item__c.isUpdatable) {
+        if (Schema.SObjectType.Checklist_Item__c.isUpdateable()) {
            update checklistItems;
         }
         return checklistItems;
@@ -79,5 +79,6 @@ global class ChecklistUtilities {
         if (Schema.SObjectType.Checklist__c.isAccessible()) {
             return [SELECT Id, Name, Description__c FROM Checklist__c];
         }
+        return null;
     }
 }
