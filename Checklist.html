@@ -35,7 +35,7 @@ applyBodyTag="false"
         <p id="completetag"> Complete </p>
       </a>
     </div>
-    <div id="newbut" href="#" ng-show="{!$ObjectType.Checklist_Response__c.createable}">
+    <div id="newbut" href="#" ng-click="checklists = {!Checklists}" ng-show="{!$ObjectType.Checklist_Response__c.createable}">
       <p> <img id="new" src="{!URLFOR($Resource.ChecklistAssets, 'new.svg')}"></img> </p>
       <p id="newtag"> New </p>
     </div>
@@ -174,7 +174,7 @@ var controllers = {};
 /** The main controller for Checklist. */
 controllers.PagesController = function ($scope, $timeout) {
   /** List of all Checklist types. */
-  $scope.checklists = {!Checklists};
+  $scope.checklists;
   /** List of Checklist Items. */
   $scope.checklistitems;
   /** List of Completed Checklist Responses. */
