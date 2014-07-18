@@ -194,7 +194,7 @@ controllers.PagesController = function ($scope, $timeout) {
   /** Determines if user can create new responses. */
 
   /** Returns all the pending Checklist Responses. */
-  var getPendingChecklistResponses = function() {
+  $scope.getPendingChecklistResponses = function() {
     Visualforce.remoting.Manager.invokeAction(
       '{!$RemoteAction.ChecklistExtension.pendingChecklists}',
       function(result, event){
@@ -211,8 +211,11 @@ controllers.PagesController = function ($scope, $timeout) {
       );
   }
 
+  /* Initiate the list of pending and complete Checklist Responses. */
+  $scope.getPendingChecklistResponses();
+
   /** Returns all the complete Checklist Responses. */
-  var getCompletedChecklistResponses = function() {
+  $scope.getCompletedChecklistResponses = function() {
     Visualforce.remoting.Manager.invokeAction(
       '{!$RemoteAction.ChecklistExtension.completedChecklists}',
       function(result, event){
@@ -228,13 +231,6 @@ controllers.PagesController = function ($scope, $timeout) {
       {escape: true}
       );
   }
-
-  /** Bind function to angular. */
-  $scope.getCompletedChecklistResponses = getCompletedChecklistResponses;
-  $scope.getPendingChecklistResponses = getPendingChecklistResponses;
-
-  /* Initiate the list of pending and complete Checklist Responses. */
-  getPendingChecklistResponses();
 
   /** Splits the Checklist Item's possible values if they are a certain type and returns the type. */
   var valueSplitter = function(i) {
@@ -365,8 +361,8 @@ $scope.submitForm = function() {
     },
     {escape: true}
     );
-  getPendingChecklistResponses();
-  getCompletedChecklistResponses();
+  $scope.getPendingChecklistResponses();
+  $scope.getCompletedChecklistResponses();
   setSection($('#container section#three'), $('.active'));
 }
 
@@ -390,7 +386,7 @@ $scope.saveResponse = function() {
     },
     {escape: true}
     );
-  getPendingChecklistResponses();
+  $scope.getPendingChecklistResponses();
   setSection($('#container section#five'), $('.active'));
 }
 
