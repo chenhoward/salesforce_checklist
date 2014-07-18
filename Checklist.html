@@ -334,14 +334,21 @@ var formHelper = function() {
 /** Creates photoes to attatch to the Checklist Response with id RESPONSEID. */
 var photoHelper= function(responseId) {
   if (Object.keys($scope.photoMap).length > 0) {
+    var queryString = "SELECT Id, Checklist_Item__c FROM Checklist_Item_Response__c WHERE (Checklist_Item__c = '";
+    var orClause = "' OR Checklist_Item__c = '";
     for (var key in $scope.photoMap) {
-      var queryString = "SELECT Id, Checklist_Item__c FROM Checklist_Item_Response__c WHERE Checklist_Item__c = '" + key + "' AND Checklist_Response__c = '" + responseId + "'";
-      forcetkClient.query(queryString, function(response) {
-        forcetkClient.create('Attachment', {'Body' : $scope.photoMap[response.records[0].Checklist_Item__c], 'ParentId': response.records[0].Id, 'Name' : 'PhotoResponse'});
-      });
+      queryString += key + orClause;
     }
+    queryString = queryString.substring(queryString.length - orClause.length, queryString.length);
+    queryString += "') AND Checklist_Response__c = '" + responseId + "'";
+    forcetkClient.query(queryString, function(response) {
+      for (var i = 0; i < response.length; i++) {
+      forcetkClient.create('Attachment', {'Body' : $scope.photoMap[response.records[i].Checklist_Item__c], 'ParentId': response.records[i].Id, 'Name' : 'PhotoResponse'});
+      }
+    });
   }
 }
+
 
 /** Completes the current Checklist Response. */
 $scope.submitForm = function() {
