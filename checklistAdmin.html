@@ -1,7 +1,7 @@
 <apex:page docType="html-5.0"
 sidebar="true" 
 showheader="true"
-standardStylesheets="false"
+standardStylesheets="true"
 standardController="Checklist__c"
 extensions="ChecklistAdminController"
 applyHtmlTag="true"
@@ -13,9 +13,9 @@ id="todo"
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1, user-scalable=no"/>
 <meta name="viewport" content="initial-scale = 1.0, user-scalable = no"/>
-<apex:includeScript value="//code.jquery.com/jquery-1.10.2.js"/>
-<apex:includeScript value="//code.jquery.com/ui/1.10.4/jquery-ui.js"/>
-<apex:includeScript value="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"/>
+<apex:includeScript value="//code.jquery.com/jquery-1.10.2.min.js"/>
+<apex:includeScript value="//code.jquery.com/ui/1.10.4/jquery-ui.min.js"/>
+<apex:includeScript value="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"/>
 <apex:includeScript value="{!URLFOR($Resource.ChecklistAssets, 'UISortable.js')}"/>
 <apex:stylesheet value="{!URLFOR($Resource.ChecklistAssets, 'adminStyle.css')}"/>
 <script>
@@ -73,7 +73,7 @@ $(function() {
                     <div class="requiredInput">
                       <div class="requiredBlock">
                       </div>
-                      <input id="Name" maxlength="255" size="20" tabindex="1" type="text" ng-model="checklist.name" name="formName" ng-required="true"/>
+                      <input id="Name" maxlength="255" size="20" tabindex="1" type="text" ng-model="checklist.Name" name="formName" ng-required="true"/>
                     </div>
                   </td>
                 </tr>
@@ -87,7 +87,7 @@ $(function() {
                     </div>
                   </td>
                   <td class="data2Col last" colspan="3">
-                    <textarea cols="75" id="Description" maxlength="4000" name="Description" rows="6" tabindex="5" type="text" wrap="soft" ng-model="checklist.description"></textarea>
+                    <textarea cols="75" id="Description" maxlength="4000" name="Description" rows="6" tabindex="5" type="text" wrap="soft" ng-model="checklist.Description__c"></textarea>
                   </td>
                 </tr>
               </tbody>
@@ -119,7 +119,7 @@ $(function() {
                   <h2 class="mainTitle" style="font-size: 14px;">Checklist Items</h2>
                 </td>
                 <td class="pbButton" id="topButtonRow">
-                  <input type="button" class="btn" value="Add Item" ng-click="addQuestion()"></input>
+                  <input type="button" class="btn" value="Add Item" ng-click="addItem()"></input>
                 </td>
               </tr>
             </tbody>
@@ -189,7 +189,7 @@ $(function() {
                     </tbody>
                   </table>
                 </div>
-                <input type='button' class="btn dlt" value='Delete' ng-click='removeQuestion(item)' style="margin-top: -120px"/>
+                <input type='button' class="btn dlt" value='Delete' ng-click='removeItem(item)' style="margin-top: -120px"/>
               </li>
             </ol>
           </div>
@@ -202,7 +202,7 @@ $(function() {
                   &nbsp;
                 </td>
                 <td class="pbButtonb" id="bottomButtonRow">
-                  <input type="button" class="btn" value="Add Item" ng-click="addQuestion()"></input>
+                  <input type="button" class="btn" value="Add Item" ng-click="addItem()"></input>
                 </td>
               </tr>
             </tbody>
@@ -218,7 +218,7 @@ $(function() {
           <div class="content">
             <div class="pageTitleIcon" title="Products"></div>
             <h1 class="pageType">Checklist Edit<span class="titleSeparatingColon">:</span></h1>
-            <h2 class="pageDescription">{{item.Name}}</h2>
+            <h2 class="pageDescription">{{checklist.Name}}</h2>
           </div>
         </div>
       </div>
@@ -250,7 +250,7 @@ $(function() {
                     <div class="requiredInput">
                       <div class="requiredBlock">
                       </div>
-                      <input id="Name" maxlength="255" size="20" tabindex="1" type="text" ng-model="item.Name" name="formName" ng-required="true"/>
+                      <input id="Name" maxlength="255" size="20" tabindex="1" type="text" ng-model="checklist.Name" name="formName" ng-required="true"/>
                     </div>
                   </td>
                 </tr>
@@ -264,7 +264,7 @@ $(function() {
                     </div>
                   </td>
                   <td class="data2Col last" colspan="3">
-                    <textarea cols="75" id="Description" maxlength="4000" name="Description" onchange="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onclick="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onkeydown="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onkeyup="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onmousedown="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" rows="6" tabindex="5" type="text" wrap="soft" ng-model="item.Description__c" ng-required="true"></textarea>
+                    <textarea cols="75" id="Description" maxlength="4000" name="Description" onchange="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onclick="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onkeydown="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onkeyup="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" onmousedown="handleTextAreaElementChangeWithByteCheck(&#39;Description&#39;, 4000, 4000, &#39;remaining&#39;, &#39;over limit&#39;);" rows="6" tabindex="5" type="text" wrap="soft" ng-model="checklist.Description__c" ng-required="true"></textarea>
                   </td>
                 </tr>
               </tbody>
@@ -296,7 +296,7 @@ $(function() {
                   <h2 class="mainTitle" style="font-size: 14px;">Checklist Items</h2>
                 </td>
                 <td class="pbButton" id="topButtonRow">
-                  <input type="button" class="btn" value="Add Item" ng-click="addQuestionEdit()"></input>
+                  <input type="button" class="btn" value="Add Item" ng-click="addItemEdit()"></input>
                 </td>
               </tr>
             </tbody>
@@ -305,8 +305,8 @@ $(function() {
         <div class="pbBody">
           <div class="pbSubsection">
             <span style="color: red"> Drag and drop to reorder! </span>
-            <ol class="sortable" ui-sortable="true" ng-model="questions">
-              <li ng-repeat="question in questions | filter:{isActive__c:'true'}" draggable="true" class="question">
+            <ol class="sortable" ui-sortable="true" ng-model="items">
+              <li ng-repeat="question in items | filter:{isActive__c:'true'}" draggable="true" class="question">
                 <div class="full">
                   <h1> Question {{$index + 1}} </h1>
                   <br/><br/>
@@ -380,7 +380,7 @@ $(function() {
                   &nbsp;
                 </td>
                 <td class="pbButton" id="bottomButtonRow">
-                  <input type="button" class="btn" value="Add Item" ng-click="addQuestionEdit()"></input>
+                  <input type="button" class="btn" value="Add Item" ng-click="addItemEdit()"></input>
                 </td>
               </tr>
             </tbody>
@@ -396,10 +396,14 @@ $(function() {
 /* Angular */
 var checklistApp = angular.module('checklistApp', ['ui.sortable']);
 checklistApp.controller("AdminCtrl", function ($scope) {
+    /** The Checklist that we are working on. */
+    $scope.checklist;
     /** True if we are on the new page. */
-    $scope.newPage = true;
+    $scope.newPage;
     /** The Id of the current checklist. */
     $scope.checklistId = document.getElementById('checklistId').value;
+    /** Items for the new view. */
+    $scope.items;
     /** If there is an Id we get the checklist. */
     if ($scope.checklistId) {
           $scope.newPage = false;
@@ -408,32 +412,22 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             $scope.checklistId,
             function(result, event) {
             if (event.status) {
-                $scope.item = result;
+              $scope.checklist = result;
             } else if (event.type == 'exception') {
-            console.log('Exception');
+              alert('Exception ' + event.message);
             } else {
-            console.log('Error!');
+              alert('Error');
             }
             },
             {escape: true}
             );
     } else {
       $scope.newPage = true;
+      $scope.checklist = {Description__c: ''};
+      $scope.items = [];
+      $scope.items[0] = {}
     }
-    /** Questions for the edit view. */
-    $scope.questions;
-    /** Items for the new view. */
-    $scope.items = new Array();
-    /** An empty first question for the new view. */
-    $scope.items[0] = new Object();
-    /** A new Checklist. */
-    $scope.checklist = new Object();
-    $scope.checklist.name = 'Default Name';
-    $scope.checklist.description = 'Default Description';
-    /** All checklists in the database. */
-    $scope.checklists = {!CheckLists};
-    /** True if no checklists are in the databse. */
-    var emptyDB = $scope.checklists.length == 0;
+ 
     /** Types of questions. */
     $scope.types = ['Yes/No', 'Number', 'Text', 'Date','Long Text', 'Rating', 'Picklist', 'Multi-Select'];
     /** True if item has Id. */
@@ -442,49 +436,48 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     }
     /** Creates a new checklist. */
     $scope.newChecklist = function() {
+
       for (var i = 0; i < $scope.items.length; i++) {
         $scope.items[i].Order__c = i;
       }
       if ($scope.newChecklistForm.$valid) {
         for(var i = 0; i < $scope.items.length; i++) {
           delete $scope.items[i].$$hashKey;
-          console.log($scope.items[i].Type__c);
         }
         Visualforce.remoting.Manager.invokeAction(
           '{!$RemoteAction.ChecklistAdminController.createChecklistWithQuestions}',
-          $scope.checklist.name,
-          $scope.checklist.description,
+          $scope.checklist.Name,
+          $scope.checklist.Description__c,
           $scope.items,
           function(result, event) {
           if (event.status) {
-          console.log('Created everything');
-          window.location.assign("/" + result.Id);
+            window.location.assign("/" + result.Id);
           } else if (event.type == 'exception') {
-            console.log('Exception');
+            alert('Exception ' + event.message);
           } else {
-            console.log('Error!');
+            alert('Error');
           }
         },
         {escape: true}
         );
       } else {
-        console.log('Invalid New Checklist');
+        alert.log('Invalid New Checklist');
       }
     }
 
-    /** Adds a question to the current checklist. */
-    $scope.addQuestion = function() {
+    /** Adds an item to the current checklist. */
+    $scope.addItem = function() {
       $scope.items.push(new Object());
     }
 
-    /** Adds a question for an edit question. */
-    $scope.addQuestionEdit = function() {
-      var item = {isActive__c : true, Order__c: $scope.questionCount() + 1, Question__c : "New Question"}
-      $scope.questions.push(item);
+    /** Adds a item for an edit question. */
+    $scope.addItemEdit = function() {
+      var item = {isActive__c : true, Order__c: $scope.itemCount() + 1}
+      $scope.items.push(item);
     }
 
     /** Removes ITEM from the current checklist. */
-    $scope.removeQuestion = function(item) {
+    $scope.removeItem = function(item) {
       $scope.items.splice($scope.items.indexOf(item), 1);
     }
 
@@ -496,72 +489,62 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     /** Edits the checklist. */
     $scope.editChecklist = function() {
       if ($scope.editPage.$valid) {
-        delete $scope.item.attributes;
-        var copy = {};
-        copy.Id = $scope.item.Id;
-        copy.Name = $scope.item.Name;
-        copy.Description__c = $scope.item.Description__c;
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistAdminController.updateChecklist}',
-            copy,
+            $scope.checklist,
             function(result, event) {
             if (event.status) {
-            console.log('Updated everything');
-
             } else if (event.type == 'exception') {
-            console.log('Exception');
+              alert('Exception ' + event.message);
             } else {
-            console.log('Error!');
+              alert('Error');
             }
             },
             {escape: true}
             );
-        updateItems(copy);
+        updateItems($scope.checklist);
       } else {
-        console.log("Fix EditForm");
+        alert("Fix EditForm");
       }};
 
       /** Updates the items in COPY. */
-      var updateItems = function(copy) {
-        for(var i = 0; i < $scope.questions.length; i++) {
-          delete $scope.questions[i].$$hashKey;
-          $scope.questions[i].Checklist__c = $scope.item.Id;
-          $scope.questions[i].Order__c = i;
+      var updateItems = function(checklist) {
+        for(var i = 0; i < $scope.items.length; i++) {
+          delete $scope.items[i].$$hashKey;
+          $scope.items[i].Checklist__c = $scope.checklist.Id;
+          $scope.items[i].Order__c = i;
         }
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistAdminController.updateChecklistItems}',
-            $scope.questions,
+            $scope.items,
             function(result, event) {
-            if (event.status) {
-            console.log('Updated everything items');
-            window.location.assign("/" + copy.Id);
-            } else if (event.type == 'exception') {
-            console.log('Exception');
-            } else {
-            console.log('Error!');
-            }
+              if (event.status) {
+                window.location.assign("/" + checklist.Id);
+              } else if (event.type == 'exception') {
+                alert('Exception ' + event.message);
+              } else {
+                alert('Error');
+              }
             }, {escape: true}
             );
       }
 
     /** Deletes the ITEM. */
     $scope.deleteChecklistItem = function(item) {
-      console.log(item);
       item.isActive__c = false;
       if(!$scope.inDB(item)) {
-        console.log("new");
-        var index = $scope.questions.indexOf(item);
+        var index = $scope.items.indexOf(item);
         if (index > -1) {
-          $scope.questions.splice(index, 1);
+          $scope.items.splice(index, 1);
         }
       }
     }
 
     /** Returns the number of questions that are active. */
-    $scope.questionCount = function() {
+    $scope.itemCount = function() {
       var count = 0;
-      for (var i = 0; i < $scope.questions.length; i++) {
-        if ($scope.questions[i].isActive__c) {
+      for (var i = 0; i < $scope.items.length; i++) {
+        if ($scope.items[i].isActive__c) {
           count++;
         }
       }
@@ -576,21 +559,22 @@ checklistApp.controller("AdminCtrl", function ($scope) {
           '{!$RemoteAction.ChecklistAdminController.getChecklistItems}',
           copy,
           function(result, event) {
-          if(event.status) {
-          $scope.questions = result;
-          $scope.$apply();
-          } else if (event.type == 'exception') {
-          console.log('Exception');
-          } else {
-          console.log('Error!');
-          }
+            if(event.status) {
+              $scope.items = result;
+              $scope.$apply();
+            } else if (event.type == 'exception') {
+              alert('Exception ' + event.message);
+            } else {
+              alert('Error');
+            }
           },
           {escape:true}
           );
-    };
+    }
+    
 
-    if (!emptyDB) {
-        $scope.getChecklistItems();
+    if (!$scope.newPage) {
+      $scope.getChecklistItems();
     }
 });
 

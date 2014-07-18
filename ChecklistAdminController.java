@@ -2,13 +2,7 @@
 global with sharing class ChecklistAdminController {
 
     public ChecklistAdminController(ApexPages.StandardController controller) {
-
     }
-
-
-    public static String getCheckLists() {
-        return ChecklistExtension.getCheckLists();
-    } 
 
     @RemoteAction
     global static Checklist__c getChecklist(ID checklistId) {
@@ -43,7 +37,7 @@ global with sharing class ChecklistAdminController {
 
     /** Updates the give Checklist ITEMS. */
     @RemoteAction
-    global static Checklist_Item__c[] updateChecklistItems(CHecklist_Item__c[] items) {
+    global static Checklist_Item__c[] updateChecklistItems(Checklist_Item__c[] items) {
         upsert items;
         return items;
     }

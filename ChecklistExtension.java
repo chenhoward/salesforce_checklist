@@ -4,7 +4,11 @@ global with sharing class ChecklistExtension {
 
     /** Returns the JSON form of all checklists. */
     public static String getChecklists() {
-       return JSON.serialize(ChecklistUtilities.getAllChecklists());
+        if (Schema.SObjectType.Checklist_Response__c.isAccessible()) {
+            List<Checklist__c> lists = [SELECT Id, Name, Description__c FROM Checklist__c];
+            return JSON.serialize(lists);
+        }
+        return JSON.serialize(new List<Checklist__c>());
     } 
 
     /** Returns all pending Checklists. */
@@ -157,4 +161,8 @@ global with sharing class ChecklistExtension {
         return responses;
     }
 
+    @RemoteAction
+    global static Boolean canCreate() {
+        return Schema.SObjectType.Checklist_Item_Response__c.isCreateable();
+    }
 }

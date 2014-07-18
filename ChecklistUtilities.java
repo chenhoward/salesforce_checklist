@@ -10,9 +10,13 @@ global class ChecklistUtilities {
         if (description == null) {
             description = '';
         }
-        Checklist__c checklist = new Checklist__c(Name = listName, Description__c = description);
-        insert checklist;
-        return checklist;
+        if (Schema.SObjectType.Checklist__c.isCreateable()) {
+            Checklist__c checklist = new Checklist__c(Name = listName, Description__c = description);
+            insert checklist;
+            return checklist;
+        } else {
+            return null;
+        }
     }
 
     /** Removes a Checklist with the ID LISTID. */
@@ -23,7 +27,10 @@ global class ChecklistUtilities {
 
     /** Queries the database for a Checklist with the ID LISTID. */
     global static Checklist__c findChecklist(ID listID) {
-        Checklist__c[] checklist = [SELECT ID, Name, Description__c FROM Checklist__c WHERE ID=:listID];
+        Checklist__c[] checklist;
+        if (Schema.SObjectType.Checklist__c.isAccessible()) {
+            checklist = [SELECT ID, Name, Description__c FROM Checklist__c WHERE ID=:listID];
+        }
         if (checklist.size() == 0) {
             return null;
         }
@@ -35,31 +42,43 @@ global class ChecklistUtilities {
          for(Checklist_Item__c item: checklistItems) {
              item.Checklist__c = checklist.ID;
          }
-         insert checklistItems;
+         if (Schema.SObjectType.Checklist_Item__c.isCreateable()){
+             insert checklistItems;
+         }
          return checklistItems;
     }
 
     /** Queries the database for a list of Checklist items. */
     global static Checklist_Item__c[] findChecklistItems(Checklist__c checklist) {
-        Checklist_Item__c[] checklistItems= [SELECT Checklist__c, Order__c, Question__c, Required__C, Type__c, Values__c, isActive__c
-         FROM Checklist_Item__c WHERE Checklist__c=:checklist.ID ORDER BY Order__c ASC];
-        return checklistItems;
+        if (Schema.SObjectType.Checklist_Item__c.isAccessible()) {
+            Checklist_Item__c[] checklistItems= [SELECT Checklist__c, Order__c, Question__c, Required__C, Type__c, Values__c, isActive__c, Attach_Photo__c
+            FROM Checklist_Item__c WHERE Checklist__c=:checklist.ID ORDER BY Order__c ASC];
+            return checklistItems;
+        }
+        return null;
     }
 
     /** Updates the CHECKLIST. */
     global static Checklist__c updateChecklist(Checklist__c checklist) {
-        update checklist;
+        if (Schema.SObjectType.Checklist__c.isUpdateable()) {
+            update checklist;
+        }
         return checklist;
     }
 
     /** Update the CHECKLISTITEMS */
     global static Checklist_Item__c[] updateChecklistItems(Checklist_Item__c[] checklistItems) {
-        update checklistItems;
+        if (Schema.SObjectType.Checklist_Item__c.isUpdateable()) {
+           update checklistItems;
+        }
         return checklistItems;
     }
 
     /** Returns all the checklists in the database. */
     global static List<Checklist__c> getAllChecklists(){
-        return [SELECT Id, Name, Description__c FROM Checklist__c];
+        if (Schema.SObjectType.Checklist__c.isAccessible()) {
+            return [SELECT Id, Name, Description__c FROM Checklist__c];
+        }
+        return null;
     }
 }

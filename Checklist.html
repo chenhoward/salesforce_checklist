@@ -11,12 +11,12 @@ applyBodyTag="false"
 <head>
   <title> Checker </title>
   <meta name="viewport" content="width=device-width, initial-scale=1,  minimum-scale=1, maximum-scale=1, user-scalable=no"/>
-  <apex:includeScript value="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js"/>
+  <apex:includeScript value="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"/>
   <apex:includeScript value="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"/>
   <apex:includeScript value="{!URLFOR($Resource.ChecklistAssets, 'forceTK/forceTK.js')}"/>
   <apex:stylesheet value="{!URLFOR($Resource.ChecklistAssets, 'fonts/proximanova.css')}"/>
   <apex:includeScript value="{!URLFOR($Resource.ChecklistAssets, 'fastclick/fastclick.js')}"/>
-  <script language="javascript" src="https://maps.google.com/maps/api/js?sensor=false"></script>
+  <apex:includeScript value="https://maps.google.com/maps/api/js?sensor=false"/>
   <apex:includeScript value="{!URLFOR($Resource.ChecklistAssets, 'sections.js')}"/>
   <apex:stylesheet value="{!URLFOR($Resource.ChecklistAssets, 'style.css')}"/>
   <title> Checker </title>
@@ -24,7 +24,7 @@ applyBodyTag="false"
 <body>
   <div id="main-page" ng-controller="PagesController">
     <div id="navbar">
-      <a class="navbut active-tab" id="pending-tab" data-section="one" href="#">
+      <a class="navbut active-tab" id="pending-tab" data-section="one" href="#" ng-click="getPendingChecklistResponses()">
         <p> <img id="pending" src="{!URLFOR($Resource.ChecklistAssets, 'pending.svg')}"></img> </p>
         <p> <img id="pending-alt" src="{!URLFOR($Resource.ChecklistAssets, 'pending-alt.svg')}"></img> </p>
         <p id="pendingtag"> Pending </p>
@@ -35,7 +35,7 @@ applyBodyTag="false"
         <p id="completetag"> Complete </p>
       </a>
     </div>
-    <div id="newbut" href="#">
+    <div id="newbut" href="#" ng-click="checklists = {!Checklists}" ng-show="{!$ObjectType.Checklist_Response__c.createable}">
       <p> <img id="new" src="{!URLFOR($Resource.ChecklistAssets, 'new.svg')}"></img> </p>
       <p id="newtag"> New </p>
     </div>
@@ -52,7 +52,7 @@ applyBodyTag="false"
     <div id="container">
       <section id="one" class="active">
         <div class="spacer"> </div>
-        <p style="text-align: center; margin-top: 100px; color: #999" ng-show="pendingchecklistresponses.length == 0"> You have no pending checklists. </p>
+        <p style="text-align: center; margin-top: 100px; color: #999" ng-show="pendingchecklistresponses.length == 0 || !pendingchecklistresponses"> You have no pending checklists. </p>
         <a class="link" data-section="two" href="#" ng-repeat="checklist in pendingchecklistresponses" ng-click="goToEditDetailPage(checklist)"> 
           <img class="checklist" src="{!URLFOR($Resource.ChecklistAssets, 'checklist.svg')}"></img>
           <p class="shorten"> {{checklist.Name}}</p>
@@ -124,13 +124,13 @@ applyBodyTag="false"
       <section id="three">
         <div class="title"> {{checklistName}} </div>
         <div class="question">
-          <p id="conclusion"> You've just submitted a review of <span class="green_text"> {{checklistName}} </span>. </p>
+          <p id="conclusion"> You've just completed a <span class="green_text"> {{checklistName}} </span>. </p>
         </div>
         <a class="link last" id="return" data-section="one" href="#"> Return </a>
       </section>
       <section id="four">
         <div class="spacer"> </div>
-        <p style="text-align: center; margin-top: 100px; color: #999" ng-show= "completedchecklistresponses.length == 0"> You have no completed checklists. </p>
+        <p style="text-align: center; margin-top: 100px; color: #999" ng-show= "completedchecklistresponses.length == 0 || !completedchecklistresponses"> You have no completed checklists. </p>
         <div class="link maplink" ng-repeat="checklist in completedchecklistresponses">
           <img class="checklist" src="{!URLFOR($Resource.ChecklistAssets, 'checklist.svg')}"></img>
           <p class="shorten"> {{checklist.Name}} </p>
@@ -141,12 +141,12 @@ applyBodyTag="false"
       <section id="five">
         <div class="title"> {{checklistName}} </div>
         <div class="question">
-          <p id="conclusion"> You've just saved a review of <span class="green_text"> {{checklistName}} </span>. </p>
+          <p id="conclusion"> You've just saved a <span class="green_text"> {{checklistName}} </span>. </p>
         </div>
         <a class="link last" id="return" data-section="one" href="#"> Return </a>
       </section>
       <div id="googleMap" ng-show="showMapView"></div>
-      <div class="openmap" ng-click="revealMap()" ng-show="completedchecklistresponses.length != 0"></div>
+      <div class="openmap" ng-click="revealMap()" ng-show="completedchecklistresponses.length > 0"></div>
     </div>
   </div>
 </body>
@@ -178,7 +178,7 @@ var controllers = {};
 /** The main controller for Checklist. */
 controllers.PagesController = function ($scope, $timeout) {
   /** List of all Checklist types. */
-  $scope.checklists = {!Checklists};
+  $scope.checklists;
   /** List of Checklist Items. */
   $scope.checklistitems;
   /** List of Completed Checklist Responses. */
@@ -195,9 +195,10 @@ controllers.PagesController = function ($scope, $timeout) {
   $scope.longitude = 0;
   /** Determines if the map should be showing. */
   $scope.showMapView = false;
+  /** Determines if user can create new responses. */
 
   /** Returns all the pending Checklist Responses. */
-  var getPendingChecklistResponses = function() {
+  $scope.getPendingChecklistResponses = function() {
     Visualforce.remoting.Manager.invokeAction(
       '{!$RemoteAction.ChecklistExtension.pendingChecklists}',
       function(result, event){
@@ -205,17 +206,20 @@ controllers.PagesController = function ($scope, $timeout) {
           $scope.pendingchecklistresponses = result;
           $scope.$apply();
         } else if (event.type === 'exception') {
-          console.log('Exception: ' + event.message);
+          alert('Exception: ' + event.message);
         } else {
-          console.log('Error!');
+          alert('Error!');
         }
       },
       {escape: true}
       );
   }
 
+  /* Initiate the list of pending and complete Checklist Responses. */
+  $scope.getPendingChecklistResponses();
+
   /** Returns all the complete Checklist Responses. */
-  var getCompletedChecklistResponses = function() {
+  $scope.getCompletedChecklistResponses = function() {
     Visualforce.remoting.Manager.invokeAction(
       '{!$RemoteAction.ChecklistExtension.completedChecklists}',
       function(result, event){
@@ -223,20 +227,14 @@ controllers.PagesController = function ($scope, $timeout) {
           $scope.completedchecklistresponses = result;
           $scope.$apply();
         } else if (event.type === 'exception') {
-          console.log('Exception: ' + event.message);
+          alert('Exception: ' + event.message);
         } else {
-          console.log('Error!');
+          alert('Error!');
         }
       },
       {escape: true}
       );
   }
-
-  /** Bind function to angular. */
-  $scope.getCompletedChecklistResponses = getCompletedChecklistResponses;
-
-  /* Initiate the list of pending and complete Checklist Responses. */
-  getPendingChecklistResponses();
 
   /** Splits the Checklist Item's possible values if they are a certain type and returns the type. */
   var valueSplitter = function(i) {
@@ -279,10 +277,11 @@ controllers.PagesController = function ($scope, $timeout) {
             }
           }
           $scope.$apply();
+          setupPhoto();
         } else if (event.type === 'exception') {
-          console.log('Exception: ' + event.message);
+          alert('Exception: ' + event.message);
         } else {
-          console.log('Error!');
+          alert('Error!');
         }
       },
       {escape: true}
@@ -302,10 +301,11 @@ var getChecklistItems = function() {
           valueSplitter(i);
         }
         $scope.$apply();
+        setupPhoto();
       } else if (event.type === 'exception') {
-        console.log('Exception: ' + event.message);
+        alert('Exception: ' + event.message);
       } else {
-        console.log('Error!');
+        alert('Error!');
       }
     },
     {escape: true}
@@ -338,14 +338,21 @@ var formHelper = function() {
 /** Creates photoes to attatch to the Checklist Response with id RESPONSEID. */
 var photoHelper= function(responseId) {
   if (Object.keys($scope.photoMap).length > 0) {
+    var queryString = "SELECT Id, Checklist_Item__c FROM Checklist_Item_Response__c WHERE (Checklist_Item__c = '";
+    var orClause = "' OR Checklist_Item__c = '";
     for (var key in $scope.photoMap) {
-      var queryString = "SELECT Id, Checklist_Item__c FROM Checklist_Item_Response__c WHERE Checklist_Item__c = '" + key + "' AND Checklist_Response__c = '" + responseId + "'";
-      forcetkClient.query(queryString, function(response) {
-        forcetkClient.create('Attachment', {'Body' : $scope.photoMap[response.records[0].Checklist_Item__c], 'ParentId': response.records[0].Id, 'Name' : 'PhotoResponse'});
-      });
+      queryString += key + orClause;
     }
+    queryString = queryString.substring(queryString.length - orClause.length, queryString.length);
+    queryString += "') AND Checklist_Response__c = '" + responseId + "'";
+    forcetkClient.query(queryString, function(response) {
+      for (var i = 0; i < response.length; i++) {
+      forcetkClient.create('Attachment', {'Body' : $scope.photoMap[response.records[i].Checklist_Item__c], 'ParentId': response.records[i].Id, 'Name' : 'PhotoResponse'});
+      }
+    });
   }
 }
+
 
 /** Completes the current Checklist Response. */
 $scope.submitForm = function() {
@@ -367,8 +374,8 @@ $scope.submitForm = function() {
     },
     {escape: true}
     );
-  getPendingChecklistResponses();
-  getCompletedChecklistResponses();
+  $scope.getPendingChecklistResponses();
+  $scope.getCompletedChecklistResponses();
   setSection($('#container section#three'), $('.active'));
 }
 
@@ -392,22 +399,15 @@ $scope.saveResponse = function() {
     },
     {escape: true}
     );
-  getPendingChecklistResponses();
+  $scope.getPendingChecklistResponses();
   setSection($('#container section#five'), $('.active'));
-}
-
-/** Sets up Images and updates which Checklist Response that is currently being worked on. */
-var setupDetail = function(checklist_id) {
-  setTimeout(function(){
-    setupPhoto();
-  },2000);
-  $scope.currentChecklistId = checklist_id;
 }
 
 /** Sets up the page for creating a Checklist Response for CHECKLIST. */
 $scope.goToCreateDetailPage = function(checklist) {
   $scope.checklistName = checklist.Name;
-  setupDetail(checklist.Id);
+  setSection($('#two'), $('#one'));
+  $scope.currentChecklistId = checklist.Id;
   getChecklistItems();
 }
 
@@ -415,7 +415,7 @@ $scope.goToCreateDetailPage = function(checklist) {
 $scope.goToEditDetailPage = function(checklistResponse) {
   $scope.checklistName = checklistResponse.Checklist__r.Name;
   setSection($('#two'), $('#one'));
-  setupDetail(checklistResponse.Id);
+  $scope.currentChecklistId = checklistResponse.Id;
   editChecklistItems();
 }
 
@@ -449,7 +449,7 @@ var handlePhoto = function(evt){
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition, showError);
     } else {
-      alert("No locaiton");
+      alert("No location");
     }
   }
 
