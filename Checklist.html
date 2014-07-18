@@ -63,7 +63,7 @@ applyBodyTag="false"
         <div class="spacer"> </div>
       </section>
       <section id="two">
-        <form id="checklistForm" name="checklistForm" class="checklistForm" ng-submit="checklistForm.$valid  && submitForm()">
+        <form id="checklistForm" name="checklistForm" class="checklistForm">
           <img class="x" id="hide-checklist" src="{!URLFOR($Resource.ChecklistAssets, 'x.svg')}"></img>
           <div class="title"> {{checklistName}}  </div>
           <div class="question" ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'">
@@ -114,7 +114,7 @@ applyBodyTag="false"
           <div class="form-buttons">
             <input class="save last" type="button" name="save" value="Save" ng-click="saveResponse()"></input>
             <!-- SPINNER LOADING PLACE -->
-            <input class="submit last" id="sub-btn" type="submit" name="submit" value="Submit"></input>
+            <input class="submit last" type="button" id="sub-btn" value="Submit" ng-click="showSpinner()"></input>
             <div class="submit last" id="sub-ldr" style="padding-bottom: 19px; display: none;">
               <img src="{!URLFOR($Resource.ChecklistAssets, 'spinner.gif')}" width="28px" height="28px"></img>
             </div>
@@ -196,6 +196,16 @@ controllers.PagesController = function ($scope, $timeout) {
   /** Determines if the map should be showing. */
   $scope.showMapView = false;
   /** Determines if user can create new responses. */
+
+  $scope.showSpinner = function() {
+    /*$("#sub-btn").hide();
+    $("#sub-ldr").show();*/
+    if ($scope.checklistForm.$valid) {
+      $scope.submitForm();
+    } else {
+      $('#checklistForm').submit();
+    }
+  }
 
   /** Returns all the pending Checklist Responses. */
   $scope.getPendingChecklistResponses = function() {
@@ -571,6 +581,7 @@ $(document).ready(function () {
   });
   $('form').h5Validate();
 });
+
 </script>
 
 </html>
