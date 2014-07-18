@@ -273,6 +273,7 @@ controllers.PagesController = function ($scope, $timeout) {
             }
           }
           $scope.$apply();
+          setupPhoto();
         } else if (event.type === 'exception') {
           alert('Exception: ' + event.message);
         } else {
@@ -296,6 +297,7 @@ var getChecklistItems = function() {
           valueSplitter(i);
         }
         $scope.$apply();
+        setupPhoto();
       } else if (event.type === 'exception') {
         alert('Exception: ' + event.message);
       } else {
@@ -390,18 +392,11 @@ $scope.saveResponse = function() {
   setSection($('#container section#five'), $('.active'));
 }
 
-/** Sets up Images and updates which Checklist Response that is currently being worked on. */
-var setupDetail = function(checklist_id) {
-  setTimeout(function(){
-    setupPhoto();
-  },2000);
-  $scope.currentChecklistId = checklist_id;
-}
-
 /** Sets up the page for creating a Checklist Response for CHECKLIST. */
 $scope.goToCreateDetailPage = function(checklist) {
   $scope.checklistName = checklist.Name;
-  setupDetail(checklist.Id);
+  setSection($('#two'), $('#one'));
+  $scope.currentChecklistId = checklist.Id;
   getChecklistItems();
 }
 
@@ -409,7 +404,7 @@ $scope.goToCreateDetailPage = function(checklist) {
 $scope.goToEditDetailPage = function(checklistResponse) {
   $scope.checklistName = checklistResponse.Checklist__r.Name;
   setSection($('#two'), $('#one'));
-  setupDetail(checklistResponse.Id);
+  $scope.currentChecklistId = checklistResponse.Id;
   editChecklistItems();
 }
 
