@@ -198,12 +198,17 @@ controllers.PagesController = function ($scope, $timeout) {
   /** Determines if user can create new responses. */
 
   $scope.showSpinner = function() {
-    /*$("#sub-btn").hide();
-    $("#sub-ldr").show();*/
     if ($scope.checklistForm.$valid) {
-      $scope.submitForm();
+      submitForm();
     } else {
-      $('#checklistForm').submit();
+      $("#sub-btn").hide();
+      $("#sub-ldr").show();
+      setTimeout(function() {
+          $('#checklistForm').submit();
+          $("#sub-btn").show();
+          $("#sub-ldr").hide();
+      }, 300);
+      
     }
   }
 
@@ -575,12 +580,12 @@ var escapeHtml = function(string) {
 
 
 <script>
-$(document).ready(function () {
-  $('#checklistForm').h5Validate({
-    errorClass:'error-border'
+$( document ).ready(function() {
+$('#checklistForm').h5Validate({
+  errorClass:'error-border'
   });
   $('form').h5Validate();
-});
+  });
 
 </script>
 
