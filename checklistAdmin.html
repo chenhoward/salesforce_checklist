@@ -87,7 +87,7 @@ $(function() {
                     </div>
                   </td>
                   <td class="data2Col last" colspan="3">
-                    <textarea cols="75" id="Description" maxlength="4000" name="Description" rows="6" tabindex="5" type="text" wrap="soft" ng-model="checklist.description"></textarea>
+                    <textarea cols="75" id="Description" maxlength="4000" name="Description" rows="6" tabindex="5" type="text" wrap="soft" ng-model="checklist.Description__c"></textarea>
                   </td>
                 </tr>
               </tbody>
@@ -412,11 +412,11 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             $scope.checklistId,
             function(result, event) {
             if (event.status) {
-                $scope.checklist = result;
+              $scope.checklist = result;
             } else if (event.type == 'exception') {
-            console.log('Exception');
+              alert('Exception ' + event.message);
             } else {
-            console.log('Error!');
+              alert('Error');
             }
             },
             {escape: true}
@@ -451,18 +451,17 @@ checklistApp.controller("AdminCtrl", function ($scope) {
           $scope.items,
           function(result, event) {
           if (event.status) {
-          console.log('Created everything');
-          window.location.assign("/" + result.Id);
+            window.location.assign("/" + result.Id);
           } else if (event.type == 'exception') {
-            console.log('Exception');
+            alert('Exception ' + event.message);
           } else {
-            console.log('Error!');
+            alert('Error');
           }
         },
         {escape: true}
         );
       } else {
-        console.log('Invalid New Checklist');
+        alert.log('Invalid New Checklist');
       }
     }
 
@@ -495,19 +494,17 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             $scope.checklist,
             function(result, event) {
             if (event.status) {
-            console.log('Updated everything');
-
             } else if (event.type == 'exception') {
-            console.log('Exception');
+              alert('Exception ' + event.message);
             } else {
-            console.log('Error!');
+              alert('Error');
             }
             },
             {escape: true}
             );
         updateItems($scope.checklist);
       } else {
-        console.log("Fix EditForm");
+        alert("Fix EditForm");
       }};
 
       /** Updates the items in COPY. */
@@ -521,13 +518,13 @@ checklistApp.controller("AdminCtrl", function ($scope) {
             '{!$RemoteAction.ChecklistAdminController.updateChecklistItems}',
             $scope.items,
             function(result, event) {
-            if (event.status) {
-            window.location.assign("/" + checklist.Id);
-            } else if (event.type == 'exception') {
-            console.log('Exception');
-            } else {
-            console.log('Error!');
-            }
+              if (event.status) {
+                window.location.assign("/" + checklist.Id);
+              } else if (event.type == 'exception') {
+                alert('Exception ' + event.message);
+              } else {
+                alert('Error');
+              }
             }, {escape: true}
             );
       }
@@ -536,7 +533,6 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     $scope.deleteChecklistItem = function(item) {
       item.isActive__c = false;
       if(!$scope.inDB(item)) {
-        console.log("new");
         var index = $scope.items.indexOf(item);
         if (index > -1) {
           $scope.items.splice(index, 1);
@@ -563,18 +559,18 @@ checklistApp.controller("AdminCtrl", function ($scope) {
           '{!$RemoteAction.ChecklistAdminController.getChecklistItems}',
           copy,
           function(result, event) {
-          if(event.status) {
-          $scope.items = result;
-          $scope.$apply();
-          } else if (event.type == 'exception') {
-          console.log('Exception');
-          } else {
-          console.log('Error!');
-          }
+            if(event.status) {
+              $scope.items = result;
+              $scope.$apply();
+            } else if (event.type == 'exception') {
+              alert('Exception ' + event.message);
+            } else {
+              alert('Error');
+            }
           },
           {escape:true}
           );
-    };
+    }
     
 
     if (!$scope.newPage) {
