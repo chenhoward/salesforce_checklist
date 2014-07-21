@@ -428,6 +428,16 @@ checklistApp.controller("AdminCtrl", function ($scope) {
       $scope.items[0] = {}
     }
  
+    var cleanChecklist = function() {
+      $scope.checklist.Name = escapeHtml($scope.checklist.Name);
+      $scope.checklist.Description__c = escapeHtml($scope.checklist.Description__c);
+      for (var i =0; i < $scope.items.length; i++) {
+        var item = $scope.items[i];
+        item.Question__c = escapeHtml(item.Question__c);
+        item.Values__c = escapeHtml(item.Values__c);
+      }
+
+    }
     /** Types of questions. */
     $scope.types = ['Yes/No', 'Number', 'Text', 'Date','Long Text', 'Rating', 'Picklist', 'Multi-Select'];
     /** True if item has Id. */
@@ -436,7 +446,6 @@ checklistApp.controller("AdminCtrl", function ($scope) {
     }
     /** Creates a new checklist. */
     $scope.newChecklist = function() {
-
       for (var i = 0; i < $scope.items.length; i++) {
         $scope.items[i].Order__c = i;
       }
@@ -444,6 +453,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
         for(var i = 0; i < $scope.items.length; i++) {
           delete $scope.items[i].$$hashKey;
         }
+        cleanChecklist();
         Visualforce.remoting.Manager.invokeAction(
           '{!$RemoteAction.ChecklistAdminController.createChecklistWithQuestions}',
           $scope.checklist.Name,
@@ -488,6 +498,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
 
     /** Edits the checklist. */
     $scope.editChecklist = function() {
+      cleanChecklist();
       if ($scope.editPage.$valid) {
         Visualforce.remoting.Manager.invokeAction(
             '{!$RemoteAction.ChecklistAdminController.updateChecklist}',
@@ -509,6 +520,7 @@ checklistApp.controller("AdminCtrl", function ($scope) {
 
       /** Updates the items in COPY. */
       var updateItems = function(checklist) {
+        cleanChecklist();
         for(var i = 0; i < $scope.items.length; i++) {
           delete $scope.items[i].$$hashKey;
           $scope.items[i].Checklist__c = $scope.checklist.Id;
@@ -583,6 +595,21 @@ function goBack() {
     window.history.back()
 }
 
+/** A map of things to escape. */
+var entityMap = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': '&quot;',
+  "/": '&#x2F;'
+};
+
+/** Escapes the dangerous characters from the entity map. */
+var escapeHtml = function(string) {
+  return String(string).replace(/[&<>"\/]/g, function (s) {
+    return entityMap[s];
+  });
+}
 </script>
 </html>
 </apex:page>
