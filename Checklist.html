@@ -68,7 +68,7 @@ applyBodyTag="false"
           <div class="question" ng-repeat="checklistitem in checklistitems | orderBy: 'Checklist_Item__r.Order__c'">
             <span ng-switch="checklistitem.Checklist_Item__r.Type__c">
               <p> {{checklistitem.Checklist_Item__r.Question__c}}
-                <b ng-show="{{checklistitem.Checklist_Item__r.Required__c}}" style="font-style:bold; color:red;"> * </b>
+                <b ng-show="{{checklistitem.Checklist_Item__r.Required__c}}" style="font-size:24px; color:red;"> * </b>
               </p>
               <div ng-switch-when="Yes/No"> 
                 <p class="toggle-spacer"></p>

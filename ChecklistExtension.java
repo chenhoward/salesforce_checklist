@@ -42,9 +42,7 @@ global with sharing class ChecklistExtension {
         }
         List<Checklist_Item__c> tempList = [SELECT Id, Order__c, Question__c, Required__c, Type__c, Checklist__c, Values__c, Attach_Photo__c 
                 FROM Checklist_Item__c WHERE Checklist__c=:checklist AND isActive__c = True order by Order__c];
-
         List<Checklist_Item_Response__c> responses = new List<Checklist_Item_Response__c>();
-        
         for (Checklist_Item__c item : tempList){
             Checklist_Item_Response__c resp = new Checklist_Item_Response__c(Checklist_Item__c = item.Id, 
                                                                              Checklist_Item__r = item);
