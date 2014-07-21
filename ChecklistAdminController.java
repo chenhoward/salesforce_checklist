@@ -38,7 +38,9 @@ global with sharing class ChecklistAdminController {
     /** Updates the give Checklist ITEMS. */
     @RemoteAction
     global static Checklist_Item__c[] updateChecklistItems(Checklist_Item__c[] items) {
-        upsert items;
+        if (Schema.SObjectType.Checklist_Item__c.isCreateable() && Schema.SObjectType.Checklist_Item__c.isUpdateable()) {
+            upsert items;
+        }
         return items;
     }
 
