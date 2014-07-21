@@ -59,7 +59,6 @@ applyBodyTag="false"
           <p class="blurb shorten"> {{checklist.Checklist__r.Name}} &nbsp;</p>
           <div class="arrow-right"></div>
         </a>
-
         <div class="spacer"> </div>
       </section>
       <section id="two">
@@ -205,9 +204,9 @@ controllers.PagesController = function ($scope, $timeout) {
       $("#sub-btn").hide();
       $("#sub-ldr").show();
       setTimeout(function() {
-          $('#checklistForm').submit();
-          $("#sub-btn").show();
-          $("#sub-ldr").hide();
+        $('#checklistForm').submit();
+        $("#sub-btn").show();
+        $("#sub-ldr").hide();
       }, 300);
       
     }
@@ -363,7 +362,7 @@ var photoHelper= function(responseId) {
     queryString += "') AND Checklist_Response__c = '" + responseId + "'";
     forcetkClient.query(queryString, function(response) {
       for (var i = 0; i < response.length; i++) {
-      forcetkClient.create('Attachment', {'Body' : $scope.photoMap[response.records[i].Checklist_Item__c], 'ParentId': response.records[i].Id, 'Name' : 'PhotoResponse'});
+        forcetkClient.create('Attachment', {'Body' : $scope.photoMap[response.records[i].Checklist_Item__c], 'ParentId': response.records[i].Id, 'Name' : 'PhotoResponse'});
       }
     });
   }
@@ -582,11 +581,11 @@ var escapeHtml = function(string) {
 
 <script>
 $( document ).ready(function() {
-$('#checklistForm').h5Validate({
-  errorClass:'error-border'
+  $('#checklistForm').h5Validate({
+    errorClass:'error-border'
   });
   $('form').h5Validate();
-  });
+});
 
 </script>
 
