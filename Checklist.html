@@ -514,9 +514,11 @@ var handlePhoto = function(evt){
         position: coordinates,
         title: response.Checklist__r.Name
       });
-      markers.push(marker);
-      boundary.extend(marker.position);
-      marker.setMap(map);
+      if (response.Location__Longitude__s || response.Location__Longitude__s) {
+        markers.push(marker);
+        boundary.extend(marker.position);
+        marker.setMap(map);
+      }
     }
     map.fitBounds(boundary)
   }
