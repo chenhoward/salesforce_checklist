@@ -5,7 +5,7 @@ global with sharing class ChecklistExtension {
     /** Returns the JSON form of all checklists. */
     public static String getChecklists() {
         if (Schema.SObjectType.Checklist_Response__c.isAccessible()) {
-            List<Checklist__c> lists = [SELECT Id, Name, Description__c FROM Checklist__c];
+            List<Checklist__c> lists = [SELECT Id, Name, Description__c FROM Checklist__c ORDER BY LastModifiedDate LIMIT 100];
             return JSON.serialize(lists);
         }
         return JSON.serialize(new List<Checklist__c>());
@@ -18,7 +18,7 @@ global with sharing class ChecklistExtension {
             return null;
         }
         List<Checklist_Response__c> checklists = [SELECT Id, Name, Checklist__r.Name, Checklist__r.Description__c, 
-                                                Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending' AND Responder__c=:UserInfo.getUserId() ORDER BY LastModifiedDate DESC];
+                                                Checklist__r.Id FROM Checklist_Response__c WHERE Status__c=:'Pending' AND Responder__c=:UserInfo.getUserId() ORDER BY LastModifiedDate DESC LIMIT 100];
        return checklists;
     } 
 
@@ -29,7 +29,7 @@ global with sharing class ChecklistExtension {
             return null;
         }
         List<Checklist_Response__c> checklists = [SELECT Id, Name, Checklist__r.Name, Checklist__r.Description__c, 
-                                                Checklist__r.Id, Location__latitude__s, Location__longitude__s, LastModifiedDate FROM Checklist_Response__c WHERE Status__c=:'Complete' AND Responder__c=:UserInfo.getUserId() ORDER BY LastModifiedDate DESC];
+                                                Checklist__r.Id, Location__latitude__s, Location__longitude__s, LastModifiedDate FROM Checklist_Response__c WHERE Status__c=:'Complete' AND Responder__c=:UserInfo.getUserId() ORDER BY LastModifiedDate DESC LIMIT 100];
         return checklists;
     } 
 
