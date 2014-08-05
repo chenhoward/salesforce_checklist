@@ -78,7 +78,7 @@ applyBodyTag="false"
               </div>
               <input ng-switch-when="Number" id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" class="h5-number"> </input>
               <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-              <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input> {{checklistitem.Answer__c}}
+              <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
               <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
               <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
               <div class="rating repaint" id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating">
@@ -356,12 +356,16 @@ var photoHelper= function(responseId) {
     var queryString = "SELECT Id, Checklist_Item__c FROM Checklist_Item_Response__c WHERE (Checklist_Item__c = '";
     var orClause = "' OR Checklist_Item__c = '";
     for (var key in $scope.photoMap) {
-      queryString += key + orClause;
+      queryString += escapeHtml(key) + "' OR Checklist_Item__c = '";
     }
-    queryString = queryString.substring(queryString.length - orClause.length, queryString.length);
+    queryString = queryString.substring(0, queryString.length - orClause.length);
     queryString += "') AND Checklist_Response__c = '" + responseId + "'";
     forcetkClient.query(queryString, function(response) {
-      for (var i = 0; i < response.length; i++) {
+      console.log(queryString);
+      console.log(response);
+      for (var i = 0; i < response.records.length; i++) {
+        console.log('create');
+        console.log(response);
         forcetkClient.create('Attachment', {'Body' : $scope.photoMap[response.records[i].Checklist_Item__c], 'ParentId': response.records[i].Id, 'Name' : 'PhotoResponse'});
       }
     });
@@ -398,7 +402,6 @@ $scope.submitForm = function() {
 $scope.saveResponse = function() {
   var that = this;
   formHelper();
-  console.log(checklistitems);
   Visualforce.remoting.Manager.invokeAction(
     '{!$RemoteAction.ChecklistExtension.saveResponses}',
     $scope.currentChecklistId,
