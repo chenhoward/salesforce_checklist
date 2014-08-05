@@ -78,7 +78,7 @@ applyBodyTag="false"
               </div>
               <input ng-switch-when="Number" id="form_number_{{checklistitem.Checklist_Item__c}}" type="number" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}" class="h5-number"> </input>
               <input id="form_text_{{checklistitem.Checklist_Item__c}}" type="text" ng-switch-when="Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
-              <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input>
+              <input id="form_date_{{checklistitem.Checklist_Item__c}}" type="date" ng-switch-when="Date" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"> </input> {{checklistitem.Answer__c}}
               <input class="input" type="file" id="image" accept="image/*" ng-switch-when="Photo" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}"/>
               <textarea id="form_longtext_{{checklistitem.Checklist_Item__c}}" ng-switch-when="Long Text" ng-model="checklistitem.Answer__c" ng-required="{{checklistitem.Checklist_Item__r.Required__c}}">Enter response here...</textarea>
               <div class="rating repaint" id="form_rating_{{checklistitem.Checklist_Item__c}}" type="range" ng-switch-when="Rating">
@@ -398,6 +398,7 @@ $scope.submitForm = function() {
 $scope.saveResponse = function() {
   var that = this;
   formHelper();
+  console.log(checklistitems);
   Visualforce.remoting.Manager.invokeAction(
     '{!$RemoteAction.ChecklistExtension.saveResponses}',
     $scope.currentChecklistId,

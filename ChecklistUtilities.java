@@ -22,7 +22,9 @@ global class ChecklistUtilities {
     /** Removes a Checklist with the ID LISTID. */
     global static void removeChecklist(ID listID) {
         Checklist__c checklist = findChecklist(listID);
-        delete checklist;
+        if (Schema.SObjectType.Checklist__c.isDeletable()) {
+            delete checklist;
+        }
     }
 
     /** Queries the database for a Checklist with the ID LISTID. */
