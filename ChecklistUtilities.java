@@ -1,5 +1,5 @@
 /** A utility class that helps create Checklists and Checklist related items. */
-global class ChecklistUtilities {
+global with sharing class ChecklistUtilities {
 
     /** Returns a new Checklist with the name LISTNAME, and the DESCRIPTION
       * while inserting it into the database. */
